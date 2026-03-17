@@ -1,0 +1,280 @@
+@import "tailwindcss";
+
+/* =============================================================
+   NEXUS BANK — DESIGN SYSTEM
+   Bloomberg Terminal × Premium Fintech War Room
+   ============================================================= */
+
+:root {
+  --bg-void: #070A0F;
+  --bg-surface: #0D1117;
+  --bg-elevated: #161B22;
+  --bg-card: #0D1117;
+
+  --accent-gold: #C9A84C;
+  --accent-gold-glow: #F0C060;
+  --accent-gold-dim: #8B7A3C;
+  --accent-gold-bg: rgba(201, 168, 76, 0.06);
+  --accent-gold-border: rgba(201, 168, 76, 0.18);
+
+  --success: #38A169;
+  --success-bg: rgba(56, 161, 105, 0.08);
+  --danger: #E53E3E;
+  --danger-bg: rgba(229, 62, 62, 0.08);
+  --warn: #D69E2E;
+  --warn-bg: rgba(214, 158, 46, 0.08);
+  --info: #4299E1;
+
+  --text-primary: #E6EDF3;
+  --text-secondary: #8B949E;
+  --text-ghost: #3D444D;
+  --text-gold: #C9A84C;
+
+  --border: #21262D;
+  --border-accent: rgba(201, 168, 76, 0.18);
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent-gold-dim); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
+::selection { background: var(--accent-gold); color: var(--bg-void); }
+
+/* ── Glass ── */
+.glass-panel {
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+}
+
+/* ── Cards ── */
+.nexus-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nexus-card:hover {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 20px rgba(201,168,76,0.06), 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.case-file {
+  background: linear-gradient(135deg, var(--bg-surface), rgba(22,27,34,0.9));
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.case-file::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold-border), transparent);
+}
+
+/* ── Buttons ── */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow));
+  color: var(--bg-void);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-gold::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+  animation: shimmer 3s ease-in-out infinite;
+}
+.btn-gold:hover {
+  box-shadow: 0 0 30px rgba(201,168,76,0.25), 0 8px 24px rgba(0,0,0,0.3);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.btn-ghost:hover {
+  color: var(--accent-gold);
+  border-color: var(--border-accent);
+  background: var(--accent-gold-bg);
+}
+
+/* ── Tags ── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ── Status Dots ── */
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }
+.dot-success { background: var(--success); box-shadow: 0 0 8px var(--success); }
+.dot-danger { background: var(--danger); box-shadow: 0 0 8px var(--danger); animation: pulse-red 2s infinite; }
+.dot-warn { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+
+/* ── Mood Bar ── */
+.mood-bar { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; }
+.mood-fill { height: 100%; border-radius: 2px; transition: width 0.8s cubic-bezier(0.34,1.56,0.64,1), background 0.5s ease; }
+
+/* ── Chat Bubbles ── */
+.chat-customer {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: 2px 12px 12px 12px;
+}
+.chat-user {
+  background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03));
+  border: 1px solid var(--accent-gold-border);
+  border-right: 3px solid var(--accent-gold);
+  border-radius: 12px 2px 12px 12px;
+}
+.chat-system {
+  background: var(--accent-gold-bg);
+  border: 1px solid var(--accent-gold-border);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: 6px;
+}
+
+/* ── Compliance Alert ── */
+.compliance-alert {
+  background: var(--danger-bg);
+  border: 1px solid rgba(229,62,62,0.25);
+  border-left: 3px solid var(--danger);
+  border-radius: 6px;
+  animation: shake 0.5s ease-in-out;
+}
+
+/* ── Grid BG ── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(201,168,76,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── Score Display ── */
+.score-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+/* ── Progress ── */
+.progress-track { height: 3px; border-radius: 2px; background: var(--border); overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent-gold-dim), var(--accent-gold)); transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
+
+/* ── Text Gradient ── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Particle ── */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particle-drift linear infinite;
+}
+
+/* ── Animations ── */
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(201,168,76,0.1); }
+  50% { box-shadow: 0 0 25px rgba(201,168,76,0.2); }
+}
+@keyframes particle-drift {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+}
+
+textarea::placeholder, input::placeholder {
+  color: var(--text-ghost);
+  font-family: var(--font-body);
+}
+textarea:focus, input:focus { outline: none; }

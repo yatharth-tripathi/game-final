@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id                 String        @id @default(uuid())
+  name               String
+  email              String?       @unique
+  branch             String        @default("HQ")
+  totalXP            Int           @default(0)
+  casesCompleted     Int           @default(0)
+  scoreSum           Int           @default(0)
+  streak             Int           @default(0)
+  lastPlayedDate     String        @default("")
+  completedScenarios String[]      @default([])
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  sessions           GameSession[]
+}
+
+model GameSession {
+  id           String   @id @default(uuid())
+  playerId     String
+  player       Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  scenarioId   String
+  scenarioTitle String
+  category     String
+  difficulty   String
+  score        Int
+  maxScore     Int
+  percentage   Int
+  grade        String
+  xpAwarded    Int
+  timeSpent    Int      @default(0)
+  mood         Int      @default(5)
+  violations   Int      @default(0)
+  evaluatedBy  String   @default("ai")
+  createdAt    DateTime @default(now())
+
+  @@index([playerId])
+  @@index([scenarioId])
+  @@index([percentage])
+}
+
+model CustomScenario {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  category    String
+  difficulty  String
+  xpReward    Int      @default(100)
+  data        Json     // Full scenario object
+  createdBy   String   @default("admin")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([isActive])
+}
