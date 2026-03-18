@@ -7,9 +7,11 @@ import { checkCompliance, evaluatePerformance } from "@/lib/evaluator";
 import type { EvaluationResult } from "@/lib/evaluator";
 import { CATEGORY_COLORS } from "@/lib/scenarios";
 import { Particles } from "./Particles";
+import { SplitLayout } from "./SplitLayout";
+import { TestMeInsights } from "./insights/TestMeInsights";
 import {
-  Lightbulb, Clock, Briefcase, Brain, Target, ArrowUp,
-  ChevronRight, AlertTriangle, Shield,
+  Clock, Briefcase, Brain, Target, ArrowUp,
+  ChevronRight, AlertTriangle,
 } from "lucide-react";
 
 // Timeout wrapper for fetch calls
@@ -27,9 +29,8 @@ export function GamePlay() {
   const {
     currentScenario: sc, currentStepIndex, messages, userResponses,
     startTime, elapsedTime, mood, complianceViolations, isAdvancing,
-    showHints, addMessage, submitResponse, advanceStep, setEvaluation,
+    addMessage, submitResponse, advanceStep, setEvaluation,
     setElapsedTime, updateMood, addComplianceViolation, setAdvancing,
-    toggleHints,
   } = store;
 
   const [input, setInput] = useState("");
@@ -98,7 +99,6 @@ export function GamePlay() {
       if (!res.ok) throw new Error("Customer AI failed");
       const data = await res.json();
 
-      // Validate response length
       let response = data.response || fallbackText;
       if (response.length > 500) response = response.slice(0, 500);
 
@@ -150,14 +150,12 @@ export function GamePlay() {
       setEvalStatus("Generating debrief report...");
       await new Promise((r) => setTimeout(r, 600));
 
-      // Build compliance violations array
       const violationObjects = currentViolations.map(v => ({
         phrase: v,
         message: sc.complianceRules.violationMessage,
         penalty: sc.complianceRules.violationPenalty,
       }));
 
-      // Apply compliance penalty to AI score
       let adjustedScore = aiResult.totalScore || 0;
       const totalPenalty = violationObjects.reduce((s, v) => s + v.penalty, 0);
       adjustedScore = Math.max(0, adjustedScore - totalPenalty);
@@ -233,17 +231,15 @@ export function GamePlay() {
       return;
     }
 
-    advanceStep(); // currentStepIndex = nextIndex now
+    advanceStep();
     const nextStep = sc.steps[nextIndex];
 
     if (nextStep.speaker === "customer") {
       setIsTyping(true);
       setWaitingForUser(false);
 
-      // AI-generated customer response
       const aiResponse = await fetchAICustomerResponse(nextStep.text, nextStep.text);
 
-      // Apply mood delta using functional update (no stale closure)
       if (aiResponse.moodDelta !== 0) {
         updateMood(aiResponse.moodDelta);
       }
@@ -251,16 +247,14 @@ export function GamePlay() {
       setIsTyping(false);
       addMessage({ role: "customer", content: aiResponse.response });
 
-      // Check if next step after customer is a system objective
       const systemStepIndex = nextIndex + 1;
       if (systemStepIndex < sc.steps.length && sc.steps[systemStepIndex].speaker === "system") {
-        advanceStep(); // Move to system step — useEffect will handle adding the system message
+        advanceStep();
         setTimeout(() => {
           setWaitingForUser(true);
           setAdvancing(false);
         }, 600);
       } else if (systemStepIndex >= sc.steps.length) {
-        // No more steps after this customer message — evaluate
         const responses = [...useGameStore.getState().userResponses];
         setTimeout(() => runEvaluation(responses), 800);
       } else {
@@ -282,10 +276,8 @@ export function GamePlay() {
     setInput("");
     if (inputRef.current) inputRef.current.style.height = "auto";
 
-    // Compliance check BEFORE anything else
     const violations = checkCompliance([response], sc.complianceRules);
     if (violations.length > 0) {
-      // Only add unique violations
       const existingViolations = useGameStore.getState().complianceViolations;
       for (const v of violations) {
         if (!existingViolations.includes(v.phrase)) {
@@ -293,7 +285,7 @@ export function GamePlay() {
         }
       }
       addMessage({ role: "compliance", content: violations[0].message });
-      updateMood(-2); // Functional update, no stale closure
+      updateMood(-2);
     }
 
     addMessage({ role: "user", content: response });
@@ -305,12 +297,7 @@ export function GamePlay() {
   if (!sc) return null;
 
   const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
-  const tasksTotal = sc.steps.filter((s) => s.speaker === "system").length;
-  const tasksCompleted = userResponses.length;
-  const currentSystemStep = sc.steps.filter(s => s.speaker === "system")[tasksCompleted];
-  const currentHints = currentSystemStep?.hints || [];
   const catColor = CATEGORY_COLORS[sc.category] || "var(--accent-gold)";
-  const moodColor = mood <= 3 ? "var(--danger)" : mood <= 6 ? "var(--warn)" : "var(--success)";
 
   // ── AI EVALUATING SCREEN ──
   if (isEvaluating) {
@@ -362,211 +349,161 @@ export function GamePlay() {
     );
   }
 
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="h-screen w-full flex flex-col relative"
-    >
+  // ── TOP BAR (simplified — mood/compliance/progress moved to insights) ──
+  const topBar = (
+    <div className="shrink-0 w-full relative z-10 glass-panel" style={{ borderBottom: "1px solid var(--border)" }}>
+      <div className="px-6 py-2.5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Briefcase size={13} style={{ color: "var(--accent-gold)" }} />
+          <div>
+            <p className="text-xs font-bold" style={{ color: "var(--text-primary)" }}>{sc.title}</p>
+            <p className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>vs {sc.customer.name}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <Clock size={11} style={{ color: "var(--text-ghost)" }} />
+          <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{formatTime(elapsedTime)}</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── CHAT AREA ──
+  const chatArea = (
+    <div className="w-full h-full relative">
       <Particles count={4} />
-
-      {/* TOP BAR */}
-      <div className="shrink-0 w-full relative z-10 glass-panel" style={{ borderBottom: "1px solid var(--border)" }}>
-        <div className="px-6 py-2.5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Briefcase size={13} style={{ color: "var(--accent-gold)" }} />
-            <div>
-              <p className="text-xs font-bold" style={{ color: "var(--text-primary)" }}>{sc.title}</p>
-              <p className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>vs {sc.customer.name}</p>
-            </div>
-          </div>
-
-          {/* Mood Meter */}
-          <div className="flex items-center gap-3" role="meter" aria-label={`Client trust level: ${mood} out of 10`}>
-            <span className="text-[9px] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>Client Trust</span>
-            <div className="w-20 mood-bar">
-              <div className="mood-fill" style={{ width: `${mood * 10}%`, background: moodColor }} />
-            </div>
-            <span className="text-[10px] font-bold" style={{ fontFamily: "var(--font-mono)", color: moodColor }}>{mood}/10</span>
-          </div>
-
-          {/* Progress + Compliance + Timer */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-                {Math.min(tasksCompleted + 1, tasksTotal)}/{tasksTotal}
-              </span>
-              {Array.from({ length: tasksTotal }).map((_, i) => (
-                <div key={i} style={{
-                  width: i === tasksCompleted ? 22 : 14, height: 4, borderRadius: 2,
-                  background: i < tasksCompleted ? "var(--success)" : i === tasksCompleted ? "var(--accent-gold)" : "var(--border)",
-                  boxShadow: i === tasksCompleted ? "0 0 8px var(--accent-gold)" : "none",
-                  transition: "all 0.3s ease",
-                }} />
-              ))}
-            </div>
-            <div className="flex items-center gap-1.5" aria-label={complianceViolations.length > 0 ? "Compliance violation detected" : "Compliance clear"}>
-              <Shield size={10} style={{ color: complianceViolations.length > 0 ? "var(--danger)" : "var(--success)" }} />
-              <span className={`dot ${complianceViolations.length > 0 ? "dot-danger" : "dot-success"}`} />
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Clock size={11} style={{ color: "var(--text-ghost)" }} />
-              <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{formatTime(elapsedTime)}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CHAT AREA */}
-      <div className="flex-1 w-full overflow-y-auto relative z-10">
-        <div className="w-full max-w-2xl mx-auto px-8 py-6 space-y-4" style={{ minHeight: "100%" }}>
-          {messages.map((msg) => (
-            <motion.div key={msg.id}
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", damping: 22 }}
-            >
-              {msg.role === "system" ? (
-                <div className="chat-system p-4">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <Target size={12} style={{ color: "var(--accent-gold)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>YOUR OBJECTIVE</span>
-                  </div>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>
-                    {msg.content.replace("OBJECTIVE: ", "")}
-                  </p>
+      <div className="w-full max-w-2xl mx-auto px-6 py-6 space-y-4 relative z-10" style={{ minHeight: "100%" }}>
+        {messages.map((msg) => (
+          <motion.div key={msg.id}
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", damping: 22 }}
+          >
+            {msg.role === "system" ? (
+              <div className="chat-system p-4">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Target size={12} style={{ color: "var(--accent-gold)" }} />
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>YOUR OBJECTIVE</span>
                 </div>
-              ) : msg.role === "compliance" ? (
-                <motion.div initial={{ x: -10 }} animate={{ x: 0 }} className="compliance-alert p-4">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <AlertTriangle size={12} style={{ color: "var(--danger)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "2px", color: "var(--danger)" }}>COMPLIANCE VIOLATION</span>
-                  </div>
-                  <p className="text-xs leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
-                </motion.div>
-              ) : msg.role === "customer" ? (
-                <div className="max-w-[85%]">
-                  <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5" style={{ fontFamily: "var(--font-mono)", color: catColor }}>{sc.customer.name}</p>
-                  <div className="chat-customer p-4">
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
-                  </div>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>
+                  {msg.content.replace("OBJECTIVE: ", "")}
+                </p>
+              </div>
+            ) : msg.role === "compliance" ? (
+              <motion.div initial={{ x: -10 }} animate={{ x: 0 }} className="compliance-alert p-4">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <AlertTriangle size={12} style={{ color: "var(--danger)" }} />
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "2px", color: "var(--danger)" }}>COMPLIANCE VIOLATION</span>
                 </div>
-              ) : (
-                <div className="max-w-[85%] ml-auto">
-                  <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5 text-right" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}>YOU (RM)</p>
-                  <div className="chat-user p-4">
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          ))}
-
-          <AnimatePresence>
-            {isTyping && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5" style={{ fontFamily: "var(--font-mono)", color: catColor }}>{sc.customer.name}</p>
-                <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
-                  {[0, 1, 2].map((i) => (
-                    <motion.span key={i}
-                      animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }}
-                      transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }}
-                      className="w-1.5 h-1.5 rounded-full" style={{ background: catColor }}
-                    />
-                  ))}
-                </div>
+                <p className="text-xs leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
               </motion.div>
+            ) : msg.role === "customer" ? (
+              <div className="max-w-[85%]">
+                <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5" style={{ fontFamily: "var(--font-mono)", color: catColor }}>{sc.customer.name}</p>
+                <div className="chat-customer p-4">
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="max-w-[85%] ml-auto">
+                <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5 text-right" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}>YOU (RM)</p>
+                <div className="chat-user p-4">
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
+                </div>
+              </div>
             )}
-          </AnimatePresence>
-          <div ref={messagesEndRef} />
-        </div>
-      </div>
+          </motion.div>
+        ))}
 
-      {/* BOTTOM INPUT */}
-      <div className="shrink-0 w-full relative z-10" style={{ background: "linear-gradient(180deg, transparent, var(--bg-void) 20%)" }}>
-        <div className="w-full max-w-2xl mx-auto px-6 pb-5 pt-3">
-          {/* Hints toggle */}
-          {waitingForUser && currentHints.length > 0 && (
-            <button
-              onClick={toggleHints}
-              className="flex items-center gap-1.5 mb-2 text-[10px] px-3 py-1 rounded-full transition-all"
+        <AnimatePresence>
+          {isTyping && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+              <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5" style={{ fontFamily: "var(--font-mono)", color: catColor }}>{sc.customer.name}</p>
+              <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                {[0, 1, 2].map((i) => (
+                  <motion.span key={i}
+                    animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }}
+                    transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }}
+                    className="w-1.5 h-1.5 rounded-full" style={{ background: catColor }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div ref={messagesEndRef} />
+      </div>
+    </div>
+  );
+
+  // ── BOTTOM INPUT ──
+  const bottomBar = (
+    <div className="w-full" style={{ background: "linear-gradient(180deg, transparent, var(--bg-void) 20%)" }}>
+      <div className="w-full max-w-2xl mx-auto px-6 pb-5 pt-3">
+        <div className="relative rounded-xl transition-all"
+          style={{
+            background: "var(--bg-surface)",
+            border: `1px solid ${waitingForUser ? "var(--accent-gold-border)" : "var(--border)"}`,
+            boxShadow: waitingForUser ? "0 0 20px rgba(201,168,76,0.04), 0 4px 24px rgba(0,0,0,0.4)" : "0 4px 24px rgba(0,0,0,0.4)",
+          }}>
+          <div className="flex items-end gap-3 px-5 pt-4 pb-2">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={(e) => { setInput(e.target.value); e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 150) + "px"; }}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+              placeholder={waitingForUser ? "Respond as Relationship Manager..." : "Waiting for client..."}
+              disabled={!waitingForUser || isAdvancing}
+              rows={1}
+              aria-label="Your response as Relationship Manager"
+              className="flex-1 resize-none text-sm leading-relaxed outline-none bg-transparent"
+              style={{ color: "var(--text-primary)", opacity: waitingForUser ? 1 : 0.3, minHeight: 28, maxHeight: 150, fontFamily: "var(--font-body)" }}
+            />
+            <motion.button
+              onClick={handleSend}
+              disabled={!waitingForUser || !input.trim() || isAdvancing}
+              whileHover={waitingForUser && input.trim() ? { scale: 1.1 } : {}}
+              whileTap={waitingForUser && input.trim() ? { scale: 0.9 } : {}}
+              aria-label="Send response"
+              className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5"
               style={{
-                fontFamily: "var(--font-mono)",
-                color: showHints ? "var(--warn)" : "var(--text-ghost)",
-                background: showHints ? "var(--warn-bg)" : "rgba(255,255,255,0.03)",
-                border: `1px solid ${showHints ? "rgba(214,158,46,0.2)" : "var(--border)"}`,
+                background: input.trim() && waitingForUser ? "linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow))" : "rgba(255,255,255,0.04)",
+                color: input.trim() && waitingForUser ? "var(--bg-void)" : "var(--text-ghost)",
               }}
             >
-              <Lightbulb size={10} /> {showHints ? "HIDE HINTS" : "SHOW HINTS"}
-            </button>
-          )}
-
-          <AnimatePresence>
-            {waitingForUser && showHints && currentHints.length > 0 && (
-              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden mb-3">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <Lightbulb size={10} style={{ color: "var(--warn)", flexShrink: 0 }} />
-                  {currentHints.map((hint, i) => (
-                    <span key={i} className="text-[10px] px-2.5 py-1 rounded-full"
-                      style={{ background: "var(--warn-bg)", color: "var(--warn)", border: "1px solid rgba(214,158,46,0.15)" }}>
-                      {hint}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="relative rounded-xl transition-all"
-            style={{
-              background: "var(--bg-surface)",
-              border: `1px solid ${waitingForUser ? "var(--accent-gold-border)" : "var(--border)"}`,
-              boxShadow: waitingForUser ? "0 0 20px rgba(201,168,76,0.04), 0 4px 24px rgba(0,0,0,0.4)" : "0 4px 24px rgba(0,0,0,0.4)",
-            }}>
-            <div className="flex items-end gap-3 px-5 pt-4 pb-2">
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => { setInput(e.target.value); e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 150) + "px"; }}
-                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-                placeholder={waitingForUser ? "Respond as Relationship Manager..." : "Waiting for client..."}
-                disabled={!waitingForUser || isAdvancing}
-                rows={1}
-                aria-label="Your response as Relationship Manager"
-                className="flex-1 resize-none text-sm leading-relaxed outline-none bg-transparent"
-                style={{ color: "var(--text-primary)", opacity: waitingForUser ? 1 : 0.3, minHeight: 28, maxHeight: 150, fontFamily: "var(--font-body)" }}
-              />
-              <motion.button
-                onClick={handleSend}
-                disabled={!waitingForUser || !input.trim() || isAdvancing}
-                whileHover={waitingForUser && input.trim() ? { scale: 1.1 } : {}}
-                whileTap={waitingForUser && input.trim() ? { scale: 0.9 } : {}}
-                aria-label="Send response"
-                className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5"
-                style={{
-                  background: input.trim() && waitingForUser ? "linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow))" : "rgba(255,255,255,0.04)",
-                  color: input.trim() && waitingForUser ? "var(--bg-void)" : "var(--text-ghost)",
-                }}
-              >
-                <ArrowUp size={16} strokeWidth={2.5} />
-              </motion.button>
-            </div>
-            <div className="px-5 pb-3 flex items-center justify-between">
-              {waitingForUser ? (
-                <div className="flex items-center gap-1.5">
-                  <ChevronRight size={9} style={{ color: "var(--success)" }} />
-                  <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--success)" }}>Your turn</span>
-                </div>
-              ) : (
-                <span className="text-[10px] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-                  {isTyping ? "Client is responding..." : "Processing..."}
-                </span>
-              )}
-              <span className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>Shift+Enter for new line</span>
-            </div>
+              <ArrowUp size={16} strokeWidth={2.5} />
+            </motion.button>
           </div>
-          <p className="text-center text-[8px] mt-2.5 uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", opacity: 0.4 }}>
-            AI-powered simulation
-          </p>
+          <div className="px-5 pb-3 flex items-center justify-between">
+            {waitingForUser ? (
+              <div className="flex items-center gap-1.5">
+                <ChevronRight size={9} style={{ color: "var(--success)" }} />
+                <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--success)" }}>Your turn</span>
+              </div>
+            ) : (
+              <span className="text-[10px] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
+                {isTyping ? "Client is responding..." : "Processing..."}
+              </span>
+            )}
+            <span className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>Shift+Enter for new line</span>
+          </div>
         </div>
+        <p className="text-center text-[8px] mt-2.5 uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", opacity: 0.4 }}>
+          AI-powered simulation
+        </p>
       </div>
+    </div>
+  );
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-screen w-full">
+      <SplitLayout
+        topBar={topBar}
+        insightsPanel={<TestMeInsights />}
+        insightsPanelTitle="LIVE ANALYSIS"
+        bottomBar={bottomBar}
+      >
+        {chatArea}
+      </SplitLayout>
     </motion.div>
   );
 }

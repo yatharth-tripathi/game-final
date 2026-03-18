@@ -66,6 +66,7 @@ interface GameState {
   startTime: number | null;
   elapsedTime: number;
   mood: number;
+  moodHistory: number[];
   complianceViolations: string[];
   isAdvancing: boolean; // Guard against race conditions
   gameMode: GameMode;
@@ -105,6 +106,7 @@ export const useGameStore = create<GameState>()(
       startTime: null,
       elapsedTime: 0,
       mood: 5,
+      moodHistory: [5],
       complianceViolations: [],
       isAdvancing: false,
       gameMode: "testme" as GameMode,
@@ -129,6 +131,7 @@ export const useGameStore = create<GameState>()(
         currentScenario: scenario,
         phase: "briefing",
         mood: scenario.customer.moodInitial,
+        moodHistory: [scenario.customer.moodInitial],
         currentStepIndex: 0,
         messages: [],
         userResponses: [],
@@ -165,6 +168,7 @@ export const useGameStore = create<GameState>()(
           elapsedTime: 0,
           complianceViolations: [],
           mood: sc.customer.moodInitial,
+          moodHistory: [sc.customer.moodInitial],
           isAdvancing: false,
         });
       },
@@ -200,6 +204,7 @@ export const useGameStore = create<GameState>()(
         startTime: null,
         elapsedTime: 0,
         mood: 5,
+        moodHistory: [5],
         complianceViolations: [],
         isAdvancing: false,
       }),
@@ -207,9 +212,10 @@ export const useGameStore = create<GameState>()(
       setElapsedTime: (elapsedTime) => set({ elapsedTime }),
 
       // Use functional update to avoid stale closure
-      updateMood: (delta) => set((state) => ({
-        mood: Math.max(1, Math.min(10, state.mood + delta)),
-      })),
+      updateMood: (delta) => set((state) => {
+        const newMood = Math.max(1, Math.min(10, state.mood + delta));
+        return { mood: newMood, moodHistory: [...state.moodHistory, newMood] };
+      }),
 
       addComplianceViolation: (v) => set((state) => ({
         complianceViolations: [...state.complianceViolations, v],

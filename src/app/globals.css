@@ -273,6 +273,148 @@ body::before {
   100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
 }
 
+/* ── Split Layout ── */
+.split-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+.split-chat {
+  flex: 0 0 62%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+.split-insights {
+  flex: 0 0 38%;
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+  background: rgba(7, 10, 15, 0.6);
+  position: relative;
+}
+
+/* ── Insight Cards ── */
+.insight-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease;
+}
+.insight-card:hover {
+  border-color: rgba(201, 168, 76, 0.12);
+}
+.insight-card-header {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.insight-card-active {
+  border-color: var(--accent-gold-border);
+  background: linear-gradient(135deg, var(--bg-surface), rgba(201, 168, 76, 0.03));
+}
+
+/* ── Skill Bars ── */
+.skill-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Mood Sparkline ── */
+.mood-spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 32px;
+}
+.mood-spark-bar {
+  flex: 1;
+  min-width: 4px;
+  max-width: 12px;
+  border-radius: 2px 2px 0 0;
+  transition: height 0.4s ease, background 0.3s ease;
+}
+
+/* ── Timeline ── */
+.timeline-node {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--bg-void);
+  transition: all 0.3s ease;
+}
+.timeline-node-active {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold);
+  box-shadow: 0 0 8px rgba(201, 168, 76, 0.4);
+}
+.timeline-node-done {
+  border-color: var(--success);
+  background: var(--success);
+}
+.timeline-line {
+  width: 1.5px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.timeline-line-done {
+  background: var(--success);
+}
+
+/* ── Mobile Toggle ── */
+.insights-toggle-mobile {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow));
+  color: var(--bg-void);
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(201, 168, 76, 0.3);
+}
+
+@media (max-width: 768px) {
+  .split-layout { flex-direction: column; }
+  .split-chat { flex: 1; }
+  .split-insights {
+    flex: none;
+    height: 0;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    overflow: hidden;
+    transition: height 0.3s ease;
+  }
+  .split-insights.open {
+    height: 45vh;
+  }
+  .insights-toggle-mobile {
+    display: flex;
+  }
+}
+
 textarea::placeholder, input::placeholder {
   color: var(--text-ghost);
   font-family: var(--font-body);
