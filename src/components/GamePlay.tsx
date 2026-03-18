@@ -254,9 +254,8 @@ export function GamePlay() {
       // Check if next step after customer is a system objective
       const systemStepIndex = nextIndex + 1;
       if (systemStepIndex < sc.steps.length && sc.steps[systemStepIndex].speaker === "system") {
-        advanceStep(); // Move to system step
+        advanceStep(); // Move to system step — useEffect will handle adding the system message
         setTimeout(() => {
-          addMessage({ role: "system", content: sc.steps[systemStepIndex].text, stepIndex: systemStepIndex });
           setWaitingForUser(true);
           setAdvancing(false);
         }, 600);
