@@ -216,81 +216,115 @@ export function GamePlay() {
     }
   }, [mood, sc, isEvaluating, addMessage, runEvaluation]);
 
-  // Advance conversation after user responds
+  // Force-end the conversation and trigger evaluation
+  const handleEndEarly = useCallback(() => {
+    const responses = [...useGameStore.getState().userResponses];
+    if (responses.length > 0 && !evaluationStarted.current) {
+      runEvaluation(responses);
+    }
+  }, [runEvaluation]);
+
+  // Advance conversation after user responds — wrapped in try-catch for crash safety
   const advanceConversation = useCallback(async () => {
     if (!sc || useGameStore.getState().isAdvancing) return;
     setAdvancing(true);
 
-    const currentIndex = useGameStore.getState().currentStepIndex;
-    const nextIndex = currentIndex + 1;
+    try {
+      const currentIndex = useGameStore.getState().currentStepIndex;
+      const nextIndex = currentIndex + 1;
 
-    if (nextIndex >= sc.steps.length) {
-      const responses = [...useGameStore.getState().userResponses];
-      setTimeout(() => runEvaluation(responses), 800);
-      return;
-    }
-
-    advanceStep();
-    const nextStep = sc.steps[nextIndex];
-
-    if (nextStep.speaker === "customer") {
-      setIsTyping(true);
-      setWaitingForUser(false);
-
-      const aiResponse = await fetchAICustomerResponse(nextStep.text, nextStep.text);
-
-      if (aiResponse.moodDelta !== 0) {
-        updateMood(aiResponse.moodDelta);
-      }
-
-      setIsTyping(false);
-      addMessage({ role: "customer", content: aiResponse.response });
-
-      const systemStepIndex = nextIndex + 1;
-      if (systemStepIndex < sc.steps.length && sc.steps[systemStepIndex].speaker === "system") {
-        advanceStep();
-        setTimeout(() => {
-          setWaitingForUser(true);
-          setAdvancing(false);
-        }, 600);
-      } else if (systemStepIndex >= sc.steps.length) {
+      if (nextIndex >= sc.steps.length) {
         const responses = [...useGameStore.getState().userResponses];
         setTimeout(() => runEvaluation(responses), 800);
-      } else {
-        setWaitingForUser(true);
-        setAdvancing(false);
+        return;
       }
-    } else if (nextStep.speaker === "system") {
-      setTimeout(() => {
-        addMessage({ role: "system", content: nextStep.text, stepIndex: nextIndex });
-        setWaitingForUser(true);
-        setAdvancing(false);
-      }, 500);
+
+      advanceStep();
+      const nextStep = sc.steps[nextIndex];
+
+      if (!nextStep) {
+        // Safety: if step is missing, trigger evaluation
+        const responses = [...useGameStore.getState().userResponses];
+        setTimeout(() => runEvaluation(responses), 800);
+        return;
+      }
+
+      if (nextStep.speaker === "customer") {
+        setIsTyping(true);
+        setWaitingForUser(false);
+
+        let aiResponse: { response: string; moodDelta: number };
+        try {
+          aiResponse = await fetchAICustomerResponse(nextStep.text, nextStep.text);
+        } catch {
+          aiResponse = { response: nextStep.text, moodDelta: 0 };
+        }
+
+        if (aiResponse.moodDelta !== 0) {
+          updateMood(aiResponse.moodDelta);
+        }
+
+        setIsTyping(false);
+        addMessage({ role: "customer", content: aiResponse.response || nextStep.text });
+
+        const systemStepIndex = nextIndex + 1;
+        if (systemStepIndex < sc.steps.length && sc.steps[systemStepIndex]?.speaker === "system") {
+          advanceStep();
+          setTimeout(() => {
+            setWaitingForUser(true);
+            setAdvancing(false);
+          }, 600);
+        } else if (systemStepIndex >= sc.steps.length) {
+          const responses = [...useGameStore.getState().userResponses];
+          setTimeout(() => runEvaluation(responses), 800);
+        } else {
+          setWaitingForUser(true);
+          setAdvancing(false);
+        }
+      } else if (nextStep.speaker === "system") {
+        setTimeout(() => {
+          addMessage({ role: "system", content: nextStep.text, stepIndex: nextIndex });
+          setWaitingForUser(true);
+          setAdvancing(false);
+        }, 500);
+      }
+    } catch (err) {
+      console.error("advanceConversation error:", err);
+      // Recover: re-enable input so user isn't stuck
+      setIsTyping(false);
+      setWaitingForUser(true);
+      setAdvancing(false);
     }
   }, [sc, advanceStep, runEvaluation, fetchAICustomerResponse, updateMood, addMessage, setAdvancing]);
 
   const handleSend = () => {
-    if (!input.trim() || !waitingForUser || !sc || useGameStore.getState().isAdvancing) return;
-    const response = input.trim();
-    setInput("");
-    if (inputRef.current) inputRef.current.style.height = "auto";
+    try {
+      if (!input.trim() || !waitingForUser || !sc || useGameStore.getState().isAdvancing) return;
+      const response = input.trim();
+      setInput("");
+      if (inputRef.current) inputRef.current.style.height = "auto";
 
-    const violations = checkCompliance([response], sc.complianceRules);
-    if (violations.length > 0) {
-      const existingViolations = useGameStore.getState().complianceViolations;
-      for (const v of violations) {
-        if (!existingViolations.includes(v.phrase)) {
-          addComplianceViolation(v.phrase);
+      const violations = checkCompliance([response], sc.complianceRules);
+      if (violations.length > 0) {
+        const existingViolations = useGameStore.getState().complianceViolations;
+        for (const v of violations) {
+          if (!existingViolations.includes(v.phrase)) {
+            addComplianceViolation(v.phrase);
+          }
         }
+        addMessage({ role: "compliance", content: violations[0].message });
+        updateMood(-2);
       }
-      addMessage({ role: "compliance", content: violations[0].message });
-      updateMood(-2);
-    }
 
-    addMessage({ role: "user", content: response });
-    submitResponse(response);
-    setWaitingForUser(false);
-    setTimeout(() => advanceConversation(), 400);
+      addMessage({ role: "user", content: response });
+      submitResponse(response);
+      setWaitingForUser(false);
+      setTimeout(() => advanceConversation(), 400);
+    } catch (err) {
+      console.error("handleSend error:", err);
+      setWaitingForUser(true);
+      setAdvancing(false);
+    }
   };
 
   if (!sc) return null;
@@ -359,9 +393,18 @@ export function GamePlay() {
             <p className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>vs {sc.customer.name}</p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5">
-          <Clock size={11} style={{ color: "var(--text-ghost)" }} />
-          <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{formatTime(elapsedTime)}</span>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5">
+            <Clock size={11} style={{ color: "var(--text-ghost)" }} />
+            <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{formatTime(elapsedTime)}</span>
+          </div>
+          <button
+            onClick={handleEndEarly}
+            className="btn-ghost text-[9px] px-2 sm:px-3 py-1"
+            style={{ color: "var(--danger)" }}
+          >
+            SUBMIT & END
+          </button>
         </div>
       </div>
     </div>

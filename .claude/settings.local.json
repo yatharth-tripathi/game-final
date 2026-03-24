@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(shopt:*)",
+      "Bash(rm:*)",
+      "Bash(git remote:*)",
+      "Bash(find:*)",
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)",
+      "Bash(npx next:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(node:*)"
+    ]
+  }
+}
