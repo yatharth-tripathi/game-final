@@ -3,6 +3,8 @@ import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { buildEvaluatorPrompt } from "@/lib/nexus-prompt";
 
+export const maxDuration = 30;
+
 export async function POST(req: NextRequest) {
   try {
     const { scenario, userResponses, conversationHistory, moodTrajectory } = await req.json();

@@ -3,6 +3,9 @@ import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { buildCustomerPrompt } from "@/lib/nexus-prompt";
 
+// Allow up to 30s on Vercel Pro (hobby stays at 10s)
+export const maxDuration = 30;
+
 export async function POST(req: NextRequest) {
   try {
     const { persona, conversationHistory, stepContext, currentMood, fallbackText, hotButtons } = await req.json();
@@ -11,7 +14,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ response: fallbackText || "I see.", moodDelta: 0 });
     }
 
-    const historyText = conversationHistory
+    // Only send the last 8 messages to keep token count low and API fast
+    const recentHistory = Array.isArray(conversationHistory)
+      ? conversationHistory.slice(-8)
+      : [];
+
+    const historyText = recentHistory
       .map((m: { role: string; content: string }) => {
         const label = m.role === "customer" ? "CLIENT" : m.role === "user" ? "RM" : "SYSTEM";
         return `[${label}]: ${m.content}`;
@@ -32,7 +40,7 @@ export async function POST(req: NextRequest) {
         { role: "user", content: `CONVERSATION SO FAR:\n${historyText}\n\nRespond as the client now. Stay in character. Include MOOD_DELTA at the end.` },
       ],
       temperature: 0.75,
-      maxOutputTokens: 250,
+      maxOutputTokens: 200,
     });
 
     const lines = text.trim().split("\n");

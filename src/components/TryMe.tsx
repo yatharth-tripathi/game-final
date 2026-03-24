@@ -11,11 +11,10 @@ import {
   ArrowLeft, ArrowUp, Clock, ChevronRight, MessageSquare, Target,
 } from "lucide-react";
 
-function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 25000): Promise<Response> {
-  return Promise.race([
-    fetch(url, options),
-    new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Timeout")), timeoutMs)),
-  ]);
+function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 12000): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
 }
 
 interface ChatMessage {
@@ -87,6 +86,7 @@ export function TryMe() {
     try {
       const history = [...messages, { role: "user", content: userText }]
         .filter((m) => m.role === "customer" || m.role === "user")
+        .slice(-8)
         .map((m) => ({ role: m.role, content: m.content }));
 
       const res = await fetchWithTimeout("/api/tryme", {
@@ -100,8 +100,9 @@ export function TryMe() {
         }),
       });
 
+      if (!res.ok) throw new Error("API failed");
       const data = await res.json();
-      let response = data.response || "I see...";
+      let response = data?.response || "I see...";
       if (response.length > 500) response = response.slice(0, 500);
 
       if (data.moodDelta) {

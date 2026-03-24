@@ -14,14 +14,11 @@ import {
   ChevronRight, AlertTriangle,
 } from "lucide-react";
 
-// Timeout wrapper for fetch calls
-function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 25000): Promise<Response> {
-  return Promise.race([
-    fetch(url, options),
-    new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Request timed out")), timeoutMs)
-    ),
-  ]);
+// Timeout wrapper for fetch calls — 12s to stay within Vercel's limits
+function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 12000): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
 }
 
 export function GamePlay() {
@@ -73,14 +70,18 @@ export function GamePlay() {
   }, [waitingForUser]);
 
   // Fetch AI customer response with timeout + fallback
+  // Reads messages from store directly (not closure) to avoid stale data
   const fetchAICustomerResponse = useCallback(async (
     fallbackText: string, stepContext: string
   ): Promise<{ response: string; moodDelta: number }> => {
     if (!sc) return { response: fallbackText, moodDelta: 0 };
     try {
-      const conversationHistory = messages
-        .filter(m => m.role === "customer" || m.role === "user")
-        .map(m => ({ role: m.role, content: m.content }));
+      // Read fresh messages from store, not stale closure
+      const freshMessages = useGameStore.getState().messages;
+      const conversationHistory = freshMessages
+        .filter((m: { role: string }) => m.role === "customer" || m.role === "user")
+        .slice(-8) // Only last 8 messages to keep API fast
+        .map((m: { role: string; content: string }) => ({ role: m.role, content: m.content }));
 
       const res = await fetchWithTimeout("/api/customer", {
         method: "POST",
@@ -98,10 +99,11 @@ export function GamePlay() {
       if (!res.ok) throw new Error("Customer AI failed");
       const data = await res.json();
 
-      let response = data.response || fallbackText;
+      let response = data?.response || fallbackText;
+      if (typeof response !== "string") response = fallbackText;
       if (response.length > 500) response = response.slice(0, 500);
 
-      const moodDelta = typeof data.moodDelta === "number"
+      const moodDelta = typeof data?.moodDelta === "number"
         ? Math.max(-3, Math.min(3, data.moodDelta))
         : 0;
 
@@ -109,7 +111,7 @@ export function GamePlay() {
     } catch {
       return { response: fallbackText, moodDelta: 0 };
     }
-  }, [sc, messages]);
+  }, [sc]);
 
   // Run evaluation (AI + fallback)
   const runEvaluation = useCallback(async (responses: string[]) => {
@@ -118,7 +120,9 @@ export function GamePlay() {
     setIsEvaluating(true);
     setEvalStatus("Connecting to AI evaluator...");
 
-    const conversationHistory = messages.map((m) => ({ role: m.role, content: m.content }));
+    // Read fresh messages from store
+    const freshMessages = useGameStore.getState().messages;
+    const conversationHistory = freshMessages.map((m: { role: string; content: string }) => ({ role: m.role, content: m.content }));
     const currentViolations = useGameStore.getState().complianceViolations;
 
     try {
@@ -127,12 +131,19 @@ export function GamePlay() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          scenario: sc,
+          scenario: {
+            title: sc.title,
+            category: sc.category,
+            difficulty: sc.difficulty,
+            customer: sc.customer,
+            evaluationRules: sc.evaluationRules,
+            complianceRules: sc.complianceRules,
+          },
           userResponses: responses,
-          conversationHistory,
+          conversationHistory: conversationHistory.slice(-20),
           moodTrajectory: `Start: ${sc.customer.moodInitial}/10 → End: ${useGameStore.getState().mood}/10`,
         }),
-      }, 30000);
+      }, 15000);
 
       if (!res.ok) throw new Error("API failed");
       const text = await res.text();
@@ -196,7 +207,7 @@ export function GamePlay() {
       const result = evaluatePerformance(responses, sc.evaluationRules, sc.complianceRules);
       setEvaluation(result);
     }
-  }, [sc, messages, setEvaluation]);
+  }, [sc, setEvaluation]);
 
   // Mood-triggered abandon — customer walks away if mood drops to 1
   useEffect(() => {
