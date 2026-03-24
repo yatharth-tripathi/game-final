@@ -26,10 +26,10 @@ export default function Home() {
   // Auto-redirect: if profiled → lobby, if not profiled → stay on login for step 2
   useEffect(() => {
     if (hydrated && phase === "login" && career.playerId) {
-      if (career.profileCompleted) {
+      if (career.profileCompleted === true) {
         setPhase("lobby");
       }
-      // If not profiled, stay on "login" — Login component will show step 2
+      // If not profiled (false or undefined), stay on "login" for step 2
     }
   }, [hydrated, phase, career.playerId, career.profileCompleted, setPhase]);
 

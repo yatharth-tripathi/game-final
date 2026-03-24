@@ -313,6 +313,17 @@ export const useGameStore = create<GameState>()(
     {
       name: "nexus-bank-game",
       partialize: (state) => ({ career: state.career }),
+      // Deep merge: ensures new career fields get defaults when loading old localStorage data
+      merge: (persisted, current) => {
+        const p = persisted as { career?: Partial<CareerProfile> } | undefined;
+        return {
+          ...current,
+          career: {
+            ...(current as GameState).career,
+            ...(p?.career || {}),
+          },
+        };
+      },
     }
   )
 );

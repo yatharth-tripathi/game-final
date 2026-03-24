@@ -40,7 +40,7 @@ export function Login() {
   const { setPlayer, setPhase, setExperienceProfile, updateAdaptiveLevel, career } = store;
 
   // Returning user who hasn't profiled → jump straight to step 2
-  const isReturningUnprofiled = career.playerId && !career.profileCompleted;
+  const isReturningUnprofiled = !!(career.playerId && career.profileCompleted === false);
   const [step, setStep] = useState(isReturningUnprofiled ? 2 : 1);
   const [name, setName] = useState("");
   const [branch, setBranch] = useState("HQ");

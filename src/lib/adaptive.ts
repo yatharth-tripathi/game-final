@@ -62,16 +62,18 @@ export interface ClassifiedScenario {
 
 export function classifyScenario(
   scenario: Scenario,
-  adaptiveLevel: string,
-  completedScenarios: string[],
-  sessionHistory: Array<{ scenarioId: string; percentage: number }>,
+  adaptiveLevel: string | undefined,
+  completedScenarios: string[] | undefined,
+  sessionHistory: Array<{ scenarioId: string; percentage: number }> | undefined,
 ): ClassifiedScenario {
-  const playerIdx = difficultyIndex(adaptiveLevel);
+  const playerIdx = difficultyIndex(adaptiveLevel || "easy");
   const scenarioIdx = difficultyIndex(scenario.difficulty);
-  const isCompleted = completedScenarios.includes(scenario.id);
+  const safeCompleted = completedScenarios || [];
+  const safeHistory = sessionHistory || [];
+  const isCompleted = safeCompleted.includes(scenario.id);
 
   // Best score for this scenario across all sessions
-  const scores = sessionHistory
+  const scores = safeHistory
     .filter((s) => s.scenarioId === scenario.id)
     .map((s) => s.percentage);
   const bestScore = scores.length > 0 ? Math.max(...scores) : null;
@@ -103,14 +105,13 @@ export function classifyScenario(
 
 export function sortScenariosForPlayer<T extends { tag: ScenarioTag; relevanceScore: number; category: string }>(
   scenarios: T[],
-  expertiseAreas: string[],
+  expertiseAreas: string[] | undefined,
 ): T[] {
+  const safeAreas = expertiseAreas || [];
   return [...scenarios].sort((a, b) => {
-    // Primary: relevance score (higher first)
     if (b.relevanceScore !== a.relevanceScore) return b.relevanceScore - a.relevanceScore;
-    // Secondary: expertise match
-    const aMatch = expertiseAreas.includes(a.category) ? 1 : 0;
-    const bMatch = expertiseAreas.includes(b.category) ? 1 : 0;
+    const aMatch = safeAreas.includes(a.category) ? 1 : 0;
+    const bMatch = safeAreas.includes(b.category) ? 1 : 0;
     return bMatch - aMatch;
   });
 }

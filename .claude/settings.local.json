@@ -11,7 +11,8 @@
       "Bash(npx next:*)",
       "Bash(git add:*)",
       "Bash(git push:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

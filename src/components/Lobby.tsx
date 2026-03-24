@@ -67,17 +67,20 @@ export function Lobby() {
     : allScenarios.filter((s) => s.category === selectedCategory);
 
   // Classify and sort scenarios — works for both profiled and non-profiled users
-  // Non-profiled users get classification based on their adaptiveLevel (defaults to "easy")
+  const adaptiveLevel = career.adaptiveLevel || "easy";
+  const completedScenarios = career.completedScenarios || [];
+  const expertiseAreas = career.expertiseAreas || [];
+
   const classifiedScenarios = useMemo(() => {
     const classified = filtered.map((s) => ({
       ...s,
-      ...classifyScenario(s, career.adaptiveLevel, career.completedScenarios, sessionHistory),
+      ...classifyScenario(s, adaptiveLevel, completedScenarios, sessionHistory),
     }));
-    return sortScenariosForPlayer(classified, career.expertiseAreas);
-  }, [filtered, career.adaptiveLevel, career.completedScenarios, career.expertiseAreas, sessionHistory]);
+    return sortScenariosForPlayer(classified, expertiseAreas);
+  }, [filtered, adaptiveLevel, completedScenarios, expertiseAreas, sessionHistory]);
 
   const recommendedScenarios = classifiedScenarios.filter(
-    (s) => (s.tag === "NEW" || s.tag === "RECOMMENDED") && !career.completedScenarios.includes(s.id),
+    (s) => (s.tag === "NEW" || s.tag === "RECOMMENDED") && !completedScenarios.includes(s.id),
   );
 
   const level = getCareerLevel(career.totalXP);
@@ -206,7 +209,7 @@ export function Lobby() {
                   color: "var(--accent-gold)",
                   border: "1px solid var(--accent-gold-border)",
                 }}>
-                  {DIFFICULTY_CONFIG[career.adaptiveLevel as keyof typeof DIFFICULTY_CONFIG]?.label || "TRAINEE"} LEVEL
+                  {DIFFICULTY_CONFIG[adaptiveLevel as keyof typeof DIFFICULTY_CONFIG]?.label || "TRAINEE"} LEVEL
                 </span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
