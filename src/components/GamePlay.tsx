@@ -450,16 +450,17 @@ export function GamePlay() {
             <motion.button
               onClick={handleSend}
               disabled={!waitingForUser || !input.trim() || isAdvancing}
-              whileHover={waitingForUser && input.trim() ? { scale: 1.1 } : {}}
-              whileTap={waitingForUser && input.trim() ? { scale: 0.9 } : {}}
+              whileHover={waitingForUser && input.trim() ? { scale: 1.03 } : {}}
+              whileTap={waitingForUser && input.trim() ? { scale: 0.97 } : {}}
               aria-label="Send response"
-              className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5"
+              className="shrink-0 h-10 px-5 rounded-full flex items-center justify-center gap-2 transition-all mb-0.5 text-xs font-bold uppercase tracking-wider"
               style={{
+                fontFamily: "var(--font-mono)",
                 background: input.trim() && waitingForUser ? "linear-gradient(135deg, var(--accent-primary), var(--accent-primary-glow))" : "var(--bg-elevated)",
                 color: input.trim() && waitingForUser ? "#FFFFFF" : "var(--text-secondary)",
               }}
             >
-              <ArrowUp size={16} strokeWidth={2.5} />
+              SEND <ArrowUp size={14} strokeWidth={2.5} />
             </motion.button>
           </div>
           <div className="px-3 sm:px-5 pb-3 flex items-center justify-between">

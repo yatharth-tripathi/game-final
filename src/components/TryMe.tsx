@@ -284,14 +284,15 @@ export function TryMe() {
               style={{ color: "var(--text-primary)", minHeight: 28, maxHeight: 150, fontFamily: "var(--font-body)" }}
             />
             <motion.button onClick={handleSend} disabled={isTyping || !input.trim()}
-              whileHover={input.trim() ? { scale: 1.1 } : {}}
-              whileTap={input.trim() ? { scale: 0.9 } : {}}
-              className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center mb-0.5"
+              whileHover={input.trim() ? { scale: 1.03 } : {}}
+              whileTap={input.trim() ? { scale: 0.97 } : {}}
+              className="shrink-0 h-10 px-5 rounded-full flex items-center justify-center gap-2 mb-0.5 text-xs font-bold uppercase tracking-wider"
               style={{
+                fontFamily: "var(--font-mono)",
                 background: input.trim() ? "linear-gradient(135deg, var(--accent-primary), var(--accent-primary-glow))" : "var(--bg-elevated)",
                 color: input.trim() ? "#FFFFFF" : "var(--text-secondary)",
               }}>
-              <ArrowUp size={16} strokeWidth={2.5} />
+              SEND <ArrowUp size={14} strokeWidth={2.5} />
             </motion.button>
           </div>
           <div className="px-3 sm:px-5 pb-3 flex items-center justify-between">

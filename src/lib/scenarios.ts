@@ -149,6 +149,106 @@ export const SCENARIOS: Scenario[] = [
         bannedPhrases: ["you should put all 10 lakhs", "markets won't crash", "guaranteed 12%", "don't worry", "best time to invest is now"],
         scoring: { "Product Suitability": 15, "Communication Clarity": 15, "Compliance Language": 10 },
       },
+
+      // ── Round 6: Wife Interference ──
+      { speaker: "customer", text: "My wife just texted me asking what I'm doing here. She literally said 'DON'T sign anything.' How exactly do you plan to handle my wife's concerns when she thinks this is a scam?" },
+      { speaker: "system", text: "OBJECTIVE: Offer to include wife in the next discussion, validate her protective instinct, and provide material she can review at home. Do not dismiss or bypass her — she is a key decision-maker. Frame her caution as a strength, not an obstacle.",
+        expectedAction: "Respect wife's role in the financial decision. Offer to schedule a follow-up with both of them. Provide printed or emailed material she can review independently. Validate her protective instinct.",
+        hints: ["Say her concern shows she cares deeply about the family's finances", "Offer to schedule a 20-minute session with both Rajesh and Anita together", "Provide a factsheet or brochure she can read at her own pace — no pressure", "Never position her as the 'obstacle' — she's the co-decision-maker", "Suggest she can call you directly with any questions"],
+        idealKeywords: ["Anita", "include her", "together", "review material", "factsheet", "schedule a meeting", "both of you", "valid concern", "protective", "her questions", "co-decision"],
+        bannedPhrases: ["convince her", "she doesn't understand", "ignore her", "she's wrong", "just sign now", "don't tell her"],
+        scoring: { "Empathy": 10, "Communication Clarity": 8, "Needs Discovery": 7 },
+      },
+
+      // ── Round 7: SIP Mechanics Deep Dive ──
+      { speaker: "customer", text: "OK explain SIP to me like I'm an idiot. How does it ACTUALLY work? Where does my money physically go?" },
+      { speaker: "system", text: "OBJECTIVE: Explain SIP mechanics clearly and simply — auto-debit from bank account on a fixed date, money goes to the fund house, converted to units at that day's NAV, fund manager invests across a diversified portfolio of stocks/bonds. Demystify the process without jargon overload.",
+        expectedAction: "Break down SIP step-by-step: auto-debit, NAV-based unit allocation, fund manager's role, portfolio diversification across companies and sectors. Use a simple analogy if possible.",
+        hints: ["Auto-debit: fixed amount leaves your bank on a chosen date every month", "NAV = price per unit that day — like buying rice at today's rate", "Units accumulate over time — more when market is down (cheaper), fewer when up", "Fund manager is a professional who picks where to invest across 40-60 companies", "Money goes into a SEBI-regulated fund, not the bank's pocket"],
+        idealKeywords: ["auto-debit", "NAV", "units", "fund manager", "diversified", "portfolio", "SEBI-regulated", "companies", "monthly", "accumulate", "transparent"],
+        bannedPhrases: ["it's complicated", "don't worry about the details", "just trust the process", "guaranteed returns", "too technical"],
+        scoring: { "Product Knowledge": 10, "Communication Clarity": 10, "Empathy": 5 },
+      },
+
+      // ── Round 8: Tax Implications ──
+      { speaker: "customer", text: "What about taxes? Nobody talks about taxes. If I make gains on mutual funds, how much tax do I pay?" },
+      { speaker: "system", text: "OBJECTIVE: Explain mutual fund taxation clearly and accurately. For equity mutual funds: LTCG (held >1 year) taxed at 12.5% on gains above ₹1.25 lakh exemption per year. STCG (held <1 year) taxed at 20%. Mention that tax obligations exist and must be factored into return expectations. Be precise on current rates.",
+        expectedAction: "State LTCG at 12.5% above ₹1.25L annual exemption for equity MFs held over 1 year. STCG at 20% for holdings under 1 year. Mention these reduce effective returns slightly. Be transparent that tax is an important factor.",
+        hints: ["LTCG on equity MF: 12.5% on gains exceeding ₹1.25 lakh per financial year (held >1 year)", "STCG on equity MF: 20% flat (held <1 year)", "This is why holding period matters — another reason for 5-year horizon", "FD interest is taxed at slab rate (could be 30% for him) — MF taxation can be more efficient", "Always mention that tax rules are subject to change as per government policy"],
+        idealKeywords: ["LTCG", "12.5%", "₹1.25 lakh", "exemption", "STCG", "20%", "one year", "holding period", "tax efficiency", "slab rate", "subject to change"],
+        bannedPhrases: ["tax-free", "no tax on mutual funds", "don't worry about tax", "guaranteed tax saving", "tax rules never change"],
+        scoring: { "Product Knowledge": 10, "Compliance Language": 10, "Communication Clarity": 5 },
+      },
+
+      // ── Round 9: Fund Selection Overwhelm ──
+      { speaker: "customer", text: "There are literally thousands of mutual funds on my broker app. Which specific one do I pick? Give me a name." },
+      { speaker: "system", text: "OBJECTIVE: Do NOT recommend a specific fund by name — this creates conflict of interest and potential compliance issues. Instead, explain fund categories, suggest balanced advantage or hybrid category for his risk profile and 5-year goal, mention SEBI's Risk-O-Meter for comparing funds, and suggest consulting a SEBI-registered investment advisor for specific fund selection.",
+        expectedAction: "Explain categories (large-cap, balanced advantage, hybrid) without naming a specific fund. Suggest balanced advantage category fits his profile. Mention SEBI Risk-O-Meter. Recommend a SEBI-registered advisor for specific fund picks.",
+        hints: ["Don't name a specific fund — say 'I can help you understand categories'", "Balanced advantage funds auto-adjust equity/debt ratio based on market valuations", "SEBI Risk-O-Meter rates every fund from Low to Very High risk — it's on every fund page", "Suggest he look at fund houses with long track records and large AUM", "Offer to connect him with a SEBI-registered investment advisor for specific recommendations"],
+        idealKeywords: ["category", "balanced advantage", "hybrid", "Risk-O-Meter", "SEBI-registered", "advisor", "large-cap", "fund house", "track record", "AUM"],
+        bannedPhrases: ["buy this fund", "I recommend XYZ fund", "this is the best fund", "guaranteed performer", "can't go wrong with"],
+        scoring: { "Compliance Language": 10, "Product Knowledge": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 10: Market Timing Fear ──
+      { speaker: "customer", text: "But markets are at all-time highs right now. Won't I be buying at the peak? Shouldn't I wait for a crash to invest?" },
+      { speaker: "system", text: "OBJECTIVE: Address market timing fear with data. Explain that time in market beats timing the market. SIP handles timing through rupee cost averaging — you buy more units when cheap, fewer when expensive. Missing the best 10 trading days in a decade can destroy returns. Do NOT predict or guarantee market direction.",
+        expectedAction: "Explain time in market > timing the market with historical data. SIP rupee cost averaging removes need to time. Show cost of missing best days. Never predict market direction.",
+        hints: ["Markets have historically hit all-time highs hundreds of times — each was once 'the peak' but was later surpassed", "Missing best 10 days in a 20-year period can halve your returns", "SIP averages your cost — you automatically buy more units when markets dip", "Nobody can consistently predict market tops or bottoms — not even fund managers", "Waiting for a crash means you're also losing FD's post-tax returns vs potential MF returns"],
+        idealKeywords: ["time in market", "timing the market", "rupee cost averaging", "all-time highs", "missing best days", "SIP averages", "no one can predict", "discipline", "historically"],
+        bannedPhrases: ["markets will only go up", "crash won't happen", "now is the perfect time", "guaranteed upside", "I can predict the market"],
+        scoring: { "Product Knowledge": 10, "Objection Handling": 8, "Compliance Language": 7 },
+      },
+
+      // ── Round 11: PPF/NPS Comparison ──
+      { speaker: "customer", text: "My father says I should put this in PPF or NPS. Those are government-backed and safe. Can't I just do that instead?" },
+      { speaker: "system", text: "OBJECTIVE: Compare PPF, NPS, and mutual funds honestly. PPF gives ~7.1% but has a 15-year lock-in (not suitable for 5-year goal). NPS has equity exposure but is locked until age 60. Mutual funds offer flexibility for a 5-year horizon. Different instruments serve different goals — don't trash PPF/NPS, position MF as right for THIS specific goal.",
+        expectedAction: "Compare all three honestly: PPF (7.1%, 15-year lock-in), NPS (equity but locked till 60), MF (flexible, suitable for 5-year goal). Respect his father's advice. Position each for its right use case.",
+        hints: ["PPF is excellent for retirement — but 15-year lock-in makes it wrong for a 5-year college goal", "NPS is great for retirement planning — equity allocation possible, but locked until 60", "Mutual funds are the flexible option for medium-term goals like 5-year college fund", "Don't trash PPF/NPS — say 'your father's advice is sound for retirement, but Riya's college is 5 years away'", "Suggest PPF/NPS for retirement AND MF for Riya's education — different goals, different tools"],
+        idealKeywords: ["PPF", "7.1%", "15-year lock-in", "NPS", "locked till 60", "different goals", "5-year", "flexibility", "college fund", "retirement", "right tool"],
+        bannedPhrases: ["PPF is bad", "NPS is useless", "your father is wrong", "government schemes are outdated", "only mutual funds work"],
+        scoring: { "Product Knowledge": 10, "Objection Handling": 8, "Empathy": 7 },
+      },
+
+      // ── Round 12: Emergency Liquidity Concern ──
+      { speaker: "customer", text: "What if I suddenly need this money in 2 years? My mother might need a surgery. Can I get it out?" },
+      { speaker: "system", text: "OBJECTIVE: Explain that open-ended mutual funds are liquid — redemption in T+2 working days. Exit load typically only in first year (1%). BUT strongly advise NOT to invest emergency money in mutual funds. Keep 6 months of expenses separate in a liquid fund or FD as emergency corpus. The ₹2L for Riya's education should be separate from emergency money.",
+        expectedAction: "Confirm MFs are liquid (T+2 days), explain exit load is only first year. But critically advise keeping emergency fund separate — 6 months expenses in liquid fund or FD. Don't invest emergency money in equity MFs.",
+        hints: ["Open-ended MFs: redemption request today, money in bank in T+2 working days", "Exit load: 1% only if redeemed within first year, zero after that", "CRITICAL: Don't invest emergency money in equity MFs — market could be down when you need it", "Advise keeping 6 months of expenses (~₹2-3L) in a liquid fund or FD as emergency corpus", "The ₹2L for Riya should be SEPARATE from emergency money — different buckets for different needs"],
+        idealKeywords: ["T+2", "liquid", "exit load", "1 year", "emergency fund", "separate", "6 months expenses", "liquid fund", "FD", "different buckets", "not locked"],
+        bannedPhrases: ["money is locked", "you can't withdraw", "don't worry about emergencies", "markets will be up when you need it", "no need for emergency fund"],
+        scoring: { "Product Knowledge": 8, "Product Suitability": 10, "Empathy": 7 },
+      },
+
+      // ── Round 13: Show Me the Data ──
+      { speaker: "customer", text: "I'm an IT guy, I love data. Show me actual numbers. What did balanced advantage funds return over 5, 10, 15 years?" },
+      { speaker: "system", text: "OBJECTIVE: Provide historical return data for balanced advantage funds honestly: typically 9-12% CAGR over 5+ years. But MUST include the SEBI-mandated disclaimer that past performance does not guarantee future returns. Show a range, not a single number. Compare with FD post-tax returns to illustrate the gap. Be data-driven but compliant.",
+        expectedAction: "Share historical data: balanced advantage category has typically delivered 9-12% CAGR over 5+ year periods. Compare with FD at 6% pre-tax (~4.2% post-tax at 30% slab). Always say past performance doesn't guarantee future returns.",
+        hints: ["Balanced advantage funds: ~9-12% CAGR over 5-year rolling periods historically", "Over 10-year periods: typically 10-12% CAGR with lower volatility than pure equity", "FD at 6% pre-tax = ~4.2% post-tax for someone in 30% bracket", "MUST say: 'Past performance does not guarantee future returns' — this is SEBI compliance", "Show a range (9-12%) not a single number — honest representation of variability"],
+        idealKeywords: ["CAGR", "9-12%", "historically", "past performance", "does not guarantee", "future returns", "rolling returns", "range", "FD comparison", "post-tax", "data"],
+        bannedPhrases: ["will definitely give 12%", "guaranteed 10%", "always outperforms", "can't lose over 5 years", "FD is a waste"],
+        scoring: { "Product Knowledge": 10, "Compliance Language": 10, "Communication Clarity": 5 },
+      },
+
+      // ── Round 14: Paperwork and Process ──
+      { speaker: "customer", text: "Fine, let's do this. What's the actual process? How many forms? How long? Do I need to come to the branch?" },
+      { speaker: "system", text: "OBJECTIVE: Explain the onboarding process clearly. KYC requires PAN and Aadhaar. Can be done entirely online via e-KYC — takes minutes, not hours. SIP mandate set up via bank auto-debit. No physical paperwork needed. First NAV allocation happens on the next business day after the first SIP date. Make the process feel simple and modern.",
+        expectedAction: "Walk through the process: e-KYC with PAN + Aadhaar (online, minutes), fund selection, SIP mandate via auto-debit, first investment on next business day. Emphasize it's fully digital, no branch visits needed.",
+        hints: ["KYC: PAN + Aadhaar — can be done via e-KYC online in minutes", "If KYC already done (check on KRA website), even faster", "SIP mandate: one-time auto-debit setup from his bank account", "No physical forms needed — entire process is digital now", "First NAV allocation: next business day after SIP debit date"],
+        idealKeywords: ["e-KYC", "PAN", "Aadhaar", "online", "minutes", "auto-debit", "SIP mandate", "digital", "no paperwork", "next business day", "NAV"],
+        bannedPhrases: ["it's a long process", "you need to visit multiple times", "lots of paperwork", "complicated setup", "takes weeks"],
+        scoring: { "Process Knowledge": 10, "Communication Clarity": 8, "Product Knowledge": 7 },
+      },
+
+      // ── Round 15: Review Plan and Exit Strategy ──
+      { speaker: "customer", text: "Last question. When do we review this? I'm not going to put money in and forget. And if things go badly, what's our exit plan?" },
+      { speaker: "system", text: "OBJECTIVE: Set up a quarterly review cadence. Discuss rebalancing if asset allocation drifts significantly. Pre-define exit triggers: goal amount achieved = redeem, or significant life change triggers a review. Give personal contact for ongoing support. Do NOT say 'set it and forget it.' Close the conversation with confidence and genuine care for his financial wellbeing.",
+        expectedAction: "Propose quarterly reviews. Define exit triggers (goal achieved, life change, significant underperformance vs category). Offer personal contact. Close with warmth — he came in skeptical and is leaving with a plan.",
+        hints: ["Quarterly review: sit down every 3 months and check performance vs category benchmark", "Rebalancing: if equity allocation drifts beyond target, adjust", "Exit trigger 1: Riya's college fund reaches ₹12-15L target = start shifting to debt/FD 6 months before needed", "Exit trigger 2: major life change (job loss, medical emergency) = review entire plan", "Give your personal number/email — ongoing relationship, not a one-time sale", "Don't say 'set it and forget it' — he needs active partnership"],
+        idealKeywords: ["quarterly review", "benchmark", "rebalance", "exit trigger", "goal achieved", "life change", "personal contact", "ongoing", "partnership", "shift to debt", "6 months before"],
+        bannedPhrases: ["set it and forget it", "don't look at it", "markets always recover", "no need to review", "I'll handle everything"],
+        scoring: { "Communication Clarity": 10, "Product Suitability": 8, "Empathy": 7 },
+      },
     ],
     evaluationRules: [
       { skill: "Needs Discovery", keywords: ["daughter", "college", "timeline", "5 years", "how much", "risk appetite", "financial goal", "Riya", "education"], weight: 15 },
@@ -239,6 +339,106 @@ export const SCENARIOS: Scenario[] = [
         idealKeywords: ["summary", "₹1 crore", "₹700 per month", "term plan", "email", "comparison", "call with both", "no pressure", "cooling-off period", "take your time", "Karthik", "this week"],
         bannedPhrases: ["you need to decide now", "offer expires", "limited time", "premium will increase if you wait", "don't delay", "sign today"],
         scoring: { "Communication Clarity": 15, "Empathy": 15, "Product Suitability": 10 },
+      },
+
+      // ── Round 6: Term vs Endowment ──
+      { speaker: "customer", text: "My friend at work has an LIC endowment plan. She says she gets ALL her money back plus bonus after 20 years. Isn't that way better than term insurance where you literally get NOTHING back?" },
+      { speaker: "system", text: "OBJECTIVE: Explain the difference between endowment and term insurance honestly. Endowment = savings component + low insurance cover. Term = pure protection + high cover at fraction of cost. ₹700/month gets ₹1Cr term cover vs maybe ₹5L endowment cover at similar premium. 'Getting nothing back' means nothing bad happened — that's the best outcome. Don't trash endowment plans but clearly show the trade-off.",
+        expectedAction: "Compare: same ₹700/month — term gives ₹1Cr cover, endowment might give ₹5L cover + money back. Explain that endowment mixes insurance and savings poorly. 'Getting nothing back' = your family didn't need the claim = best-case scenario.",
+        hints: ["₹700/month term = ₹1Cr cover. ₹700/month endowment = maybe ₹5L cover + low returns", "Endowment returns typically 4-5% — less than FD after adjusting for charges", "Insurance should protect, investments should grow — don't mix the two", "Reframe 'getting nothing back': it means everyone in your family is alive and healthy", "Don't insult LIC or her friend — say 'different products serve different purposes'"],
+        idealKeywords: ["term", "endowment", "₹1 crore", "₹5 lakh", "pure protection", "money back", "cover", "returns", "separate", "insurance and investment", "nothing bad happened"],
+        bannedPhrases: ["endowment is a scam", "LIC is bad", "your friend is wrong", "waste of money", "never buy endowment"],
+        scoring: { "Product Knowledge": 10, "Objection Handling": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 7: Critical Illness ──
+      { speaker: "customer", text: "What if I don't die but get something serious like cancer? Does term insurance help then?" },
+      { speaker: "system", text: "OBJECTIVE: Explain critical illness rider — an add-on to the term plan that triggers a lump-sum payout on diagnosis of specified critical illnesses (cancer, heart attack, stroke, etc.), not on death. Also mention that separate health insurance is necessary for hospitalization costs. Don't oversell riders — present them as optional enhancements.",
+        expectedAction: "Explain critical illness rider: add-on to term plan, pays lump sum on diagnosis (not death). List common covered illnesses. Emphasize that health insurance is a separate, necessary product for hospital bills. Present rider as optional.",
+        hints: ["Critical illness rider: add-on that pays lump sum on diagnosis of specified illnesses", "Covers cancer, heart attack, stroke, kidney failure, etc. — varies by insurer", "This payout helps replace income during treatment, not hospital bills", "Health insurance is SEPARATE and necessary for hospitalization — don't conflate the two", "Rider adds ~₹100-200/month to the premium — mention the cost transparently"],
+        idealKeywords: ["critical illness rider", "diagnosis", "lump sum", "cancer", "heart attack", "add-on", "health insurance", "separate", "hospitalization", "optional", "income replacement"],
+        bannedPhrases: ["covers everything", "you won't need health insurance", "no additional cost", "guaranteed payout", "all illnesses covered"],
+        scoring: { "Product Knowledge": 10, "Compliance Language": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 8: Health Insurance Gap ──
+      { speaker: "customer", text: "Wait — we don't have health insurance EITHER! Karthik's startup covers nothing. Is that actually a bigger emergency?" },
+      { speaker: "system", text: "OBJECTIVE: Acknowledge that YES, health insurance might be more immediately urgent than life insurance. A family floater for a young couple + child is affordable (₹15-20K/year for ₹10L cover). Prioritize both but honestly acknowledge the health insurance urgency. Don't use this as an opportunity to upsell aggressively — be genuinely helpful.",
+        expectedAction: "Confirm health insurance is critically urgent — one hospitalization without coverage can wipe savings. Suggest family floater: ₹15-20K/year for ₹10L cover for the whole family. Prioritize both but be honest about urgency.",
+        hints: ["YES — health insurance might be the more immediate need, be honest about this", "Family floater: one policy covers Meera + Karthik + Arjun", "₹15-20K/year (~₹1,500/month) for ₹10L family floater cover at their age", "One hospital stay can cost ₹2-5L easily — this is the immediate financial risk", "Suggest getting both but acknowledge health insurance is the burning platform"],
+        idealKeywords: ["health insurance", "urgent", "family floater", "₹15,000", "₹20,000", "₹10 lakh cover", "hospitalization", "immediate", "both", "priority", "one policy"],
+        bannedPhrases: ["you're completely unprotected", "disaster waiting to happen", "irresponsible", "how could you not have", "you must buy today"],
+        scoring: { "Product Suitability": 10, "Empathy": 8, "Needs Discovery": 7 },
+      },
+
+      // ── Round 9: Child Education Plan ──
+      { speaker: "customer", text: "My colleague Nisha has a child education plan from LIC. She says it'll pay for her daughter's college. Should I get one for Arjun?" },
+      { speaker: "system", text: "OBJECTIVE: Child education plans are often expensive endowment or ULIP products with high charges and mediocre returns. Compare honestly: a term plan + MF SIP for education gives better protection AND better investment returns than a bundled child plan. Don't mix insurance and investment. Be diplomatic about Nisha's plan.",
+        expectedAction: "Explain that child plans bundle insurance + investment at higher cost. Better approach: separate term plan for protection + SIP in equity MF for Arjun's education corpus. Show the math advantage. Don't insult Nisha's choice.",
+        hints: ["Child plans are typically endowment/ULIP wrappers with high charges (2-5% allocation charges)", "Separate approach: ₹700/month term + ₹5,000/month SIP = better protection AND better corpus", "Child plan returns: typically 5-6%. MF SIP over 16 years: historically 10-12%", "The difference in corpus over 16 years (until Arjun is 18) can be massive", "Don't say 'Nisha's plan is bad' — say 'there's a more efficient approach for you'"],
+        idealKeywords: ["child plan", "bundled", "charges", "separate", "term plan", "SIP", "education corpus", "better returns", "more efficient", "16 years", "Arjun"],
+        bannedPhrases: ["child plans are scams", "Nisha was cheated", "LIC is terrible", "never buy child plans", "guaranteed education fund"],
+        scoring: { "Product Knowledge": 10, "Product Suitability": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 10: ULIP Temptation ──
+      { speaker: "customer", text: "Actually, my relationship manager at another bank suggested a ULIP last month. He said it's 'insurance plus investment — best of both worlds.' Is that true?" },
+      { speaker: "system", text: "OBJECTIVE: Explain ULIP charges honestly — premium allocation charge (3-5%), mortality charge, admin charge, fund management charge. Compare total cost of ULIP vs term + MF separately. Don't trash ULIPs entirely — IRDAI has improved regulation and reduced charges over the years — but explain the trade-offs clearly. Let her make an informed decision.",
+        expectedAction: "Break down ULIP charges: premium allocation, mortality, admin, fund management. Compare with term + MF approach. Acknowledge IRDAI improvements but show that separate products are typically more cost-effective. Be balanced, not dismissive.",
+        hints: ["ULIP charges: premium allocation ~3-5% in early years, mortality charges, admin charges, fund management ~1.35%", "After all charges, effective investment is lower than investing directly in MFs", "IRDAI has capped charges and improved transparency since 2019 — acknowledge this", "5-year lock-in period for ULIPs — can't exit before that", "Separate term + MF: full transparency on costs, no lock-in (for MF), higher insurance cover"],
+        idealKeywords: ["ULIP", "charges", "premium allocation", "mortality charge", "fund management", "separate", "term plus MF", "lock-in", "5 years", "IRDAI", "transparency", "compare"],
+        bannedPhrases: ["ULIP is a scam", "never buy ULIP", "worst product ever", "that RM cheated you", "ULIPs are perfect"],
+        scoring: { "Product Knowledge": 10, "Compliance Language": 8, "Objection Handling": 7 },
+      },
+
+      // ── Round 11: Claim Process Mechanics ──
+      { speaker: "customer", text: "Let's say worst case actually happens. How does the claim process work? Who files it? How long does it take? Be specific." },
+      { speaker: "system", text: "OBJECTIVE: Explain the claim process factually and specifically. Nominee or legal heir files the claim with death certificate, policy documents, and KYC. Top insurers settle claims in 30-60 days. After 3 years from policy start, the insurer cannot reject a claim on grounds of non-disclosure (Section 45, Insurance Act 1938). Be factual and procedural, not scary or emotional.",
+        expectedAction: "Walk through claim process step by step: nominee files with death certificate + policy docs, insurer investigates, settlement in 30-60 days for top insurers. Mention Section 45 protection after 3 years. Be matter-of-fact, not fear-inducing.",
+        hints: ["Nominee (Karthik) or legal heir files claim with: death certificate, policy document, claimant's KYC", "Top insurers: 30-60 days settlement for straightforward claims", "Section 45 of Insurance Act: after 3 years, insurer can't reject on non-disclosure grounds — powerful protection", "Claim settlement ratios are publicly available — check before buying", "Some insurers offer claim concierge services — nominee gets guided through the entire process"],
+        idealKeywords: ["nominee", "death certificate", "policy document", "30-60 days", "Section 45", "3 years", "non-disclosure", "claim settlement ratio", "KYC", "legal heir", "straightforward"],
+        bannedPhrases: ["claims are never rejected", "instant settlement", "guaranteed payout", "100% claims paid", "nothing to worry about"],
+        scoring: { "Product Knowledge": 10, "Compliance Language": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 12: Nomination for Minor ──
+      { speaker: "customer", text: "Can I name Arjun as nominee? He's only 2. Or does it have to be Karthik?" },
+      { speaker: "system", text: "OBJECTIVE: Explain nomination rules clearly. A minor CAN be nominated, but an appointee (adult) must be designated to receive and manage the proceeds until the minor turns 18. Typically, for Meera's policy Karthik would be nominee, and for Karthik's policy Meera would be nominee. Explain the difference between nominee, legal heir, and the importance of a will.",
+        expectedAction: "Explain: minor can be nominee but needs an appointee. For practical purposes, spouse as nominee is simplest. Explain nominee vs legal heir vs will. Suggest having a registered will for complete clarity.",
+        hints: ["Minor CAN be nominee — but must designate an appointee (adult guardian) to manage money until child turns 18", "Simpler approach: Karthik is nominee on Meera's policy, Meera is nominee on Karthik's policy", "Nominee is not the same as legal heir — nominee is a custodian of proceeds, legal heirs have ownership rights", "A registered will overrides nomination in case of dispute — strongly recommend having one", "This is a good time to gently suggest basic estate planning — will + nomination aligned"],
+        idealKeywords: ["nominee", "minor", "appointee", "18 years", "Karthik", "legal heir", "will", "registered will", "guardian", "estate planning", "custodian"],
+        bannedPhrases: ["minors can't be nominees", "doesn't matter who nominee is", "will is not needed", "nomination is final", "no legal complications"],
+        scoring: { "Product Knowledge": 10, "Compliance Language": 7, "Communication Clarity": 8 },
+      },
+
+      // ── Round 13: Tax Benefits ──
+      { speaker: "customer", text: "Does insurance have tax benefits? I vaguely remember something about 80C from tax filing." },
+      { speaker: "system", text: "OBJECTIVE: Explain insurance tax benefits accurately. Term insurance premiums qualify under Section 80C (up to ₹1.5 lakh combined limit with other 80C investments). Death benefit (claim payout) is 100% tax-free under Section 10(10D). Note that GST of 18% applies on insurance premiums. Be precise on tax sections and current rules.",
+        expectedAction: "Confirm: premiums under 80C (₹1.5L limit, shared with PPF/EPF/ELSS etc.), death benefit tax-free under 10(10D), GST of 18% on premiums. Be specific about sections and limits.",
+        hints: ["Section 80C: term insurance premium deductible up to ₹1.5L limit (shared with PPF, EPF, ELSS, etc.)", "Section 10(10D): death benefit is 100% tax-free to the nominee — no income tax on claim amount", "GST: 18% on insurance premiums — so ₹700 + GST = ~₹826 actual outgo per month", "Health insurance premiums qualify under Section 80D — separate section, separate limit", "Tax laws are subject to change — always mention this caveat"],
+        idealKeywords: ["80C", "₹1.5 lakh", "Section 10(10D)", "tax-free", "death benefit", "GST", "18%", "premium", "deduction", "80D", "health insurance", "subject to change"],
+        bannedPhrases: ["completely tax-free", "no tax at all", "save all your tax", "guaranteed tax benefit forever", "no GST"],
+        scoring: { "Product Knowledge": 10, "Compliance Language": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 14: Payment Options ──
+      { speaker: "customer", text: "If I do this, can I pay yearly instead of monthly? Is that cheaper? And can I increase cover later?" },
+      { speaker: "system", text: "OBJECTIVE: Explain payment frequency options and their cost implications. Annual payment typically saves ~5% vs monthly (no loading/frequency charge). Most insurers offer monthly, quarterly, half-yearly, and annual options. Regarding increasing cover: can add top-up or buy new policy later, BUT premium will be higher due to older age and will require fresh medical underwriting. Advise buying adequate cover now while young and healthy.",
+        expectedAction: "Confirm annual saves ~5%. List frequency options. Explain that increasing cover later means higher premium + fresh medicals. Strongly suggest buying adequate cover now at age 32 while healthy and premiums are lowest.",
+        hints: ["Annual payment saves ~5% — no monthly loading charge. ₹8,400/year vs ₹700×12=₹8,400 (some insurers charge ₹730/month for monthly)", "Options: monthly, quarterly, half-yearly, annual — choose what fits cash flow", "Increasing cover later: new policy needed, higher premium (age 35 vs 32), fresh medical tests required", "If any health issue develops between now and then, new policy may be declined or loaded", "Best advice: buy adequate cover NOW while young and healthy — it's the cheapest it will ever be"],
+        idealKeywords: ["annual", "save", "5%", "monthly", "quarterly", "frequency", "increase cover", "new policy", "higher premium", "medical underwriting", "age", "healthy", "adequate cover"],
+        bannedPhrases: ["premium never increases", "you can increase anytime easily", "no medical tests needed", "price is locked forever", "buy minimum now"],
+        scoring: { "Product Knowledge": 10, "Product Suitability": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 15: The Karthik Pitch ──
+      { speaker: "customer", text: "OK I REALLY need to go get Arjun now. Give me the complete 2-minute pitch to convince Karthik tonight. Everything — plan, numbers, what it covers, what it doesn't, and why." },
+      { speaker: "system", text: "OBJECTIVE: Deliver a crisp, complete summary she can relay to Karthik tonight. Cover: Term plan, ₹1Cr cover, ~₹700/month (₹23/day), covers death + optional critical illness rider, excludes suicide in first year, 97%+ claim settlement ratio for top insurers, 15-day free-look period to cancel risk-free, Section 80C tax benefit on premiums. The 'why': zero group coverage at Karthik's startup, young family with ₹25K flat EMI exposure, ₹23/day is less than a coffee. Offer to call Karthik directly or schedule a meeting this weekend.",
+        expectedAction: "Crisp summary: what (term plan ₹1Cr), cost (₹700/month = ₹23/day), covers (death + CI rider option), doesn't cover (suicide year 1, pre-existing non-disclosure), proof (97%+ claim ratio), safety net (15-day free-look), tax (80C). Why: startup with zero coverage, flat EMI at risk, ₹23/day. Next step: call Karthik or meet this weekend.",
+        hints: ["Make it textable — she'll WhatsApp this to Karthik", "Lead with the 'why': startup has zero coverage, ₹25K EMI at risk, Arjun's future", "₹23/day = less than a coffee/auto ride — make the number relatable", "What it covers: death, optional critical illness rider", "What it doesn't: suicide in first year, non-disclosed pre-existing conditions", "Proof point: 97%+ claim settlement ratio, 15-day free-look period", "Close: offer to call Karthik directly or meet both of them Saturday"],
+        idealKeywords: ["term plan", "₹1 crore", "₹700", "₹23 per day", "critical illness", "claim settlement", "97%", "15-day free-look", "80C", "startup", "no coverage", "EMI", "Arjun", "Karthik", "call", "this weekend"],
+        bannedPhrases: ["you must decide tonight", "premium increases tomorrow", "last chance", "he'd be foolish to say no", "sign before you leave", "irresponsible if you don't"],
+        scoring: { "Communication Clarity": 10, "Product Knowledge": 8, "Empathy": 7 },
       },
     ],
     evaluationRules: [
