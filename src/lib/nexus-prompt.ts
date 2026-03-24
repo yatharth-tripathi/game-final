@@ -319,7 +319,7 @@ Generate a complete model conversation. Return ONLY a JSON object (no markdown, 
   "exchanges": [
     {"speaker": "customer", "text": "Customer's opening line", "technique": null},
     {"speaker": "rm", "text": "Ideal RM response", "technique": "Name of technique used and why it works"},
-    ...continue alternating until natural close (6-10 exchanges)
+    ...continue alternating until natural close (minimum 15 exchanges, aim for 15-18 total)
   ],
   "debrief": [
     {"skill": "skill name", "demonstrated": true, "where": "Step N"}
@@ -327,13 +327,16 @@ Generate a complete model conversation. Return ONLY a JSON object (no markdown, 
 }
 
 RULES:
+- CRITICAL: Generate AT LEAST 15 exchanges (alternating customer/rm). This is a FULL masterclass, not a summary.
 - The ideal RM is a MASTERCLASS — not robotic-perfect but human-excellent. Warm without fake. Confident without pushy.
 - Never let the ideal RM mis-sell, over-promise, or skip discovery.
-- The customer must be REALISTIC — not a pushover. At least one genuine objection must occur.
-- Include compliance-sensitive moments and show how to handle them.
-- Use natural Indian English. Real vocabulary.
-- The scenario must reach a natural close.
-- Cover the Discovery Ladder (situation, objective, timeline, risk tolerance).`;
+- The customer must be REALISTIC — not a pushover. Include at least 3 genuine objections and 1 emotional turning point.
+- Include compliance-sensitive moments and show how to handle them correctly.
+- Show the FULL sales/service arc: rapport building → discovery → education → objection handling → product recommendation → compliance disclosure → closing.
+- Use natural Indian English. Real vocabulary. Real emotions.
+- The scenario must reach a natural, satisfying close — not abrupt.
+- Cover the Discovery Ladder (situation, objective, timeline, risk tolerance, constraints).
+- Each RM response should demonstrate a named technique (mirroring, labeling, anchoring, reframing, etc.).`;
 }
 
 export function buildEvaluatorPrompt(scenario: {

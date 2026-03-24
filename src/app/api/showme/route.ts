@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       system: systemPrompt,
       prompt: "Generate the complete SHOW ME demonstration now. Return only JSON.",
       temperature: 0.7,
-      maxOutputTokens: 3000,
+      maxOutputTokens: 8000,
     });
 
     let cleanText = text.trim();
