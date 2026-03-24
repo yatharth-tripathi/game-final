@@ -21,6 +21,16 @@ model Player {
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
   sessions           GameSession[]
+
+  // Experience profile (set during onboarding)
+  experienceTier     String        @default("")
+  currentRole        String        @default("")
+  expertiseAreas     String[]      @default([])
+  profileCompleted   Boolean       @default(false)
+
+  // Adaptive routing (updated after each game)
+  adaptiveLevel      String        @default("easy")
+  adaptiveLevelScore Float         @default(0)
 }
 
 model GameSession {
@@ -40,6 +50,7 @@ model GameSession {
   mood         Int      @default(5)
   violations   Int      @default(0)
   evaluatedBy  String   @default("ai")
+  skillScores  Json?
   createdAt    DateTime @default(now())
 
   @@index([playerId])

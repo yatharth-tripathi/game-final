@@ -56,7 +56,11 @@ export async function POST(req: NextRequest) {
 // PATCH /api/player — sync career data from client
 export async function PATCH(req: NextRequest) {
   try {
-    const { id, totalXP, casesCompleted, scoreSum, streak, lastPlayedDate, completedScenarios } = await req.json();
+    const {
+      id, totalXP, casesCompleted, scoreSum, streak, lastPlayedDate, completedScenarios,
+      experienceTier, currentRole, expertiseAreas, profileCompleted,
+      adaptiveLevel, adaptiveLevelScore,
+    } = await req.json();
     if (!id) return NextResponse.json({ error: "Missing player ID" }, { status: 400 });
 
     const player = await prisma.player.update({
@@ -68,6 +72,12 @@ export async function PATCH(req: NextRequest) {
         streak: streak ?? undefined,
         lastPlayedDate: lastPlayedDate ?? undefined,
         completedScenarios: completedScenarios ?? undefined,
+        experienceTier: experienceTier ?? undefined,
+        currentRole: currentRole ?? undefined,
+        expertiseAreas: expertiseAreas ?? undefined,
+        profileCompleted: profileCompleted ?? undefined,
+        adaptiveLevel: adaptiveLevel ?? undefined,
+        adaptiveLevelScore: adaptiveLevelScore ?? undefined,
       },
     });
 

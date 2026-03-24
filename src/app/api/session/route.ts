@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { computeAdaptiveLevelUpdate } from "@/lib/adaptive";
 
 // POST /api/session — save a completed game session
 export async function POST(req: NextRequest) {
@@ -8,7 +9,7 @@ export async function POST(req: NextRequest) {
     const {
       playerId, scenarioId, scenarioTitle, category, difficulty,
       score, maxScore, percentage, grade, xpAwarded,
-      timeSpent, mood, violations, evaluatedBy,
+      timeSpent, mood, violations, evaluatedBy, skillScores,
     } = body;
 
     if (!playerId || !scenarioId) {
@@ -32,6 +33,7 @@ export async function POST(req: NextRequest) {
         mood: mood || 5,
         violations: violations || 0,
         evaluatedBy: evaluatedBy || "ai",
+        skillScores: skillScores ?? undefined,
       },
     });
 
@@ -48,6 +50,36 @@ export async function POST(req: NextRequest) {
         },
       },
     });
+
+    // Adaptive level update
+    try {
+      const player = await prisma.player.findUnique({ where: { id: playerId } });
+      if (player && player.profileCompleted) {
+        const recentSessions = await prisma.gameSession.findMany({
+          where: { playerId },
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          select: { percentage: true, difficulty: true },
+        });
+
+        const { newScore, newLevel, suggestion } = computeAdaptiveLevelUpdate(
+          player.adaptiveLevelScore,
+          percentage || 0,
+          difficulty || "medium",
+          player.adaptiveLevel,
+          recentSessions,
+        );
+
+        await prisma.player.update({
+          where: { id: playerId },
+          data: { adaptiveLevel: newLevel, adaptiveLevelScore: newScore },
+        });
+
+        return NextResponse.json({ ...session, adaptiveLevel: newLevel, adaptiveLevelScore: newScore, adaptiveSuggestion: suggestion });
+      }
+    } catch (e) {
+      console.error("Adaptive update failed (non-blocking):", e);
+    }
 
     return NextResponse.json(session);
   } catch (error) {

@@ -48,10 +48,19 @@ interface CareerProfile {
   playerBranch: string;
   totalXP: number;
   casesCompleted: number;
-  scoreSum: number; // Store sum instead of average to avoid rounding issues
+  scoreSum: number;
   streak: number;
   lastPlayedDate: string;
   completedScenarios: string[];
+  // Experience profile
+  experienceTier: string;
+  currentRole: string;
+  expertiseAreas: string[];
+  profileCompleted: boolean;
+  // Adaptive routing
+  adaptiveLevel: string;
+  adaptiveLevelScore: number;
+  adaptiveSuggestion: string | null;
 }
 
 interface GameState {
@@ -89,6 +98,9 @@ interface GameState {
   awardXP: (xp: number, scenarioId: string, score: number) => void;
   setAdvancing: (v: boolean) => void;
   setPlayer: (id: string, name: string, branch: string) => void;
+  setExperienceProfile: (tier: string, role: string, areas: string[]) => void;
+  updateAdaptiveLevel: (level: string, score: number, suggestion: string | null) => void;
+  dismissSuggestion: () => void;
   logout: () => void;
 }
 
@@ -120,6 +132,13 @@ export const useGameStore = create<GameState>()(
         streak: 0,
         lastPlayedDate: "",
         completedScenarios: [],
+        experienceTier: "",
+        currentRole: "",
+        expertiseAreas: [],
+        profileCompleted: false,
+        adaptiveLevel: "easy",
+        adaptiveLevelScore: 0,
+        adaptiveSuggestion: null,
       },
 
       setPhase: (phase) => set({ phase }),
@@ -227,6 +246,29 @@ export const useGameStore = create<GameState>()(
         career: { ...state.career, playerId: id, playerName: name, playerBranch: branch },
       })),
 
+      setExperienceProfile: (tier, role, areas) => set((state) => ({
+        career: {
+          ...state.career,
+          experienceTier: tier,
+          currentRole: role,
+          expertiseAreas: areas,
+          profileCompleted: true,
+        },
+      })),
+
+      updateAdaptiveLevel: (level, score, suggestion) => set((state) => ({
+        career: {
+          ...state.career,
+          adaptiveLevel: level,
+          adaptiveLevelScore: score,
+          adaptiveSuggestion: suggestion,
+        },
+      })),
+
+      dismissSuggestion: () => set((state) => ({
+        career: { ...state.career, adaptiveSuggestion: null },
+      })),
+
       logout: () => set(() => ({
         phase: "login" as GamePhase,
         career: {
@@ -239,6 +281,13 @@ export const useGameStore = create<GameState>()(
           streak: 0,
           lastPlayedDate: "",
           completedScenarios: [],
+          experienceTier: "",
+          currentRole: "",
+          expertiseAreas: [],
+          profileCompleted: false,
+          adaptiveLevel: "easy",
+          adaptiveLevelScore: 0,
+          adaptiveSuggestion: null,
         },
       })),
 

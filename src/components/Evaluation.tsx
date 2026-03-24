@@ -38,7 +38,7 @@ function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: 
 
 export function Evaluation() {
   const store = useGameStore();
-  const { evaluation, currentScenario, messages, resetGame, selectScenario, career, awardXP, elapsedTime, mood, complianceViolations } = store;
+  const { evaluation, currentScenario, messages, resetGame, selectScenario, career, awardXP, elapsedTime, mood, complianceViolations, updateAdaptiveLevel } = store;
   const [xpAwarded, setXpAwarded] = useState(false);
   const sessionSaved = useRef(false);
 
@@ -75,8 +75,16 @@ export function Evaluation() {
           mood,
           violations: complianceViolations.length,
           evaluatedBy: ev.evaluatedBy,
+          skillScores: ev.skills,
         }),
-      }).catch((err) => console.error("Failed to save session:", err));
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.adaptiveLevel) {
+            updateAdaptiveLevel(data.adaptiveLevel, data.adaptiveLevelScore || 0, data.adaptiveSuggestion || null);
+          }
+        })
+        .catch((err) => console.error("Failed to save session:", err));
     }
   }, [ev, sc, career.playerId, elapsedTime, mood, complianceViolations]);
 
