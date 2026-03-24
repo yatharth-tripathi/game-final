@@ -36,15 +36,19 @@ const EXPERTISE_AREAS = [
 ];
 
 export function Login() {
-  const { setPlayer, setPhase, setExperienceProfile, updateAdaptiveLevel } = useGameStore();
-  const [step, setStep] = useState(1);
+  const store = useGameStore();
+  const { setPlayer, setPhase, setExperienceProfile, updateAdaptiveLevel, career } = store;
+
+  // Returning user who hasn't profiled → jump straight to step 2
+  const isReturningUnprofiled = career.playerId && !career.profileCompleted;
+  const [step, setStep] = useState(isReturningUnprofiled ? 2 : 1);
   const [name, setName] = useState("");
   const [branch, setBranch] = useState("HQ");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   // Step 2 state
-  const [playerId, setPlayerId] = useState("");
+  const [playerId, setPlayerId] = useState(career.playerId || "");
   const [expTier, setExpTier] = useState("");
   const [role, setRole] = useState("");
   const [expertise, setExpertise] = useState<string[]>([]);

@@ -23,12 +23,15 @@ export default function Home() {
     setHydrated(true);
   }, []);
 
-  // Auto-redirect to lobby if player already logged in (persisted career)
+  // Auto-redirect: if profiled → lobby, if not profiled → stay on login for step 2
   useEffect(() => {
     if (hydrated && phase === "login" && career.playerId) {
-      setPhase("lobby");
+      if (career.profileCompleted) {
+        setPhase("lobby");
+      }
+      // If not profiled, stay on "login" — Login component will show step 2
     }
-  }, [hydrated, phase, career.playerId, setPhase]);
+  }, [hydrated, phase, career.playerId, career.profileCompleted, setPhase]);
 
   // Show loading screen until hydrated
   if (!hydrated) {

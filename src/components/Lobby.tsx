@@ -66,16 +66,15 @@ export function Lobby() {
     ? allScenarios
     : allScenarios.filter((s) => s.category === selectedCategory);
 
-  // Classify and sort scenarios based on player's adaptive level
+  // Classify and sort scenarios — works for both profiled and non-profiled users
+  // Non-profiled users get classification based on their adaptiveLevel (defaults to "easy")
   const classifiedScenarios = useMemo(() => {
-    if (!career.profileCompleted) return filtered.map((s) => ({ ...s, tag: "NEW" as ScenarioTag, bestScore: null, relevanceScore: 50 }));
-
     const classified = filtered.map((s) => ({
       ...s,
       ...classifyScenario(s, career.adaptiveLevel, career.completedScenarios, sessionHistory),
     }));
     return sortScenariosForPlayer(classified, career.expertiseAreas);
-  }, [filtered, career.profileCompleted, career.adaptiveLevel, career.completedScenarios, career.expertiseAreas, sessionHistory]);
+  }, [filtered, career.adaptiveLevel, career.completedScenarios, career.expertiseAreas, sessionHistory]);
 
   const recommendedScenarios = classifiedScenarios.filter(
     (s) => (s.tag === "NEW" || s.tag === "RECOMMENDED") && !career.completedScenarios.includes(s.id),
@@ -190,7 +189,7 @@ export function Lobby() {
           )}
 
           {/* ── RECOMMENDED FOR YOU ── */}
-          {career.profileCompleted && recommendedScenarios.length > 0 && (
+          {recommendedScenarios.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -344,14 +343,9 @@ export function Lobby() {
                       <span className="tag" style={{ color: catColor, background: `${catColor}08`, border: `1px solid ${catColor}20` }}>
                         {scenario.category.replace("-", " ")}
                       </span>
-                      {career.profileCompleted && (
-                        <span className="tag" style={{ color: tagStyle.color, background: tagStyle.bg, border: `1px solid ${tagStyle.border}` }}>
-                          {tagStyle.label}
-                        </span>
-                      )}
-                      {!career.profileCompleted && career.completedScenarios.includes(scenario.id) && (
-                        <span className="tag tag-success">DONE</span>
-                      )}
+                      <span className="tag" style={{ color: tagStyle.color, background: tagStyle.bg, border: `1px solid ${tagStyle.border}` }}>
+                        {tagStyle.label}
+                      </span>
                     </div>
                     <h3 className="text-[13px] font-bold leading-tight mb-0.5 transition-colors"
                       style={{ color: isHovered ? "var(--accent-gold)" : "var(--text-primary)" }}>
