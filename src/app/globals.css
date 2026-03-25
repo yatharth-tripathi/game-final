@@ -37,9 +37,9 @@
   --border: #E2E8F0;
   --border-accent: rgba(37, 99, 235, 0.18);
 
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-display: var(--font-space), 'Space Grotesk', system-ui, sans-serif;
+  --font-body: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), 'JetBrains Mono', 'Consolas', monospace;
 
   /* Legacy aliases for components using old variable names */
   --accent-gold: var(--accent-primary);
