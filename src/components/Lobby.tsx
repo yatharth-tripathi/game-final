@@ -9,7 +9,7 @@ import { Particles } from "./Particles";
 import {
   Briefcase, Shield, Headphones, AlertTriangle, Settings, LayoutGrid,
   TrendingUp, ChevronRight, Flame, Star, Clock, Trophy, LogOut, Wrench,
-  Compass, X, Zap,
+  Compass, X, Zap, BarChart3,
 } from "lucide-react";
 
 const categoryIcons: Record<string, typeof Briefcase> = {
@@ -149,6 +149,14 @@ export function Lobby() {
               >
                 <Trophy size={10} style={{ color: "var(--accent-gold)" }} />
                 <span style={{ color: "var(--accent-gold)" }}>RANKS</span>
+              </button>
+              <button
+                onClick={() => setPhase("analytics")}
+                className="flex items-center gap-1 px-2 py-1 rounded-md transition-all hover:opacity-80"
+                style={{ background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.15)" }}
+              >
+                <BarChart3 size={10} style={{ color: "#7C3AED" }} />
+                <span className="hidden sm:inline" style={{ color: "#7C3AED" }}>ANALYTICS</span>
               </button>
               <button
                 onClick={() => setPhase("admin")}

@@ -9,9 +9,10 @@ import { CATEGORY_COLORS } from "@/lib/scenarios";
 import { Particles } from "./Particles";
 import { SplitLayout } from "./SplitLayout";
 import { TestMeInsights } from "./insights/TestMeInsights";
+import { useVoice } from "@/hooks/useVoice";
 import {
   Clock, Briefcase, Brain, Target, ArrowUp,
-  ChevronRight, AlertTriangle, ArrowLeft,
+  ChevronRight, AlertTriangle, ArrowLeft, Mic, MicOff, Volume2, VolumeX,
 } from "lucide-react";
 
 // Timeout wrapper for fetch calls — 12s to stay within Vercel's limits
@@ -39,6 +40,16 @@ export function GamePlay() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const evaluationStarted = useRef(false);
   const shownSystemSteps = useRef<Set<number>>(new Set());
+
+  // Voice mode
+  const voice = useVoice();
+
+  // Sync voice transcript to input
+  useEffect(() => {
+    if (voice.isListening && voice.transcript) {
+      setInput(voice.transcript);
+    }
+  }, [voice.transcript, voice.isListening]);
 
   // Timer — stops when evaluating
   useEffect(() => {
@@ -271,7 +282,9 @@ export function GamePlay() {
         }
 
         setIsTyping(false);
-        addMessage({ role: "customer", content: aiResponse.response || nextStep.text });
+        const customerText = aiResponse.response || nextStep.text;
+        addMessage({ role: "customer", content: customerText });
+        voice.speak(customerText);
 
         const systemStepIndex = nextIndex + 1;
         if (systemStepIndex < sc.steps.length && sc.steps[systemStepIndex]?.speaker === "system") {
@@ -406,6 +419,16 @@ export function GamePlay() {
             <Clock size={11} style={{ color: "var(--text-ghost)" }} />
             <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{formatTime(elapsedTime)}</span>
           </div>
+          {voice.isSupported && (
+            <button
+              onClick={voice.toggleVoice}
+              className="btn-ghost text-[9px] px-2 py-1 flex items-center gap-1"
+              style={{ color: voice.voiceEnabled ? "var(--accent-primary)" : "var(--text-ghost)" }}
+            >
+              {voice.voiceEnabled ? <Volume2 size={11} /> : <VolumeX size={11} />}
+              <span className="hidden sm:inline">{voice.voiceEnabled ? "VOICE ON" : "VOICE OFF"}</span>
+            </button>
+          )}
           <button
             onClick={handleEndEarly}
             className="btn-ghost text-[9px] px-2 sm:px-3 py-1"
@@ -498,8 +521,22 @@ export function GamePlay() {
               className="flex-1 resize-none text-sm leading-relaxed outline-none bg-transparent"
               style={{ color: "var(--text-primary)", opacity: waitingForUser ? 1 : 0.3, minHeight: 28, maxHeight: 150, fontFamily: "var(--font-body)" }}
             />
+            {voice.isSupported && voice.voiceEnabled && (
+              <button
+                onClick={() => voice.isListening ? voice.stopListening() : voice.startListening()}
+                disabled={!waitingForUser}
+                className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5 ${voice.isListening ? "mic-active" : ""}`}
+                style={{
+                  background: voice.isListening ? "rgba(220,38,38,0.1)" : "var(--bg-elevated)",
+                  border: voice.isListening ? "1.5px solid var(--danger)" : "1px solid var(--border)",
+                  color: voice.isListening ? "var(--danger)" : "var(--text-secondary)",
+                }}
+              >
+                {voice.isListening ? <MicOff size={16} /> : <Mic size={16} />}
+              </button>
+            )}
             <motion.button
-              onClick={handleSend}
+              onClick={() => { handleSend(); voice.stopListening(); voice.resetTranscript(); }}
               disabled={!waitingForUser || !input.trim() || isAdvancing}
               whileHover={waitingForUser && input.trim() ? { scale: 1.03 } : {}}
               whileTap={waitingForUser && input.trim() ? { scale: 0.97 } : {}}

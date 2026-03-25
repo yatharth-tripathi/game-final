@@ -448,3 +448,26 @@ textarea::placeholder, input::placeholder {
   font-family: var(--font-body);
 }
 textarea:focus, input:focus { outline: none; }
+
+/* ── Voice Mode ── */
+@keyframes pulse-mic {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+}
+.mic-active {
+  animation: pulse-mic 1.5s ease-in-out infinite;
+}
+
+/* ── Print Styles for Certificate ── */
+@media print {
+  body * { visibility: hidden !important; }
+  #certificate-print, #certificate-print * { visibility: visible !important; }
+  #certificate-print {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @page { margin: 0.5in; size: landscape; }
+}

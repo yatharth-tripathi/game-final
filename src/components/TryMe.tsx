@@ -7,8 +7,10 @@ import { CATEGORY_COLORS } from "@/lib/scenarios";
 import { Particles } from "./Particles";
 import { SplitLayout } from "./SplitLayout";
 import { TryMeInsights } from "./insights/TryMeInsights";
+import { useVoice } from "@/hooks/useVoice";
 import {
   ArrowLeft, ArrowUp, Clock, ChevronRight, MessageSquare, Target,
+  Mic, MicOff, Volume2, VolumeX,
 } from "lucide-react";
 
 function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 12000): Promise<Response> {
@@ -38,6 +40,15 @@ export function TryMe() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const initialized = useRef(false);
   const shownCoaching = useRef<Set<number>>(new Set());
+
+  // Voice mode
+  const voice = useVoice();
+
+  useEffect(() => {
+    if (voice.isListening && voice.transcript) {
+      setInput(voice.transcript);
+    }
+  }, [voice.transcript, voice.isListening]);
 
   // Init mood history
   useEffect(() => {
@@ -110,6 +121,8 @@ export function TryMe() {
         const currentMood = useGameStore.getState().mood;
         setMoodHistory(prev => [...prev, currentMood]);
       }
+
+      voice.speak(response);
 
       const newMessages: ChatMessage[] = [{
         id: crypto.randomUUID(),
@@ -185,6 +198,15 @@ export function TryMe() {
             <Clock size={11} style={{ color: "var(--text-ghost)" }} />
             <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{formatTime(elapsed)}</span>
           </div>
+          {voice.isSupported && (
+            <button
+              onClick={voice.toggleVoice}
+              className="btn-ghost text-[9px] px-2 py-1 flex items-center gap-1"
+              style={{ color: voice.voiceEnabled ? "var(--accent-primary)" : "var(--text-ghost)" }}
+            >
+              {voice.voiceEnabled ? <Volume2 size={11} /> : <VolumeX size={11} />}
+            </button>
+          )}
           {!ended && (
             <button onClick={handleEnd} className="btn-ghost text-[10px] px-3 py-1">
               END SESSION
@@ -284,7 +306,21 @@ export function TryMe() {
               className="flex-1 resize-none text-sm leading-relaxed outline-none bg-transparent"
               style={{ color: "var(--text-primary)", minHeight: 28, maxHeight: 150, fontFamily: "var(--font-body)" }}
             />
-            <motion.button onClick={handleSend} disabled={isTyping || !input.trim()}
+            {voice.isSupported && voice.voiceEnabled && (
+              <button
+                onClick={() => voice.isListening ? voice.stopListening() : voice.startListening()}
+                disabled={isTyping}
+                className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5 ${voice.isListening ? "mic-active" : ""}`}
+                style={{
+                  background: voice.isListening ? "rgba(220,38,38,0.1)" : "var(--bg-elevated)",
+                  border: voice.isListening ? "1.5px solid var(--danger)" : "1px solid var(--border)",
+                  color: voice.isListening ? "var(--danger)" : "var(--text-secondary)",
+                }}
+              >
+                {voice.isListening ? <MicOff size={16} /> : <Mic size={16} />}
+              </button>
+            )}
+            <motion.button onClick={() => { handleSend(); voice.stopListening(); voice.resetTranscript(); }} disabled={isTyping || !input.trim()}
               whileHover={input.trim() ? { scale: 1.03 } : {}}
               whileTap={input.trim() ? { scale: 0.97 } : {}}
               className="shrink-0 h-10 px-5 rounded-full flex items-center justify-center gap-2 mb-0.5 text-xs font-bold uppercase tracking-wider"

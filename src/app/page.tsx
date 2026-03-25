@@ -11,6 +11,7 @@ import { Leaderboard } from "@/components/Leaderboard";
 import { ShowMe } from "@/components/ShowMe";
 import { TryMe } from "@/components/TryMe";
 import { AdminPanel } from "@/components/AdminPanel";
+import { Analytics } from "@/components/Analytics";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -18,6 +19,7 @@ import { AnimatePresence, motion } from "framer-motion";
 const PHASE_PARENT: Record<string, GamePhase> = {
   lobby: "login",
   briefing: "lobby",
+  analytics: "lobby",
   playing: "lobby",
   evaluation: "lobby",
   leaderboard: "lobby",
@@ -144,6 +146,7 @@ export default function Home() {
           {phase === "showme" && <ShowMe key="showme" />}
           {phase === "tryme" && <TryMe key="tryme" />}
           {phase === "admin" && <AdminPanel key="admin" />}
+          {phase === "analytics" && <Analytics key="analytics" />}
         </AnimatePresence>
       </div>
     </ErrorBoundary>

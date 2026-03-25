@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 import type { Scenario } from "@/lib/scenarios";
 import type { EvaluationResult } from "@/lib/evaluator";
 
-export type GamePhase = "login" | "lobby" | "briefing" | "playing" | "evaluation" | "leaderboard" | "showme" | "tryme" | "admin";
+export type GamePhase = "login" | "lobby" | "briefing" | "playing" | "evaluation" | "leaderboard" | "showme" | "tryme" | "admin" | "analytics";
 export type GameMode = "showme" | "tryme" | "testme";
 
 interface Message {
