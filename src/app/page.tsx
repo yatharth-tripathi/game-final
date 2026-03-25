@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useGameStore } from "@/store/useGameStore";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { useGameStore, type GamePhase } from "@/store/useGameStore";
 import { Login } from "@/components/Login";
 import { Lobby } from "@/components/Lobby";
 import { Briefing } from "@/components/Briefing";
@@ -14,11 +14,23 @@ import { AdminPanel } from "@/components/AdminPanel";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AnimatePresence, motion } from "framer-motion";
 
+// Map phases to parent phases for back navigation
+const PHASE_PARENT: Record<string, GamePhase> = {
+  lobby: "login",
+  briefing: "lobby",
+  playing: "lobby",
+  evaluation: "lobby",
+  leaderboard: "lobby",
+  showme: "lobby",
+  tryme: "lobby",
+  admin: "lobby",
+};
+
 export default function Home() {
   const { phase, career, setPhase } = useGameStore();
   const [hydrated, setHydrated] = useState(false);
+  const isPopState = useRef(false);
 
-  // Wait for Zustand to rehydrate from localStorage before rendering
   useEffect(() => {
     setHydrated(true);
   }, []);
@@ -29,11 +41,62 @@ export default function Home() {
       if (career.profileCompleted === true) {
         setPhase("lobby");
       }
-      // If not profiled (false or undefined), stay on "login" for step 2
     }
   }, [hydrated, phase, career.playerId, career.profileCompleted, setPhase]);
 
-  // Show loading screen until hydrated
+  // ── Browser history integration ──
+  // Push state when phase changes (so browser back/forward works)
+  useEffect(() => {
+    if (!hydrated) return;
+    if (isPopState.current) {
+      isPopState.current = false;
+      return;
+    }
+    // Push new history entry for each phase change
+    window.history.pushState({ phase }, "", `#${phase}`);
+  }, [phase, hydrated]);
+
+  // Listen for browser back/forward
+  useEffect(() => {
+    const handlePopState = (e: PopStateEvent) => {
+      if (e.state?.phase) {
+        isPopState.current = true;
+        const targetPhase = e.state.phase as GamePhase;
+        // If going back to login but user is logged in, go to lobby instead
+        if (targetPhase === "login" && career.playerId) {
+          setPhase("lobby");
+        } else {
+          setPhase(targetPhase);
+        }
+      } else {
+        // No state — go to lobby if logged in, else login
+        isPopState.current = true;
+        setPhase(career.playerId ? "lobby" : "login");
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [career.playerId, setPhase]);
+
+  // Reset game state when navigating back to lobby
+  const goBack = useCallback(() => {
+    const parent = PHASE_PARENT[phase];
+    if (parent) {
+      if (phase === "playing" || phase === "showme" || phase === "tryme") {
+        // Reset game state when leaving a game session
+        useGameStore.getState().resetGame();
+      } else {
+        setPhase(parent);
+      }
+    }
+  }, [phase, setPhase]);
+
+  // Expose goBack globally for components
+  useEffect(() => {
+    (window as unknown as Record<string, unknown>).__nexusGoBack = goBack;
+  }, [goBack]);
+
   if (!hydrated) {
     return (
       <div className="h-screen w-full flex items-center justify-center" style={{ background: "var(--bg-void)" }}>
@@ -62,9 +125,7 @@ export default function Home() {
   return (
     <ErrorBoundary>
       <div className="h-screen w-full relative overflow-hidden" style={{ background: "var(--bg-void)" }}>
-        {/* Grid background */}
         <div className="fixed inset-0 pointer-events-none grid-bg" />
-        {/* Top glow */}
         <div
           className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none"
           style={{

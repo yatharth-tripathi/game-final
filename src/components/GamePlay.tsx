@@ -11,7 +11,7 @@ import { SplitLayout } from "./SplitLayout";
 import { TestMeInsights } from "./insights/TestMeInsights";
 import {
   Clock, Briefcase, Brain, Target, ArrowUp,
-  ChevronRight, AlertTriangle,
+  ChevronRight, AlertTriangle, ArrowLeft,
 } from "lucide-react";
 
 // Timeout wrapper for fetch calls — 12s to stay within Vercel's limits
@@ -393,7 +393,9 @@ export function GamePlay() {
     <div className="shrink-0 w-full relative z-10 glass-panel" style={{ borderBottom: "1px solid var(--border)" }}>
       <div className="px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <Briefcase size={13} className="shrink-0" style={{ color: "var(--accent-gold)" }} />
+          <button onClick={() => useGameStore.getState().resetGame()} className="btn-ghost shrink-0 px-2 py-1">
+            <ArrowLeft size={12} />
+          </button>
           <div className="min-w-0">
             <p className="text-xs font-bold truncate" style={{ color: "var(--text-primary)" }}>{sc.title}</p>
             <p className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>vs {sc.customer.name}</p>
