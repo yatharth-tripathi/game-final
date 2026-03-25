@@ -209,23 +209,18 @@ export function GamePlay() {
     }
   }, [sc, setEvaluation]);
 
-  // Mood-triggered abandon — customer walks away if mood drops to 1
+  // Mood warning — show warning when mood is very low but DON'T end the game
+  // The game continues all rounds regardless of mood — mood affects AI tone and final score
   useEffect(() => {
     if (!sc || isEvaluating || evaluationStarted.current) return;
     const currentMood = useGameStore.getState().mood;
     if (currentMood <= 1) {
       addMessage({
-        role: "customer",
-        content: "You know what? I've had enough. I'm done talking to you. I'll take my business elsewhere.",
+        role: "system",
+        content: "⚠ CLIENT TRUST CRITICAL — The customer is extremely frustrated. Focus on empathy and de-escalation to recover the conversation.",
       });
-      setTimeout(() => {
-        const responses = [...useGameStore.getState().userResponses];
-        if (responses.length > 0) {
-          runEvaluation(responses);
-        }
-      }, 1500);
     }
-  }, [mood, sc, isEvaluating, addMessage, runEvaluation]);
+  }, [mood, sc, isEvaluating, addMessage]);
 
   // Force-end the conversation and trigger evaluation
   const handleEndEarly = useCallback(() => {
