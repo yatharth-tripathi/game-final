@@ -190,10 +190,10 @@ export function Login() {
             <Briefcase size={28} color="#FFFFFF" />
           </motion.div>
           <h1 className="text-2xl font-bold tracking-wide" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
-            NEXUS BANK
+            EMPLOYEE TRAINING
           </h1>
           <p className="text-[10px] tracking-[6px] mt-1" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-            TRAINING SIMULATION
+            SIMULATOR
           </p>
         </div>
 

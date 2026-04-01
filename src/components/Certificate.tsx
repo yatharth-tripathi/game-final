@@ -78,7 +78,7 @@ export function Certificate({
                   color: "#FFFFFF",
                 }}
               >
-                NEXUS BANK
+                EMPLOYEE TRAINING SIMULATOR
               </span>
               <ShieldCheck size={18} style={{ color: "rgba(255,255,255,0.9)" }} />
             </div>
@@ -306,7 +306,7 @@ export function Certificate({
               className="text-[8px] tracking-[3px] uppercase"
               style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}
             >
-              NEXUS BANK TRAINING SIMULATION
+              EMPLOYEE TRAINING SIMULATOR
             </p>
           </div>
         </div>

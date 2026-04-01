@@ -534,7 +534,7 @@ export function Evaluation() {
             <div className="flex items-center gap-2 mb-3">
               <Briefcase size={13} style={{ color: "var(--accent-gold)" }} />
               <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
-                NEXUS COACHING PRESCRIPTION
+                COACHING PRESCRIPTION
               </span>
             </div>
             <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-primary)" }}>

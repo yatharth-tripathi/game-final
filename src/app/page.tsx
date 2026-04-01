@@ -117,7 +117,7 @@ export default function Home() {
             </svg>
           </div>
           <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "4px", color: "var(--text-ghost)" }}>
-            LOADING NEXUS...
+            LOADING ETS...
           </p>
         </motion.div>
       </div>

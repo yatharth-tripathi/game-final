@@ -88,7 +88,7 @@ export function ShowMe() {
             </div>
           </motion.div>
           <h2 className="text-lg font-bold mb-2" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
-            NEXUS is generating the masterclass...
+            Generating the masterclass...
           </h2>
           <p className="text-sm" style={{ color: "var(--text-secondary)" }}>Building the ideal conversation for {sc.title}</p>
         </div>

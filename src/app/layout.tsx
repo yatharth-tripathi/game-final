@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NEXUS BANK — BFSI Training Simulation",
+  title: "Employee Training Simulator — BFSI Training Simulation",
   description: "Elite BFSI career simulation. Train like the stakes are real.",
 };
 

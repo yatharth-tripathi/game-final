@@ -106,10 +106,10 @@ export function Lobby() {
             </div>
             <div className="hidden sm:block">
               <span className="font-bold text-sm tracking-wide" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
-                NEXUS BANK
+                EMPLOYEE TRAINING
               </span>
               <p className="text-[9px] tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-                TRAINING SIMULATION
+                SIMULATOR
               </p>
             </div>
           </div>
@@ -392,7 +392,7 @@ export function Lobby() {
 
       <div className="relative z-10 shrink-0 glass-panel px-4 sm:px-8 py-2 flex items-center justify-between"
         style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "3px", color: "var(--text-ghost)", borderTop: "1px solid var(--border)" }}>
-        <span>NEXUS BANK v2.0</span>
+        <span>ETS v2.0</span>
         <span>{classifiedScenarios.length} CASES AVAILABLE</span>
       </div>
     </motion.div>
