@@ -9,12 +9,13 @@ import { Particles } from "./Particles";
 import {
   Briefcase, Shield, Headphones, AlertTriangle, Settings, LayoutGrid,
   TrendingUp, ChevronRight, Flame, Star, Clock, Trophy, LogOut, Wrench,
-  Compass, X, Zap, BarChart3,
+  Compass, X, Zap, BarChart3, FlaskConical,
 } from "lucide-react";
 
 const categoryIcons: Record<string, typeof Briefcase> = {
   all: LayoutGrid, sales: TrendingUp, compliance: Shield,
   "customer-service": Headphones, fraud: AlertTriangle, operations: Settings,
+  pharma: FlaskConical,
 };
 
 const TAG_STYLES: Record<ScenarioTag, { color: string; bg: string; border: string; label: string }> = {

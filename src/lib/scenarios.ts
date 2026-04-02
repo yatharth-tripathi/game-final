@@ -56,6 +56,7 @@ export const CATEGORIES = [
   { id: "customer-service", label: "Service" },
   { id: "fraud", label: "Fraud" },
   { id: "operations", label: "Operations" },
+  { id: "pharma", label: "Pharma QA" },
 ];
 
 export const CATEGORY_COLORS: Record<string, string> = {
@@ -64,6 +65,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   "customer-service": "#3B82F6",
   fraud: "#D97706",
   operations: "#16A34A",
+  pharma: "#8B5CF6",
 };
 
 export const DIFFICULTY_CONFIG = {
