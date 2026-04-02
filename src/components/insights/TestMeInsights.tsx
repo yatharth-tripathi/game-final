@@ -62,7 +62,7 @@ export function TestMeInsights() {
           {lastDelta !== 0 && (
             <span className="text-[10px] px-2 py-0.5 rounded-full" style={{
               fontFamily: "var(--font-mono)",
-              fontWeight: 700,
+              fontWeight: 600,
               background: lastDelta > 0 ? "var(--success-bg)" : "var(--danger-bg)",
               color: lastDelta > 0 ? "var(--success)" : "var(--danger)",
             }}>
@@ -116,7 +116,7 @@ export function TestMeInsights() {
 
       {/* Compliance Watch */}
       <div className="insight-card" style={{
-        borderColor: complianceViolations.length > 0 ? "rgba(220,38,38,0.3)" : undefined,
+        borderColor: complianceViolations.length > 0 ? "rgba(196,48,48,0.3)" : undefined,
       }}>
         <div className="insight-card-header" style={{ color: complianceViolations.length > 0 ? "var(--danger)" : "var(--success)" }}>
           <Shield size={11} /> COMPLIANCE WATCH
@@ -157,7 +157,7 @@ export function TestMeInsights() {
           <div className="flex flex-wrap gap-1.5 mt-1">
             {sc.customer.hotButtons.map((btn) => (
               <span key={btn} className="text-[9px] px-2 py-0.5 rounded-full"
-                style={{ background: "var(--danger-bg)", color: "var(--danger)", border: "1px solid rgba(220,38,38,0.15)" }}>
+                style={{ background: "var(--danger-bg)", color: "var(--danger)", border: "1px solid rgba(196,48,48,0.15)" }}>
                 {btn}
               </span>
             ))}

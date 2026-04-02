@@ -362,18 +362,14 @@ export function GamePlay() {
         <Particles count={10} />
         <div className="relative z-10 text-center max-w-sm px-6">
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
-            className="mx-auto mb-8" style={{ width: 80, height: 80 }}
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="mx-auto mb-8 w-20 h-20 rounded-2xl flex items-center justify-center"
+            style={{ background: "var(--bg-tint)", border: "1px solid var(--border)", boxShadow: "var(--shadow-md)" }}
           >
-            <div className="w-full h-full rounded-full flex items-center justify-center"
-              style={{ background: "conic-gradient(var(--accent-gold), var(--accent-gold-glow), var(--accent-gold-dim), var(--accent-gold))", padding: 3 }}>
-              <div className="w-full h-full rounded-full flex items-center justify-center" style={{ background: "var(--bg-void)" }}>
-                <Brain size={28} style={{ color: "var(--accent-gold)" }} />
-              </div>
-            </div>
+            <Brain size={28} style={{ color: "var(--accent-primary)" }} />
           </motion.div>
-          <h2 className="text-lg font-bold uppercase tracking-wide mb-3" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
+          <h2 className="text-lg uppercase tracking-wide mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 600, color: "var(--text-primary)" }}>
             AI Evaluation
           </h2>
           <p className="text-sm mb-8" style={{ color: "var(--text-secondary)" }}>{evalStatus}</p>
@@ -382,7 +378,7 @@ export function GamePlay() {
               <motion.div key={i}
                 animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
                 transition={{ repeat: Infinity, duration: 1.2, delay: i * 0.12 }}
-                className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--accent-gold)" }}
+                className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--accent-primary)" }}
               />
             ))}
           </div>
@@ -392,7 +388,7 @@ export function GamePlay() {
                 animate={{ x: ["-100%", "200%"] }}
                 transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
                 className="h-full w-1/3 rounded-full"
-                style={{ background: "linear-gradient(90deg, transparent, var(--accent-gold), transparent)" }}
+                style={{ background: "linear-gradient(90deg, transparent, var(--accent-primary), transparent)" }}
               />
             </div>
           </div>
@@ -410,14 +406,14 @@ export function GamePlay() {
             <ArrowLeft size={12} />
           </button>
           <div className="min-w-0">
-            <p className="text-xs font-bold truncate" style={{ color: "var(--text-primary)" }}>{sc.title}</p>
+            <p className="text-xs truncate" style={{ fontFamily: "var(--font-display)", fontWeight: 600, color: "var(--text-primary)" }}>{sc.title}</p>
             <p className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>vs {sc.customer.name}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-1.5">
             <Clock size={11} style={{ color: "var(--text-ghost)" }} />
-            <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{formatTime(elapsedTime)}</span>
+            <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>{formatTime(elapsedTime)}</span>
           </div>
           {voice.isSupported && (
             <button
@@ -431,8 +427,8 @@ export function GamePlay() {
           )}
           <button
             onClick={handleEndEarly}
-            className="btn-ghost text-[9px] px-2 sm:px-3 py-1"
-            style={{ color: "var(--danger)" }}
+            className="text-[9px] px-2 sm:px-3 py-1.5 rounded-md font-bold uppercase tracking-wider transition-colors"
+            style={{ background: "var(--danger)", color: "#FFFFFF", fontFamily: "var(--font-mono)" }}
           >
             SUBMIT & END
           </button>
@@ -455,7 +451,7 @@ export function GamePlay() {
               <motion.div initial={{ x: -10 }} animate={{ x: 0 }} className="compliance-alert p-4">
                 <div className="flex items-center gap-2 mb-1.5">
                   <AlertTriangle size={12} style={{ color: "var(--danger)" }} />
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "2px", color: "var(--danger)" }}>COMPLIANCE VIOLATION</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.06em", color: "var(--danger)" }}>COMPLIANCE VIOLATION</span>
                 </div>
                 <p className="text-xs leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
               </motion.div>
@@ -500,13 +496,14 @@ export function GamePlay() {
 
   // ── BOTTOM INPUT ──
   const bottomBar = (
-    <div className="w-full" style={{ background: "linear-gradient(180deg, transparent, var(--bg-void) 20%)" }}>
+    <div className="w-full" style={{ background: "var(--bg-surface)" }}>
       <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 pb-4 sm:pb-5 pt-2 sm:pt-3">
-        <div className="relative rounded-xl transition-all"
+        <div className="relative transition-all"
           style={{
             background: "var(--bg-surface)",
-            border: `1px solid ${waitingForUser ? "var(--accent-gold-border)" : "var(--border)"}`,
-            boxShadow: waitingForUser ? "0 0 20px rgba(37,99,235,0.06), 0 4px 24px rgba(0,0,0,0.08)" : "0 4px 24px rgba(0,0,0,0.06)",
+            border: `1px solid ${waitingForUser ? "var(--accent-primary-border)" : "var(--border)"}`,
+            boxShadow: waitingForUser ? "var(--shadow-ring)" : "var(--shadow-sm)",
+            borderRadius: 12,
           }}>
           <div className="flex items-end gap-2 sm:gap-3 px-3 sm:px-5 pt-3 sm:pt-4 pb-2">
             <textarea
@@ -527,7 +524,7 @@ export function GamePlay() {
                 disabled={!waitingForUser}
                 className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5 ${voice.isListening ? "mic-active" : ""}`}
                 style={{
-                  background: voice.isListening ? "rgba(220,38,38,0.1)" : "var(--bg-elevated)",
+                  background: voice.isListening ? "color-mix(in srgb, var(--danger) 10%, transparent)" : "var(--bg-elevated)",
                   border: voice.isListening ? "1.5px solid var(--danger)" : "1px solid var(--border)",
                   color: voice.isListening ? "var(--danger)" : "var(--text-secondary)",
                 }}
@@ -544,7 +541,7 @@ export function GamePlay() {
               className="shrink-0 h-10 px-5 rounded-full flex items-center justify-center gap-2 transition-all mb-0.5 text-xs font-bold uppercase tracking-wider"
               style={{
                 fontFamily: "var(--font-mono)",
-                background: input.trim() && waitingForUser ? "linear-gradient(135deg, var(--accent-primary), var(--accent-primary-glow))" : "var(--bg-elevated)",
+                background: input.trim() && waitingForUser ? "var(--accent-primary)" : "var(--bg-elevated)",
                 color: input.trim() && waitingForUser ? "#FFFFFF" : "var(--text-secondary)",
               }}
             >

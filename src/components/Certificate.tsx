@@ -59,20 +59,20 @@ export function Certificate({
           style={{
             background: "#FFFFFF",
             border: "2px solid var(--border)",
-            boxShadow: "0 25px 80px rgba(0,0,0,0.15), 0 0 40px rgba(37,99,235,0.08)",
+            boxShadow: "var(--shadow-md), 0 0 40px rgba(45,91,210,0.08)",
           }}
         >
           {/* Header Gradient Bar */}
           <div
             className="px-6 sm:px-8 py-5 text-center"
             style={{
-              background: "linear-gradient(135deg, #1E40AF, #2563EB, #3B82F6)",
+              background: "linear-gradient(135deg, var(--accent-primary-dim), var(--accent-primary), var(--accent-primary-glow))",
             }}
           >
             <div className="flex items-center justify-center gap-2 mb-1">
               <ShieldCheck size={18} style={{ color: "rgba(255,255,255,0.9)" }} />
               <span
-                className="text-lg sm:text-xl font-bold tracking-[6px]"
+                className="text-lg sm:text-xl font-semibold tracking-[0.06em]"
                 style={{
                   fontFamily: "var(--font-display)",
                   color: "#FFFFFF",
@@ -83,7 +83,7 @@ export function Certificate({
               <ShieldCheck size={18} style={{ color: "rgba(255,255,255,0.9)" }} />
             </div>
             <p
-              className="text-[9px] tracking-[3px] uppercase"
+              className="text-[9px] tracking-[0.06em] uppercase"
               style={{
                 fontFamily: "var(--font-mono)",
                 color: "rgba(255,255,255,0.7)",
@@ -107,7 +107,7 @@ export function Certificate({
 
             {/* Title */}
             <p
-              className="text-xs sm:text-sm tracking-[4px] uppercase mb-6"
+              className="text-xs sm:text-sm tracking-[0.08em] uppercase mb-6"
               style={{
                 fontFamily: "var(--font-mono)",
                 color: "var(--text-ghost)",
@@ -130,7 +130,7 @@ export function Certificate({
               className="text-2xl sm:text-3xl font-bold mb-3"
               style={{
                 fontFamily: "var(--font-display)",
-                background: "linear-gradient(135deg, #1E40AF, #2563EB)",
+                background: "linear-gradient(135deg, var(--accent-primary-dim), var(--accent-primary))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -157,7 +157,7 @@ export function Certificate({
             >
               <Award size={16} style={{ color: "var(--accent-primary)" }} />
               <span
-                className="text-sm sm:text-base font-bold tracking-[2px] uppercase"
+                className="text-sm sm:text-base font-bold tracking-[0.04em] uppercase"
                 style={{
                   fontFamily: "var(--font-display)",
                   color: "var(--accent-primary)",
@@ -212,7 +212,7 @@ export function Certificate({
             {skillBreakdown.length > 0 && (
               <div className="mb-6 max-w-sm mx-auto">
                 <p
-                  className="text-[9px] font-bold uppercase tracking-[2px] mb-3 text-left"
+                  className="text-[9px] font-bold uppercase tracking-[0.04em] mb-3 text-left"
                   style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}
                 >
                   SKILL PROFICIENCY
@@ -303,7 +303,7 @@ export function Certificate({
             }}
           >
             <p
-              className="text-[8px] tracking-[3px] uppercase"
+              className="text-[8px] tracking-[0.06em] uppercase"
               style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}
             >
               EMPLOYEE TRAINING SIMULATOR

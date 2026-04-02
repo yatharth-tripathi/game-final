@@ -53,8 +53,8 @@ const inputStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   display: "block",
   fontSize: 10,
-  fontWeight: 700,
-  letterSpacing: "1.5px",
+  fontWeight: 600,
+  letterSpacing: "0.04em",
   textTransform: "uppercase" as const,
   color: "var(--text-secondary)",
   fontFamily: "var(--font-mono)",
@@ -253,7 +253,7 @@ export function AdminPanel() {
       <div className="relative z-10 shrink-0 glass-panel" style={{ borderBottom: "1px solid var(--border)" }}>
         <div className="px-6 py-3 flex items-center justify-between">
           <button onClick={resetGame} className="btn-ghost"><ArrowLeft size={12} /> LOBBY</button>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "4px", color: "var(--accent-gold)" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.1em", color: "var(--accent-gold)" }}>
             ADMIN — SCENARIO BUILDER
           </span>
           <div style={{ width: 80 }} />
@@ -345,7 +345,7 @@ export function AdminPanel() {
                       <button key={s.n} onClick={() => setStep(s.n)}
                         className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider transition-all"
                         style={{
-                          background: active ? "rgba(37,99,235,0.1)" : done ? "rgba(22,163,74,0.06)" : "transparent",
+                          background: active ? "rgba(45,91,210,0.1)" : done ? "rgba(47,125,91,0.06)" : "transparent",
                           border: active ? "1px solid var(--accent-primary-border)" : "1px solid var(--border)",
                           color: active ? "var(--accent-primary)" : done ? "var(--success)" : "var(--text-ghost)",
                         }}>
@@ -571,7 +571,7 @@ export function AdminPanel() {
                 {/* Step 5: Compliance */}
                 {step === 5 && (
                   <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="space-y-4">
-                    <div className="nexus-card p-5" style={{ borderTop: "2px solid rgba(220,38,38,0.3)" }}>
+                    <div className="nexus-card p-5" style={{ borderTop: "2px solid rgba(196,48,48,0.3)" }}>
                       <h3 className="text-sm font-bold mb-1" style={{ color: "var(--text-primary)" }}>Compliance Rules</h3>
                       <p className="text-[10px] mb-4" style={{ color: "var(--text-ghost)" }}>
                         Phrases that trigger instant compliance violations.

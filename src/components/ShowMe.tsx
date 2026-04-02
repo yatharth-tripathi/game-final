@@ -81,7 +81,7 @@ export function ShowMe() {
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
             className="mx-auto mb-6" style={{ width: 70, height: 70 }}>
             <div className="w-full h-full rounded-full flex items-center justify-center"
-              style={{ background: "conic-gradient(var(--accent-gold), var(--accent-gold-glow), var(--accent-gold-dim), var(--accent-gold))", padding: 3 }}>
+              style={{ background: "conic-gradient(var(--accent-primary), var(--text-muted), var(--accent-primary))", padding: 3 }}>
               <div className="w-full h-full rounded-full flex items-center justify-center" style={{ background: "var(--bg-void)" }}>
                 <Brain size={24} style={{ color: "var(--accent-gold)" }} />
               </div>
@@ -113,7 +113,7 @@ export function ShowMe() {
     <div className="relative z-10 shrink-0 glass-panel" style={{ borderBottom: "1px solid var(--border)" }}>
       <div className="px-3 sm:px-6 py-3 flex items-center justify-between gap-2">
         <button onClick={resetGame} className="btn-ghost shrink-0"><ArrowLeft size={12} /> <span className="hidden sm:inline">BACK</span></button>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "4px", color: "var(--accent-gold)" }}>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
           SHOW ME — MASTERCLASS
         </span>
         <div className="hidden sm:block" style={{ width: 80 }} />
@@ -144,7 +144,7 @@ export function ShowMe() {
                   style={{ fontFamily: "var(--font-mono)", color: "var(--success)" }}>
                   IDEAL RM <CheckCircle size={9} className="inline ml-1" />
                 </p>
-                <div className="p-4 rounded-xl" style={{ background: "rgba(22,163,74,0.06)", border: "1px solid rgba(22,163,74,0.15)" }}>
+                <div className="p-4 rounded-xl" style={{ background: "var(--success-bg)", border: "1px solid var(--success-border)" }}>
                   <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{ex.text}</p>
                 </div>
               </div>
@@ -173,7 +173,8 @@ export function ShowMe() {
       <button onClick={() => {
         useGameStore.getState().setGameMode("testme");
         useGameStore.getState().selectScenario(sc);
-      }} className="btn-gold px-6 sm:px-8 py-2.5">
+      }} className="px-6 sm:px-8 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-2"
+        style={{ fontFamily: "var(--font-mono)", background: "var(--accent-primary)", color: "#FFFFFF", border: "none" }}>
         TEST ME <ChevronRight size={14} />
       </button>
     </div>

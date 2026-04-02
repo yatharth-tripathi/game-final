@@ -15,7 +15,7 @@ export function Briefing() {
   if (!currentScenario) return null;
   const sc = currentScenario;
   const diff = DIFFICULTY_CONFIG[sc.difficulty];
-  const catColor = CATEGORY_COLORS[sc.category] || "var(--accent-gold)";
+  const catColor = CATEGORY_COLORS[sc.category] || "var(--accent-primary)";
   const taskCount = sc.steps.filter(s => s.speaker === "system").length;
 
   return (
@@ -33,7 +33,7 @@ export function Briefing() {
           <button onClick={resetGame} className="btn-ghost">
             <ArrowLeft size={12} /> BACK
           </button>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "4px", color: "var(--text-ghost)" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.06em", color: "var(--text-ghost)" }}>
             CASE FILE BRIEFING
           </span>
           <div style={{ width: 80 }} />
@@ -60,7 +60,7 @@ export function Briefing() {
                 <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-bold"
                   style={{
                     fontFamily: "var(--font-display)",
-                    background: `linear-gradient(135deg, ${catColor}15, ${catColor}08)`,
+                    background: `${catColor}10`,
                     border: `1px solid ${catColor}30`,
                     color: catColor,
                   }}>
@@ -92,9 +92,9 @@ export function Briefing() {
                   {sc.description}
                 </p>
                 <div className="flex items-center gap-5 text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>
-                  <span className="flex items-center gap-1"><FileText size={10} style={{ color: "var(--accent-gold)" }} /> {taskCount} rounds</span>
+                  <span className="flex items-center gap-1"><FileText size={10} style={{ color: "var(--accent-primary)" }} /> {taskCount} rounds</span>
                   <span className="flex items-center gap-1"><Clock size={10} style={{ color: "var(--text-ghost)" }} /> ~3 min</span>
-                  <span className="flex items-center gap-1" style={{ color: "var(--accent-gold)" }}><Target size={10} /> +{sc.xpReward} XP</span>
+                  <span className="flex items-center gap-1" style={{ color: "var(--accent-primary)" }}><Target size={10} /> +{sc.xpReward} XP</span>
                 </div>
               </div>
             </div>
@@ -107,12 +107,12 @@ export function Briefing() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="nexus-card p-3 sm:p-5"
-              style={{ borderTop: `2px solid ${catColor}30` }}
+              className="p-3 sm:p-5"
+              style={{ background: "var(--bg-tint)", borderRadius: 12, border: "1px solid var(--border)" }}
             >
               <div className="flex items-center gap-2 mb-3">
                 <User size={13} style={{ color: catColor }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: catColor }}>CLIENT DOSSIER</span>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600, letterSpacing: "0.06em", color: catColor }}>CLIENT DOSSIER</span>
               </div>
               <div className="space-y-2">
                 {[
@@ -149,26 +149,26 @@ export function Briefing() {
               transition={{ delay: 0.15 }}
               className="flex flex-col gap-4"
             >
-              <div className="nexus-card p-5 flex-1" style={{ borderTop: "2px solid var(--accent-gold-border)" }}>
+              <div className="p-5 flex-1" style={{ background: "var(--bg-tint)", borderRadius: 12, border: "1px solid var(--border)" }}>
                 <div className="flex items-center gap-2 mb-3">
-                  <Target size={13} style={{ color: "var(--accent-gold)" }} />
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>SCORING</span>
+                  <Target size={13} style={{ color: "var(--accent-primary)" }} />
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600, letterSpacing: "0.06em", color: "var(--accent-primary)" }}>SCORING</span>
                 </div>
                 <div className="space-y-2">
                   {sc.evaluationRules.map((rule) => (
                     <div key={rule.skill} className="flex items-center gap-3">
-                      <CheckCircle size={10} style={{ color: "var(--accent-gold-dim)" }} />
+                      <CheckCircle size={10} style={{ color: "var(--text-muted)" }} />
                       <span className="text-xs flex-1" style={{ color: "var(--text-primary)" }}>{rule.skill}</span>
-                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "var(--accent-gold)" }}>{rule.weight}pts</span>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600, color: "var(--accent-primary)" }}>{rule.weight}pts</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="nexus-card p-4" style={{ borderTop: "2px solid rgba(220,38,38,0.3)" }}>
+              <div className="p-4" style={{ background: "var(--bg-tint)", borderRadius: 12, border: "1px solid var(--border)" }}>
                 <div className="flex items-center gap-2 mb-2">
                   <AlertTriangle size={12} style={{ color: "var(--danger)" }} />
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--danger)" }}>COMPLIANCE</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600, letterSpacing: "0.06em", color: "var(--danger)" }}>COMPLIANCE</span>
                 </div>
                 <p className="text-[10px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
                   Banned phrases trigger instant violation: <strong style={{ color: "var(--danger)" }}>-{sc.complianceRules.violationPenalty}pts</strong>. Stay compliant.
@@ -182,21 +182,22 @@ export function Briefing() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="nexus-card p-5 mb-5"
+            className="p-5 mb-5"
+            style={{ background: "var(--bg-tint)", borderRadius: 12, border: "1px solid var(--border)" }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <BookOpen size={13} style={{ color: "var(--accent-gold)" }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>HOW IT WORKS</span>
+              <BookOpen size={13} style={{ color: "var(--accent-primary)" }} />
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600, letterSpacing: "0.06em", color: "var(--accent-primary)" }}>HOW IT WORKS</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5">
               {[
                 { n: "01", title: "Client Speaks", desc: "Read the message. Understand the need before responding.", color: catColor },
-                { n: "02", title: "You Respond", desc: "Type your response as a bank RM. An objective guides each round.", color: "var(--accent-gold)" },
+                { n: "02", title: "You Respond", desc: "Type your response as a bank RM. An objective guides each round.", color: "var(--accent-primary)" },
                 { n: "03", title: "AI Evaluates", desc: "AI scores your knowledge, empathy, compliance, and communication.", color: "var(--success)" },
               ].map((item) => (
                 <div key={item.n} className="flex gap-3">
-                  <div className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, background: `${item.color}10`, color: item.color, border: `1px solid ${item.color}20` }}>
+                  <div className="shrink-0 w-8 h-8 flex items-center justify-center"
+                    style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, borderRadius: 10, background: `${item.color}10`, color: item.color, border: `1px solid ${item.color}20` }}>
                     {item.n}
                   </div>
                   <div>
@@ -218,7 +219,7 @@ export function Briefing() {
         className="relative z-10 shrink-0 glass-panel px-3 sm:px-6 py-3 sm:py-5"
         style={{ borderTop: "1px solid var(--border)" }}
       >
-        <p className="text-center text-[9px] uppercase tracking-widest mb-3 sm:mb-4" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
+        <p className="text-center text-[9px] uppercase mb-3 sm:mb-4" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", letterSpacing: "0.06em" }}>
           CHOOSE YOUR MODE
         </p>
         <div className="flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
@@ -229,14 +230,14 @@ export function Briefing() {
             whileTap={{ scale: 0.97 }}
             className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all"
             style={{
-              background: "rgba(22,163,74,0.06)",
-              border: "1px solid rgba(22,163,74,0.2)",
+              background: "rgba(47, 125, 91, 0.05)",
+              border: "1px solid rgba(47, 125, 91, 0.15)",
               color: "var(--success)",
             }}
           >
             <Eye size={16} />
             <div className="text-left">
-              <p className="text-[11px] sm:text-xs font-bold">SHOW ME</p>
+              <p className="text-[11px] sm:text-xs font-bold" style={{ letterSpacing: "0.04em" }}>SHOW ME</p>
               <p className="text-[8px] sm:text-[9px] opacity-70">Watch the masterclass</p>
             </div>
           </motion.button>
@@ -248,14 +249,14 @@ export function Briefing() {
             whileTap={{ scale: 0.97 }}
             className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all"
             style={{
-              background: "rgba(37,99,235,0.06)",
-              border: "1px solid var(--accent-primary-border)",
+              background: "rgba(181, 133, 10, 0.05)",
+              border: "1px solid rgba(181, 133, 10, 0.15)",
               color: "var(--warn)",
             }}
           >
             <MessageSquare size={16} />
             <div className="text-left">
-              <p className="text-[11px] sm:text-xs font-bold">TRY ME</p>
+              <p className="text-[11px] sm:text-xs font-bold" style={{ letterSpacing: "0.04em" }}>TRY ME</p>
               <p className="text-[8px] sm:text-[9px] opacity-70">Practice freely</p>
             </div>
           </motion.button>
@@ -265,12 +266,17 @@ export function Briefing() {
             onClick={startGame}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="btn-gold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl"
+            className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all"
+            style={{
+              background: "var(--accent-primary)",
+              color: "#FFFFFF",
+              boxShadow: "var(--shadow-sm)",
+            }}
           >
             <Award size={16} />
             <div className="text-left">
-              <p className="text-[11px] sm:text-xs font-bold">TEST ME</p>
-              <p className="text-[8px] sm:text-[9px] opacity-80" style={{ color: "#FFFFFF" }}>Get evaluated</p>
+              <p className="text-[11px] sm:text-xs font-bold" style={{ letterSpacing: "0.04em" }}>TEST ME</p>
+              <p className="text-[8px] sm:text-[9px] opacity-80">Get evaluated</p>
             </div>
           </motion.button>
         </div>

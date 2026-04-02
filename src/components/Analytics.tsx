@@ -59,14 +59,14 @@ interface CertState {
 }
 
 const DIFFICULTY_LABELS: Record<string, { label: string; color: string }> = {
-  easy: { label: "TRAINEE", color: "#16A34A" },
-  medium: { label: "JUNIOR RM", color: "#D97706" },
-  hard: { label: "SENIOR RM", color: "#DC2626" },
-  expert: { label: "BRANCH MGR", color: "#7C3AED" },
+  easy: { label: "TRAINEE", color: "var(--success)" },
+  medium: { label: "JUNIOR RM", color: "var(--warn)" },
+  hard: { label: "SENIOR RM", color: "var(--danger)" },
+  expert: { label: "BRANCH MGR", color: "#7C5AC7" },
 };
 
 const gradeColors: Record<string, string> = {
-  S: "#2563EB", A: "#16A34A", B: "#3B82F6", C: "#D97706", D: "#DC2626", F: "#DC2626",
+  S: "var(--accent-primary)", A: "var(--success)", B: "var(--accent-primary-glow)", C: "var(--warn)", D: "var(--danger)", F: "var(--danger)",
 };
 
 export function Analytics() {
@@ -111,7 +111,7 @@ export function Analytics() {
           <button onClick={() => setPhase("lobby")} className="btn-ghost">
             <ArrowLeft size={12} /> BACK
           </button>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "4px", color: "var(--text-ghost)" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.1em", color: "var(--text-ghost)" }}>
             PERFORMANCE ANALYTICS
           </span>
           <div className="flex items-center gap-1">
@@ -177,7 +177,7 @@ export function Analytics() {
                 {/* Average Score */}
                 <div
                   className="nexus-card p-4 text-center"
-                  style={{ borderTop: `2px solid ${avgScore >= 70 ? "rgba(22,163,74,0.3)" : avgScore >= 50 ? "rgba(217,119,6,0.3)" : "rgba(220,38,38,0.3)"}` }}
+                  style={{ borderTop: `2px solid ${avgScore >= 70 ? "rgba(47,125,91,0.3)" : avgScore >= 50 ? "rgba(181,133,10,0.3)" : "rgba(196,48,48,0.3)"}` }}
                 >
                   <Target size={16} className="mx-auto mb-2" style={{ color: avgScore >= 70 ? "var(--success)" : avgScore >= 50 ? "var(--warn)" : "var(--danger)" }} />
                   <p
@@ -200,7 +200,7 @@ export function Analytics() {
                 {/* Overall Rank */}
                 <div
                   className="nexus-card p-4 text-center"
-                  style={{ borderTop: "2px solid rgba(37,99,235,0.2)" }}
+                  style={{ borderTop: "2px solid rgba(45,91,210,0.2)" }}
                 >
                   <Award size={16} className="mx-auto mb-2" style={{ color: "var(--accent-gold)" }} />
                   <p
@@ -248,7 +248,7 @@ export function Analytics() {
                 >
                   <div className="flex items-center gap-2 mb-4">
                     <Target size={14} style={{ color: "var(--accent-gold)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", color: "var(--accent-gold)" }}>
                       SKILL PROFILE
                     </span>
                   </div>
@@ -273,15 +273,15 @@ export function Analytics() {
                         <Radar
                           name="Ideal"
                           dataKey="ideal"
-                          stroke="rgba(37,99,235,0.2)"
-                          fill="rgba(37,99,235,0.05)"
+                          stroke="rgba(45,91,210,0.2)"
+                          fill="rgba(45,91,210,0.05)"
                           strokeDasharray="4 4"
                         />
                         <Radar
                           name="Your Average"
                           dataKey="score"
                           stroke="var(--accent-primary)"
-                          fill="rgba(37,99,235,0.15)"
+                          fill="rgba(45,91,210,0.15)"
                           strokeWidth={2}
                         />
                       </RadarChart>
@@ -300,7 +300,7 @@ export function Analytics() {
                 >
                   <div className="flex items-center gap-2 mb-4">
                     <TrendingUp size={14} style={{ color: "var(--accent-gold)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", color: "var(--accent-gold)" }}>
                       SCORE PROGRESSION
                     </span>
                     <span className="ml-auto text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
@@ -363,7 +363,7 @@ export function Analytics() {
                 >
                   <div className="flex items-center gap-2 mb-4">
                     <BarChart3 size={14} style={{ color: "var(--accent-gold)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", color: "var(--accent-gold)" }}>
                       CATEGORY BREAKDOWN
                     </span>
                   </div>
@@ -425,11 +425,11 @@ export function Analytics() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
                   className="nexus-card p-3 sm:p-5"
-                  style={{ borderTop: "2px solid rgba(22,163,74,0.3)" }}
+                  style={{ borderTop: "2px solid rgba(47,125,91,0.3)" }}
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <TrendingUp size={13} style={{ color: "var(--success)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--success)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600, letterSpacing: "0.04em", color: "var(--success)" }}>
                       STRONGEST SKILLS
                     </span>
                   </div>
@@ -466,11 +466,11 @@ export function Analytics() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.45 }}
                   className="nexus-card p-3 sm:p-5"
-                  style={{ borderTop: "2px solid rgba(217,119,6,0.3)" }}
+                  style={{ borderTop: "2px solid rgba(181,133,10,0.3)" }}
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <TrendingDown size={13} style={{ color: "var(--warn)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--warn)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600, letterSpacing: "0.04em", color: "var(--warn)" }}>
                       AREAS TO IMPROVE
                     </span>
                   </div>
@@ -513,7 +513,7 @@ export function Analytics() {
                 >
                   <div className="flex items-center gap-2 mb-4">
                     <Award size={14} style={{ color: "var(--accent-gold)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", color: "var(--accent-gold)" }}>
                       CERTIFICATES
                     </span>
                   </div>
@@ -541,7 +541,7 @@ export function Analytics() {
                               </span>
                             </div>
                             {cert.eligible && (
-                              <span className="tag" style={{ color: "var(--success)", background: "var(--success-bg)", border: "1px solid rgba(22,163,74,0.2)" }}>
+                              <span className="tag" style={{ color: "var(--success)", background: "var(--success-bg)", border: "1px solid rgba(47,125,91,0.2)" }}>
                                 ELIGIBLE
                               </span>
                             )}
@@ -605,7 +605,7 @@ export function Analytics() {
                 >
                   <div className="flex items-center gap-2 mb-4">
                     <Calendar size={14} style={{ color: "var(--accent-gold)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.04em", color: "var(--accent-gold)" }}>
                       SESSION HISTORY
                     </span>
                     <span className="ml-auto text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>

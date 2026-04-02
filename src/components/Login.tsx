@@ -185,14 +185,14 @@ export function Login() {
             animate={{ scale: 1 }}
             transition={{ type: "spring", damping: 12, delay: 0.2 }}
             className="w-16 h-16 rounded-xl mx-auto mb-4 flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow))" }}
+            style={{ background: "var(--accent-primary)" }}
           >
             <Briefcase size={28} color="#FFFFFF" />
           </motion.div>
-          <h1 className="text-2xl font-bold tracking-wide" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
+          <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)", letterSpacing: "0.04em" }}>
             EMPLOYEE TRAINING
           </h1>
-          <p className="text-[10px] tracking-[6px] mt-1" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
+          <p className="text-[10px] mt-1" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", letterSpacing: "0.06em" }}>
             SIMULATOR
           </p>
         </div>
@@ -207,10 +207,10 @@ export function Login() {
               exit={{ opacity: 0, x: -60 }}
               transition={{ duration: 0.25 }}
               className="nexus-card p-6 space-y-4"
-              style={{ borderTop: "2px solid var(--accent-gold-border)" }}
+              style={{ borderTop: "2px solid var(--accent-primary)" }}
             >
               <div>
-                <label className="text-[10px] font-semibold uppercase tracking-wider block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}>
+                <label className="text-[10px] uppercase block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-primary)", fontWeight: 600, letterSpacing: "0.04em" }}>
                   <User size={10} className="inline mr-1.5" />YOUR NAME
                 </label>
                 <input
@@ -220,29 +220,31 @@ export function Login() {
                   placeholder="Enter your full name"
                   maxLength={50}
                   autoFocus
-                  className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all"
+                  className="w-full px-4 py-3 text-sm outline-none transition-all"
                   style={{
-                    background: "var(--bg-void)",
+                    background: "var(--bg-tint)",
                     border: "1px solid var(--border)",
                     color: "var(--text-primary)",
                     fontFamily: "var(--font-body)",
+                    borderRadius: 10,
                   }}
                 />
               </div>
 
               <div>
-                <label className="text-[10px] font-semibold uppercase tracking-wider block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}>
+                <label className="text-[10px] uppercase block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-primary)", fontWeight: 600, letterSpacing: "0.04em" }}>
                   <Building2 size={10} className="inline mr-1.5" />BRANCH
                 </label>
                 <select
                   value={branch}
                   onChange={(e) => setBranch(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg text-sm outline-none cursor-pointer"
+                  className="w-full px-4 py-3 text-sm outline-none cursor-pointer"
                   style={{
-                    background: "var(--bg-void)",
+                    background: "var(--bg-tint)",
                     border: "1px solid var(--border)",
                     color: "var(--text-primary)",
                     fontFamily: "var(--font-body)",
+                    borderRadius: 10,
                   }}
                 >
                   {["HQ", "Mumbai", "Delhi", "Bangalore", "Chennai", "Pune", "Hyderabad", "Kolkata", "Ahmedabad", "Kochi"].map((b) => (
@@ -275,9 +277,9 @@ export function Login() {
               exit={{ opacity: 0, x: -60 }}
               transition={{ duration: 0.25 }}
               className="nexus-card p-5 space-y-4"
-              style={{ borderTop: "2px solid var(--accent-gold-border)" }}
+              style={{ borderTop: "2px solid var(--accent-primary)" }}
             >
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-center" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}>
+              <p className="text-[10px] uppercase text-center" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-primary)", fontWeight: 600, letterSpacing: "0.06em" }}>
                 EXPERIENCE PROFILE
               </p>
               <p className="text-[11px] text-center" style={{ color: "var(--text-secondary)" }}>
@@ -286,7 +288,7 @@ export function Login() {
 
               {/* Experience Tier */}
               <div>
-                <label className="text-[9px] font-semibold uppercase tracking-wider block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
+                <label className="text-[9px] uppercase block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", fontWeight: 600, letterSpacing: "0.04em" }}>
                   <Clock size={9} className="inline mr-1" />BFSI EXPERIENCE
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -294,12 +296,14 @@ export function Login() {
                     <button
                       key={t.value}
                       onClick={() => setExpTier(t.value)}
-                      className="px-3 py-1.5 rounded-lg text-[10px] font-semibold transition-all"
+                      className="px-3 py-1.5 text-[10px] transition-all"
                       style={{
                         fontFamily: "var(--font-mono)",
-                        background: expTier === t.value ? "linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow))" : "var(--bg-void)",
+                        fontWeight: 600,
+                        borderRadius: 10,
+                        background: expTier === t.value ? "var(--accent-primary)" : "var(--bg-tint)",
                         color: expTier === t.value ? "#FFFFFF" : "var(--text-secondary)",
-                        border: `1px solid ${expTier === t.value ? "var(--accent-gold-border)" : "var(--border)"}`,
+                        border: `1px solid ${expTier === t.value ? "var(--accent-primary)" : "var(--border)"}`,
                       }}
                     >
                       {t.label}
@@ -310,7 +314,7 @@ export function Login() {
 
               {/* Current Role */}
               <div>
-                <label className="text-[9px] font-semibold uppercase tracking-wider block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
+                <label className="text-[9px] uppercase block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", fontWeight: 600, letterSpacing: "0.04em" }}>
                   <Briefcase size={9} className="inline mr-1" />CURRENT ROLE
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -318,12 +322,14 @@ export function Login() {
                     <button
                       key={r.value}
                       onClick={() => setRole(r.value)}
-                      className="px-3 py-1.5 rounded-lg text-[10px] font-semibold transition-all"
+                      className="px-3 py-1.5 text-[10px] transition-all"
                       style={{
                         fontFamily: "var(--font-mono)",
-                        background: role === r.value ? "linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow))" : "var(--bg-void)",
+                        fontWeight: 600,
+                        borderRadius: 10,
+                        background: role === r.value ? "var(--accent-primary)" : "var(--bg-tint)",
                         color: role === r.value ? "#FFFFFF" : "var(--text-secondary)",
-                        border: `1px solid ${role === r.value ? "var(--accent-gold-border)" : "var(--border)"}`,
+                        border: `1px solid ${role === r.value ? "var(--accent-primary)" : "var(--border)"}`,
                       }}
                     >
                       {r.label}
@@ -334,7 +340,7 @@ export function Login() {
 
               {/* Expertise Areas */}
               <div>
-                <label className="text-[9px] font-semibold uppercase tracking-wider block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
+                <label className="text-[9px] uppercase block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", fontWeight: 600, letterSpacing: "0.04em" }}>
                   <TrendingUp size={9} className="inline mr-1" />YOUR STRENGTHS (select all that apply)
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -345,12 +351,14 @@ export function Login() {
                       <button
                         key={a.value}
                         onClick={() => toggleExpertise(a.value)}
-                        className="px-3 py-1.5 rounded-lg text-[10px] font-semibold transition-all flex items-center gap-1.5"
+                        className="px-3 py-1.5 text-[10px] transition-all flex items-center gap-1.5"
                         style={{
                           fontFamily: "var(--font-mono)",
-                          background: active ? "linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow))" : "var(--bg-void)",
+                          fontWeight: 600,
+                          borderRadius: 10,
+                          background: active ? "var(--accent-primary)" : "var(--bg-tint)",
                           color: active ? "#FFFFFF" : "var(--text-secondary)",
-                          border: `1px solid ${active ? "var(--accent-gold-border)" : "var(--border)"}`,
+                          border: `1px solid ${active ? "var(--accent-primary)" : "var(--border)"}`,
                         }}
                       >
                         <Icon size={10} />{a.label}
@@ -375,8 +383,8 @@ export function Login() {
 
               <button
                 onClick={handleSkip}
-                className="w-full text-center text-[10px] uppercase tracking-wider py-1 transition-opacity hover:opacity-100"
-                style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", opacity: 0.6 }}
+                className="w-full text-center text-[10px] uppercase py-1 transition-opacity hover:opacity-100"
+                style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", opacity: 0.6, letterSpacing: "0.04em" }}
               >
                 <SkipForward size={10} className="inline mr-1" />SKIP PROFILING
               </button>
@@ -384,7 +392,7 @@ export function Login() {
           )}
         </AnimatePresence>
 
-        <p className="text-center text-[8px] mt-4 uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", opacity: 0.4 }}>
+        <p className="text-center text-[8px] mt-4 uppercase" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", opacity: 0.4, letterSpacing: "0.06em" }}>
           AI-POWERED BFSI TRAINING PLATFORM
         </p>
       </div>

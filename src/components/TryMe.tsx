@@ -225,10 +225,10 @@ export function TryMe() {
           <motion.div key={msg.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", damping: 22 }}>
             {msg.role === "system" ? (
-              <div className="chat-system p-4">
+              <div className="chat-system p-4" style={{ background: "var(--info-bg)" }}>
                 <div className="flex items-center gap-2 mb-1.5">
-                  <Target size={12} style={{ color: "var(--accent-gold)" }} />
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>COACHING</span>
+                  <Target size={12} style={{ color: "var(--accent-primary)" }} />
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.06em", color: "var(--accent-primary)" }}>COACHING</span>
                 </div>
                 <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>
                   {msg.content.replace("OBJECTIVE: ", "")}
@@ -292,7 +292,7 @@ export function TryMe() {
         <div className="relative rounded-xl" style={{
           background: "var(--bg-surface)",
           border: "1px solid var(--accent-gold-border)",
-          boxShadow: "0 0 20px rgba(37,99,235,0.06), 0 4px 24px rgba(0,0,0,0.08)",
+          boxShadow: "var(--shadow-md)",
         }}>
           <div className="flex items-end gap-2 sm:gap-3 px-3 sm:px-5 pt-3 sm:pt-4 pb-2">
             <textarea
@@ -312,7 +312,7 @@ export function TryMe() {
                 disabled={isTyping}
                 className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5 ${voice.isListening ? "mic-active" : ""}`}
                 style={{
-                  background: voice.isListening ? "rgba(220,38,38,0.1)" : "var(--bg-elevated)",
+                  background: voice.isListening ? "var(--danger-bg)" : "var(--bg-elevated)",
                   border: voice.isListening ? "1.5px solid var(--danger)" : "1px solid var(--border)",
                   color: voice.isListening ? "var(--danger)" : "var(--text-secondary)",
                 }}
@@ -326,16 +326,16 @@ export function TryMe() {
               className="shrink-0 h-10 px-5 rounded-full flex items-center justify-center gap-2 mb-0.5 text-xs font-bold uppercase tracking-wider"
               style={{
                 fontFamily: "var(--font-mono)",
-                background: input.trim() ? "linear-gradient(135deg, var(--accent-primary), var(--accent-primary-glow))" : "var(--bg-elevated)",
+                background: input.trim() ? "var(--accent-primary)" : "var(--bg-elevated)",
                 color: input.trim() ? "#FFFFFF" : "var(--text-secondary)",
               }}>
               SEND <ArrowUp size={14} strokeWidth={2.5} />
             </motion.button>
           </div>
-          <div className="px-3 sm:px-5 pb-3 flex items-center justify-between">
+          <div className="px-3 sm:px-5 pb-3 flex items-center justify-between rounded-b-xl" style={{ background: "var(--bg-tint)" }}>
             <div className="flex items-center gap-1.5">
-              <MessageSquare size={9} style={{ color: "var(--warn)" }} />
-              <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--warn)" }}>
+              <MessageSquare size={9} style={{ color: "var(--text-muted)" }} />
+              <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
                 PRACTICE — No scoring
               </span>
             </div>

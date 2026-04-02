@@ -95,7 +95,7 @@ export function Evaluation() {
   const hasViolations = ev.complianceViolations && ev.complianceViolations.length > 0;
 
   const gradeColors: Record<string, string> = {
-    S: "#2563EB", A: "#16A34A", B: "#3B82F6", C: "#D97706", D: "#DC2626", F: "#DC2626",
+    S: "var(--accent-primary)", A: "var(--success)", B: "#4A7AE8", C: "var(--warn)", D: "var(--danger)", F: "var(--danger)",
   };
   const gradeColor = gradeColors[ev.grade] || "var(--accent-primary)";
 
@@ -111,7 +111,7 @@ export function Evaluation() {
       {/* TOP BAR */}
       <div className="relative z-10 shrink-0 glass-panel" style={{ borderBottom: "1px solid var(--border)" }}>
         <div className="px-3 sm:px-6 py-3 flex items-center justify-between gap-2 flex-wrap">
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "2px", color: "var(--text-ghost)" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.06em", color: "var(--text-ghost)" }}>
             DEBRIEF
           </span>
           <div className="flex items-center gap-2 sm:gap-3">
@@ -152,10 +152,10 @@ export function Evaluation() {
               animate={{ scale: 1 }}
               transition={{ type: "spring", damping: 10, delay: 0.3 }}
               className="inline-flex items-center gap-2 px-5 py-2 rounded-lg mb-4"
-              style={{ background: `${gradeColor}15`, border: `1px solid ${gradeColor}30` }}
+              style={{ background: gradeColor, border: `1px solid ${gradeColor}`, color: "#FFFFFF" }}
             >
-              <Trophy size={16} style={{ color: gradeColor }} />
-              <span className="text-lg font-bold" style={{ fontFamily: "var(--font-display)", color: gradeColor }}>
+              <Trophy size={16} style={{ color: "#FFFFFF" }} />
+              <span className="text-lg font-bold" style={{ fontFamily: "var(--font-display)", color: "#FFFFFF" }}>
                 Grade {ev.grade}
               </span>
               {hasViolations && (
@@ -171,7 +171,7 @@ export function Evaluation() {
               className="flex items-center justify-center gap-2"
             >
               <Zap size={14} style={{ color: "var(--accent-gold)" }} />
-              <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}>
+              <span className="text-sm font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent-gold)" }}>
                 +{ev.xpAwarded} XP
               </span>
               <span className="text-xs" style={{ color: "var(--text-ghost)" }}>awarded</span>
@@ -188,7 +188,7 @@ export function Evaluation() {
           >
             <div className="flex items-center gap-2 mb-5">
               <Target size={14} style={{ color: "var(--accent-gold)" }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
                 SKILL BREAKDOWN
               </span>
               <span className="ml-auto text-xs" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
@@ -240,7 +240,7 @@ export function Evaluation() {
           >
             <div className="flex items-center gap-2 mb-4">
               <Target size={14} style={{ color: "var(--accent-gold)" }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
                 PERFORMANCE RADAR
               </span>
             </div>
@@ -265,15 +265,15 @@ export function Evaluation() {
                   <Radar
                     name="Ideal"
                     dataKey="ideal"
-                    stroke="rgba(37,99,235,0.2)"
-                    fill="rgba(37,99,235,0.05)"
+                    stroke="rgba(45,91,210,0.2)"
+                    fill="rgba(45,91,210,0.05)"
                     strokeDasharray="4 4"
                   />
                   <Radar
                     name="Your Score"
                     dataKey="score"
                     stroke="var(--accent-primary)"
-                    fill="rgba(37,99,235,0.15)"
+                    fill="rgba(45,91,210,0.15)"
                     strokeWidth={2}
                   />
                 </RadarChart>
@@ -289,11 +289,11 @@ export function Evaluation() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
               className="nexus-card p-3 sm:p-5"
-              style={{ borderTop: "2px solid rgba(22,163,74,0.3)" }}
+              style={{ borderTop: "2px solid var(--success-border)", background: "var(--success-bg)" }}
             >
               <div className="flex items-center gap-2 mb-3">
                 <TrendingUp size={13} style={{ color: "var(--success)" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--success)" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", color: "var(--success)" }}>
                   STRENGTHS
                 </span>
               </div>
@@ -317,11 +317,11 @@ export function Evaluation() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.45 }}
               className="nexus-card p-3 sm:p-5"
-              style={{ borderTop: "2px solid rgba(217,119,6,0.3)" }}
+              style={{ borderTop: "2px solid var(--warn-border)", background: "var(--warn-bg)" }}
             >
               <div className="flex items-center gap-2 mb-3">
                 <TrendingDown size={13} style={{ color: "var(--warn)" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--warn)" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", color: "var(--warn)" }}>
                   AREAS TO IMPROVE
                 </span>
               </div>
@@ -349,11 +349,11 @@ export function Evaluation() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.5 }}
                   className="nexus-card p-3 sm:p-5"
-                  style={{ borderTop: "2px solid rgba(22,163,74,0.3)" }}
+                  style={{ borderTop: "2px solid var(--success-border)" }}
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <Award size={13} style={{ color: "var(--success)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--success)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", color: "var(--success)" }}>
                       BEST MOMENT
                     </span>
                   </div>
@@ -368,11 +368,11 @@ export function Evaluation() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.55 }}
                   className="nexus-card p-3 sm:p-5"
-                  style={{ borderTop: "2px solid rgba(220,38,38,0.3)" }}
+                  style={{ borderTop: "2px solid var(--danger-bg)" }}
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <AlertTriangle size={13} style={{ color: "var(--danger)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--danger)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", color: "var(--danger)" }}>
                       ROOM TO IMPROVE
                     </span>
                   </div>
@@ -390,12 +390,12 @@ export function Evaluation() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.55 }}
             className="nexus-card p-4 sm:p-5 mb-4 sm:mb-6"
-            style={{ borderTop: hasViolations ? "2px solid rgba(220,38,38,0.3)" : "2px solid rgba(22,163,74,0.3)" }}
+            style={{ borderTop: hasViolations ? "2px solid var(--danger-bg)" : "2px solid var(--success-border)" }}
           >
             <div className="flex items-center gap-2 mb-3">
               <Shield size={13} style={{ color: hasViolations ? "var(--danger)" : "var(--success)" }} />
               <span style={{
-                fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px",
+                fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em",
                 color: hasViolations ? "var(--danger)" : "var(--success)",
               }}>
                 COMPLIANCE REPORT
@@ -431,7 +431,7 @@ export function Evaluation() {
           >
             <div className="flex items-center gap-2 mb-4">
               <MessageSquare size={13} style={{ color: "var(--accent-gold)" }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
                 CONVERSATION REPLAY
               </span>
             </div>
@@ -468,17 +468,17 @@ export function Evaluation() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.63 }}
               className="nexus-card p-4 sm:p-5 mb-4 sm:mb-6"
-              style={{ borderTop: "2px solid rgba(37,99,235,0.2)" }}
+              style={{ borderTop: "2px solid rgba(45,91,210,0.2)" }}
             >
               <div className="flex items-center gap-2 mb-4">
                 <Target size={13} style={{ color: "var(--accent-gold)" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
                   GHOST REPLAY — IDEAL RESPONSES
                 </span>
               </div>
               <div className="space-y-4">
                 {ev.ghostResponses.map((ghost, i) => (
-                  <div key={i} className="rounded-lg p-4" style={{ background: "rgba(37,99,235,0.03)", border: "1px solid var(--border)" }}>
+                  <div key={i} className="rounded-lg p-4" style={{ background: "var(--info-bg)", border: "1px solid var(--border)" }}>
                     <p className="text-[9px] font-semibold uppercase tracking-wider mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
                       STEP {ghost.step}
                     </p>
@@ -514,7 +514,7 @@ export function Evaluation() {
             >
               <div className="flex items-center gap-2 mb-3">
                 <TrendingUp size={13} style={{ color: "var(--accent-gold)" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
                   CLIENT MOOD ANALYSIS
                 </span>
               </div>
@@ -533,7 +533,7 @@ export function Evaluation() {
           >
             <div className="flex items-center gap-2 mb-3">
               <Briefcase size={13} style={{ color: "var(--accent-gold)" }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
                 COACHING PRESCRIPTION
               </span>
             </div>

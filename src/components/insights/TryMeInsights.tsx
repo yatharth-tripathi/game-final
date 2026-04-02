@@ -96,7 +96,7 @@ export function TryMeInsights({ scenario: sc, mood, moodHistory, responseCount, 
               <div className="flex flex-wrap gap-1.5 mt-2 pt-2" style={{ borderTop: "1px solid var(--border)" }}>
                 {currentCoachingStep.idealKeywords.map((kw, i) => (
                   <span key={i} className="text-[9px] px-2 py-0.5 rounded-full"
-                    style={{ background: "var(--warn-bg)", color: "var(--warn)", border: "1px solid rgba(217,119,6,0.15)" }}>
+                    style={{ background: "var(--warn-bg)", color: "var(--warn)", border: "1px solid rgba(181,133,10,0.15)" }}>
                     {kw}
                   </span>
                 ))}
@@ -135,7 +135,7 @@ export function TryMeInsights({ scenario: sc, mood, moodHistory, responseCount, 
             <span className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>HOT BUTTONS</span>
             {sc.customer.hotButtons.map((btn) => (
               <span key={btn} className="text-[9px] px-2 py-0.5 rounded-full"
-                style={{ background: "var(--danger-bg)", color: "var(--danger)", border: "1px solid rgba(220,38,38,0.15)" }}>
+                style={{ background: "var(--danger-bg)", color: "var(--danger)", border: "1px solid rgba(196,48,48,0.15)" }}>
                 {btn}
               </span>
             ))}
@@ -157,7 +157,7 @@ export function TryMeInsights({ scenario: sc, mood, moodHistory, responseCount, 
           {lastDelta !== 0 && (
             <span className="text-[10px] px-2 py-0.5 rounded-full" style={{
               fontFamily: "var(--font-mono)",
-              fontWeight: 700,
+              fontWeight: 600,
               background: lastDelta > 0 ? "var(--success-bg)" : "var(--danger-bg)",
               color: lastDelta > 0 ? "var(--success)" : "var(--danger)",
             }}>
@@ -239,9 +239,9 @@ export function TryMeInsights({ scenario: sc, mood, moodHistory, responseCount, 
             <span key={phrase} className="text-[9px] px-2 py-1 rounded"
               style={{
                 fontFamily: "var(--font-mono)",
-                background: "rgba(217,119,6,0.06)",
+                background: "rgba(181,133,10,0.06)",
                 color: "var(--warn)",
-                border: "1px solid rgba(217,119,6,0.15)",
+                border: "1px solid rgba(181,133,10,0.15)",
               }}>
               {phrase}
             </span>

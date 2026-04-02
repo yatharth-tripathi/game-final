@@ -11,7 +11,7 @@ export function Particles({ count = 15 }: { count?: number }) {
         size: 1 + Math.random() * 2,
         duration: 15 + Math.random() * 25,
         delay: Math.random() * 20,
-        opacity: 0.15 + Math.random() * 0.25,
+        opacity: 0.06 + Math.random() * 0.12,
       })),
     [count]
   );
@@ -27,11 +27,11 @@ export function Particles({ count = 15 }: { count?: number }) {
             bottom: "-10px",
             width: p.size,
             height: p.size,
-            background: "var(--accent-primary)",
+            background: "var(--text-ghost)",
             opacity: p.opacity,
             animationDuration: `${p.duration}s`,
             animationDelay: `${p.delay}s`,
-            boxShadow: `0 0 ${p.size * 3}px rgba(37,99,235,0.3)`,
+            boxShadow: `0 0 ${p.size * 2}px rgba(142,142,137,0.15)`,
           }}
         />
       ))}

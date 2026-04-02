@@ -116,7 +116,7 @@ export function Leaderboard({ onClose }: { onClose: () => void }) {
           <button onClick={onClose} className="btn-ghost">
             <ArrowLeft size={12} /> BACK
           </button>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "4px", color: "var(--text-ghost)" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.1em", color: "var(--text-ghost)" }}>
             LEADERBOARD
           </span>
           <div className="flex items-center gap-1">
@@ -199,7 +199,7 @@ export function Leaderboard({ onClose }: { onClose: () => void }) {
                     const colors = rank === 1
                       ? { bg: "rgba(234,179,8,0.08)", border: "rgba(234,179,8,0.25)", accent: "#EAB308", icon: <Crown size={isFirst ? 20 : 16} /> }
                       : rank === 2
-                      ? { bg: "rgba(148,163,184,0.08)", border: "rgba(148,163,184,0.25)", accent: "#94A3B8", icon: <Medal size={16} /> }
+                      ? { bg: "rgba(142,142,137,0.08)", border: "rgba(142,142,137,0.25)", accent: "var(--text-ghost)", icon: <Medal size={16} /> }
                       : { bg: "rgba(180,83,9,0.08)", border: "rgba(180,83,9,0.25)", accent: "#B45309", icon: <Medal size={16} /> };
 
                     return (
@@ -291,7 +291,7 @@ export function Leaderboard({ onClose }: { onClose: () => void }) {
                 >
                   <div className="flex items-center gap-2 mb-3 px-1">
                     <Target size={12} style={{ color: "var(--accent-gold)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "3px", color: "var(--accent-gold)" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 600, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
                       CATEGORY CHAMPIONS
                     </span>
                   </div>
@@ -341,7 +341,7 @@ export function Leaderboard({ onClose }: { onClose: () => void }) {
               >
                 <div className="flex items-center gap-2 mb-3 px-1">
                   <Trophy size={12} style={{ color: "var(--accent-gold)" }} />
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "3px", color: "var(--accent-gold)" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 600, letterSpacing: "0.06em", color: "var(--accent-gold)" }}>
                     {top3.length >= 3 ? "FULL RANKINGS" : "RANKINGS"}
                   </span>
                   <span className="ml-auto text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
@@ -375,7 +375,7 @@ export function Leaderboard({ onClose }: { onClose: () => void }) {
                         transition={{ delay: 0.5 + actualIndex * 0.02 }}
                         className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all"
                         style={{
-                          background: isMe ? "rgba(37,99,235,0.1)" : entry.rank <= 3 ? getRankBg(entry.rank) : "transparent",
+                          background: isMe ? "rgba(45,91,210,0.1)" : entry.rank <= 3 ? getRankBg(entry.rank) : "transparent",
                           border: isMe ? "1px solid var(--accent-primary-border)" : "1px solid transparent",
                         }}
                       >
@@ -424,7 +424,7 @@ export function Leaderboard({ onClose }: { onClose: () => void }) {
 
                         <div className="hidden sm:block w-10 text-center shrink-0">
                           {entry.streak > 0 && (
-                            <span className="text-xs flex items-center justify-center gap-0.5" style={{ fontFamily: "var(--font-mono)", color: "#DC2626" }}>
+                            <span className="text-xs flex items-center justify-center gap-0.5" style={{ fontFamily: "var(--font-mono)", color: "var(--danger)" }}>
                               <Flame size={9} /> {entry.streak}
                             </span>
                           )}
@@ -443,7 +443,7 @@ export function Leaderboard({ onClose }: { onClose: () => void }) {
                   transition={{ delay: 0.7 }}
                   className="mt-6 rounded-xl p-4"
                   style={{
-                    background: "rgba(37,99,235,0.06)",
+                    background: "rgba(45,91,210,0.06)",
                     border: "1px solid var(--accent-primary-border)",
                   }}
                 >
@@ -495,14 +495,14 @@ export function Leaderboard({ onClose }: { onClose: () => void }) {
 
 function getRankIcon(rank: number) {
   if (rank === 1) return <Crown size={14} style={{ color: "#EAB308" }} />;
-  if (rank === 2) return <Medal size={14} style={{ color: "#94A3B8" }} />;
+  if (rank === 2) return <Medal size={14} style={{ color: "var(--text-ghost)" }} />;
   if (rank === 3) return <Medal size={14} style={{ color: "#B45309" }} />;
   return null;
 }
 
 function getRankBg(rank: number) {
   if (rank === 1) return "rgba(234,179,8,0.06)";
-  if (rank === 2) return "rgba(148,163,184,0.04)";
+  if (rank === 2) return "rgba(142,142,137,0.04)";
   if (rank === 3) return "rgba(180,83,9,0.04)";
   return "transparent";
 }

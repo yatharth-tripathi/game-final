@@ -19,11 +19,11 @@ const categoryIcons: Record<string, typeof Briefcase> = {
 };
 
 const TAG_STYLES: Record<ScenarioTag, { color: string; bg: string; border: string; label: string }> = {
-  RECOMMENDED: { color: "var(--accent-primary)", bg: "rgba(37,99,235,0.08)", border: "rgba(37,99,235,0.2)", label: "RECOMMENDED" },
-  NEW: { color: "var(--accent-primary)", bg: "rgba(37,99,235,0.08)", border: "rgba(37,99,235,0.2)", label: "NEW" },
-  MASTERED: { color: "var(--success)", bg: "rgba(22,163,74,0.08)", border: "rgba(22,163,74,0.2)", label: "MASTERED" },
-  BELOW_YOUR_LEVEL: { color: "var(--text-ghost)", bg: "rgba(148,163,184,0.06)", border: "rgba(148,163,184,0.15)", label: "REVIEW" },
-  CHALLENGE: { color: "#7C3AED", bg: "rgba(124,58,237,0.08)", border: "rgba(124,58,237,0.15)", label: "CHALLENGE" },
+  RECOMMENDED: { color: "var(--accent-primary)", bg: "rgba(45,91,210,0.06)", border: "rgba(45,91,210,0.18)", label: "RECOMMENDED" },
+  NEW: { color: "var(--accent-primary)", bg: "rgba(45,91,210,0.06)", border: "rgba(45,91,210,0.18)", label: "NEW" },
+  MASTERED: { color: "var(--success)", bg: "rgba(47,125,91,0.06)", border: "rgba(47,125,91,0.18)", label: "MASTERED" },
+  BELOW_YOUR_LEVEL: { color: "var(--text-ghost)", bg: "rgba(148,163,184,0.05)", border: "rgba(148,163,184,0.12)", label: "REVIEW" },
+  CHALLENGE: { color: "#7C3AED", bg: "rgba(124,58,237,0.05)", border: "rgba(124,58,237,0.12)", label: "CHALLENGE" },
 };
 
 export function Lobby() {
@@ -102,14 +102,14 @@ export function Lobby() {
         <div className="px-4 sm:px-8 py-3 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow))" }}>
+              style={{ background: "var(--accent-primary)" }}>
               <Briefcase size={14} color="#FFFFFF" />
             </div>
             <div className="hidden sm:block">
-              <span className="font-bold text-sm tracking-wide" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
+              <span className="font-bold text-sm" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)", letterSpacing: "0.04em" }}>
                 EMPLOYEE TRAINING
               </span>
-              <p className="text-[9px] tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
+              <p className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", letterSpacing: "0.06em" }}>
                 SIMULATOR
               </p>
             </div>
@@ -118,11 +118,11 @@ export function Lobby() {
           <div className="flex items-center gap-3 sm:gap-6 flex-wrap justify-end min-w-0">
             <div className="hidden md:flex items-center gap-3">
               <div className="text-right">
-                <p className="text-[10px] font-semibold" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}>
-                  {level.title} · Lv {level.level}
+                <p className="text-[10px] font-medium" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-primary)" }}>
+                  {level.title} · <span style={{ fontFamily: "var(--font-display)" }}>Lv {level.level}</span>
                 </p>
                 <p className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-                  {career.totalXP} / {nextXP} XP
+                  <span style={{ fontFamily: "var(--font-display)" }}>{career.totalXP}</span> / <span style={{ fontFamily: "var(--font-display)" }}>{nextXP}</span> <span style={{ fontFamily: "var(--font-mono)" }}>XP</span>
                 </p>
               </div>
               <div className="w-24">
@@ -134,38 +134,38 @@ export function Lobby() {
 
             <div className="flex items-center gap-2 sm:gap-4 text-[10px] flex-wrap" style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>
               <span className="hidden sm:flex items-center gap-1.5">
-                <Briefcase size={10} style={{ color: "var(--accent-gold)" }} />
+                <Briefcase size={10} style={{ color: "var(--accent-primary)" }} />
                 <strong style={{ color: "var(--text-primary)" }}>{career.casesCompleted}</strong> cases
               </span>
               {career.streak > 0 && (
                 <span className="hidden sm:flex items-center gap-1">
-                  <Flame size={10} style={{ color: "#DC2626" }} />
+                  <Flame size={10} style={{ color: "var(--danger)" }} />
                   <strong style={{ color: "var(--text-primary)" }}>{career.streak}</strong>
                 </span>
               )}
               <button
                 onClick={() => setPhase("leaderboard")}
                 className="flex items-center gap-1 px-2 py-1 rounded-md transition-all hover:opacity-80"
-                style={{ background: "rgba(37,99,235,0.08)", border: "1px solid rgba(37,99,235,0.15)" }}
+                style={{ background: "rgba(45,91,210,0.05)", border: "1px solid rgba(45,91,210,0.12)" }}
               >
-                <Trophy size={10} style={{ color: "var(--accent-gold)" }} />
-                <span style={{ color: "var(--accent-gold)" }}>RANKS</span>
+                <Trophy size={10} style={{ color: "var(--accent-primary)" }} />
+                <span style={{ color: "var(--accent-primary)", letterSpacing: "0.04em" }}>RANKS</span>
               </button>
               <button
                 onClick={() => setPhase("analytics")}
                 className="flex items-center gap-1 px-2 py-1 rounded-md transition-all hover:opacity-80"
-                style={{ background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.15)" }}
+                style={{ background: "rgba(124,58,237,0.05)", border: "1px solid rgba(124,58,237,0.12)" }}
               >
                 <BarChart3 size={10} style={{ color: "#7C3AED" }} />
-                <span className="hidden sm:inline" style={{ color: "#7C3AED" }}>ANALYTICS</span>
+                <span className="hidden sm:inline" style={{ color: "#7C3AED", letterSpacing: "0.04em" }}>ANALYTICS</span>
               </button>
               <button
                 onClick={() => setPhase("admin")}
                 className="flex items-center gap-1 px-2 py-1 rounded-md transition-all hover:opacity-80"
-                style={{ background: "rgba(132,204,22,0.08)", border: "1px solid rgba(132,204,22,0.15)" }}
+                style={{ background: "rgba(101,163,13,0.05)", border: "1px solid rgba(101,163,13,0.12)" }}
               >
                 <Wrench size={10} style={{ color: "#65A30D" }} />
-                <span className="hidden sm:inline" style={{ color: "#65A30D" }}>ADMIN</span>
+                <span className="hidden sm:inline" style={{ color: "#65A30D", letterSpacing: "0.04em" }}>ADMIN</span>
               </button>
               {career.playerName && (
                 <span className="hidden md:flex items-center gap-1.5" style={{ color: "var(--text-primary)" }}>
@@ -190,9 +190,9 @@ export function Lobby() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="nexus-card px-4 py-3 mb-4 flex items-center gap-3"
-              style={{ borderLeft: "3px solid var(--accent-gold)" }}
+              style={{ borderLeft: "3px solid var(--accent-primary)" }}
             >
-              <Zap size={16} style={{ color: "var(--accent-gold)" }} />
+              <Zap size={16} style={{ color: "var(--accent-primary)" }} />
               <p className="text-xs flex-1" style={{ color: "var(--text-primary)" }}>{career.adaptiveSuggestion}</p>
               <button onClick={dismissSuggestion} className="shrink-0 opacity-50 hover:opacity-100 transition-opacity">
                 <X size={14} style={{ color: "var(--text-ghost)" }} />
@@ -208,15 +208,16 @@ export function Lobby() {
               className="mb-6"
             >
               <div className="flex items-center gap-2 mb-3">
-                <Compass size={14} style={{ color: "var(--accent-gold)" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "2px", color: "var(--accent-gold)" }}>
+                <Compass size={14} style={{ color: "var(--accent-primary)" }} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", color: "var(--accent-primary)" }}>
                   RECOMMENDED FOR YOU
                 </span>
                 <span className="text-[9px] ml-2 px-2 py-0.5 rounded-full" style={{
                   fontFamily: "var(--font-mono)",
-                  background: "var(--accent-gold-bg)",
-                  color: "var(--accent-gold)",
-                  border: "1px solid var(--accent-gold-border)",
+                  background: "rgba(45,91,210,0.06)",
+                  color: "var(--accent-primary)",
+                  border: "1px solid rgba(45,91,210,0.15)",
+                  letterSpacing: "0.04em",
                 }}>
                   {DIFFICULTY_CONFIG[adaptiveLevel as keyof typeof DIFFICULTY_CONFIG]?.label || "TRAINEE"} LEVEL
                 </span>
@@ -224,7 +225,7 @@ export function Lobby() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {recommendedScenarios.slice(0, 2).map((scenario, i) => {
                   const diff = DIFFICULTY_CONFIG[scenario.difficulty];
-                  const catColor = CATEGORY_COLORS[scenario.category] || "var(--accent-gold)";
+                  const catColor = CATEGORY_COLORS[scenario.category] || "var(--accent-primary)";
                   return (
                     <motion.div
                       key={scenario.id}
@@ -232,8 +233,8 @@ export function Lobby() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
                       onClick={() => selectScenario(scenario)}
-                      className="case-file cursor-pointer px-4 py-4 flex items-center gap-4 transition-all hover:shadow-lg"
-                      style={{ borderColor: "var(--accent-gold-border)", borderWidth: 1.5 }}
+                      className="case-file cursor-pointer px-4 py-4 flex items-center gap-4 transition-all"
+                      style={{ background: "var(--bg-surface)", borderColor: "var(--border)", borderWidth: 1, boxShadow: "var(--shadow-xs)" }}
                     >
                       <div className="shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-sm font-bold"
                         style={{
@@ -251,15 +252,15 @@ export function Lobby() {
                           </span>
                           <span className="tag" style={TAG_STYLES.RECOMMENDED}>RECOMMENDED</span>
                         </div>
-                        <h3 className="text-[13px] font-bold leading-tight mb-0.5" style={{ color: "var(--text-primary)" }}>
+                        <h3 className="text-[13px] font-semibold leading-tight mb-0.5" style={{ color: "var(--text-primary)" }}>
                           {scenario.title}
                         </h3>
                         <div className="flex items-center gap-3 text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
                           <span>vs {scenario.customer.name}</span>
-                          <span style={{ color: "var(--accent-gold)" }}>+{scenario.xpReward} XP</span>
+                          <span style={{ color: "var(--accent-primary)" }}>+{scenario.xpReward} XP</span>
                         </div>
                       </div>
-                      <ChevronRight size={16} style={{ color: "var(--accent-gold)" }} />
+                      <ChevronRight size={16} style={{ color: "var(--accent-primary)" }} />
                     </motion.div>
                   );
                 })}
@@ -273,7 +274,7 @@ export function Lobby() {
             className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3"
           >
             <div>
-              <h2 className="text-lg sm:text-xl font-bold tracking-wide" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
+              <h2 className="text-lg sm:text-xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)", letterSpacing: "0.02em" }}>
                 Case Files
               </h2>
               <p className="text-xs mt-1" style={{ color: "var(--text-secondary)" }}>
@@ -289,10 +290,11 @@ export function Lobby() {
                   <button
                     key={cat.id}
                     onClick={() => setCategory(cat.id)}
-                    className="px-2 sm:px-3 py-1.5 rounded-md text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider transition-all flex items-center gap-1"
+                    className="px-2 sm:px-3 py-1.5 rounded-md text-[9px] sm:text-[10px] font-medium uppercase transition-all flex items-center gap-1"
                     style={{
                       color: active ? "#FFFFFF" : "var(--text-secondary)",
-                      background: active ? "linear-gradient(135deg, var(--accent-gold), var(--accent-gold-glow))" : "transparent",
+                      background: active ? "var(--accent-primary)" : "transparent",
+                      letterSpacing: "0.04em",
                     }}
                   >
                     <Icon size={10} /> <span className="hidden sm:inline">{cat.label}</span><span className="sm:hidden">{cat.id === "all" ? "All" : cat.label.slice(0, 4)}</span>
@@ -305,7 +307,7 @@ export function Lobby() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {classifiedScenarios.map((scenario, i) => {
               const diff = DIFFICULTY_CONFIG[scenario.difficulty];
-              const catColor = CATEGORY_COLORS[scenario.category] || "var(--accent-gold)";
+              const catColor = CATEGORY_COLORS[scenario.category] || "var(--accent-primary)";
               const isHovered = hoveredId === scenario.id;
               const tagStyle = TAG_STYLES[scenario.tag];
 
@@ -320,10 +322,10 @@ export function Lobby() {
                   onMouseLeave={() => setHoveredId(null)}
                   className="case-file cursor-pointer px-3 sm:px-5 py-3 sm:py-4 flex items-center gap-3 sm:gap-4"
                   style={{
-                    borderColor: isHovered ? "var(--border-accent)" : "var(--border)",
-                    boxShadow: isHovered ? "0 0 20px rgba(37,99,235,0.08), 0 8px 32px rgba(0,0,0,0.08)" : "none",
-                    transform: isHovered ? "translateY(-2px)" : "none",
-                    transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+                    borderColor: isHovered ? "var(--border-hover)" : "var(--border)",
+                    boxShadow: isHovered ? "var(--shadow-sm)" : "none",
+                    transform: isHovered ? "translateY(-1px)" : "none",
+                    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
                     opacity: scenario.tag === "BELOW_YOUR_LEVEL" ? 0.7 : 1,
                   }}
                 >
@@ -359,8 +361,8 @@ export function Lobby() {
                         {tagStyle.label}
                       </span>
                     </div>
-                    <h3 className="text-[13px] font-bold leading-tight mb-0.5 transition-colors"
-                      style={{ color: isHovered ? "var(--accent-gold)" : "var(--text-primary)" }}>
+                    <h3 className="text-[13px] font-semibold leading-tight mb-0.5 transition-colors"
+                      style={{ color: isHovered ? "var(--accent-primary)" : "var(--text-primary)" }}>
                       {scenario.title}
                     </h3>
                     <p className="text-[10px] mb-2" style={{ color: "var(--text-secondary)" }}>
@@ -368,7 +370,7 @@ export function Lobby() {
                     </p>
                     <div className="flex items-center gap-3 text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
                       <span className="flex items-center gap-1"><Clock size={9} /> ~3 min</span>
-                      <span style={{ color: "var(--accent-gold)" }}>+{scenario.xpReward} XP</span>
+                      <span style={{ color: "var(--accent-primary)" }}>+{scenario.xpReward} XP</span>
                       {scenario.bestScore !== null && (
                         <span style={{ color: scenario.bestScore >= 70 ? "var(--success)" : "var(--warn)" }}>
                           Best: {scenario.bestScore}%
@@ -379,10 +381,10 @@ export function Lobby() {
 
                   <div className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all"
                     style={{
-                      background: isHovered ? "var(--accent-gold-bg)" : "transparent",
-                      border: `1px solid ${isHovered ? "var(--accent-gold-border)" : "transparent"}`,
+                      background: isHovered ? "rgba(45,91,210,0.06)" : "transparent",
+                      border: `1px solid ${isHovered ? "rgba(45,91,210,0.15)" : "transparent"}`,
                     }}>
-                    <ChevronRight size={14} style={{ color: isHovered ? "var(--accent-gold)" : "var(--text-ghost)" }} />
+                    <ChevronRight size={14} style={{ color: isHovered ? "var(--accent-primary)" : "var(--text-ghost)" }} />
                   </div>
                 </motion.div>
               );
@@ -392,7 +394,7 @@ export function Lobby() {
       </div>
 
       <div className="relative z-10 shrink-0 glass-panel px-4 sm:px-8 py-2 flex items-center justify-between"
-        style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "3px", color: "var(--text-ghost)", borderTop: "1px solid var(--border)" }}>
+        style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.06em", color: "var(--text-ghost)", borderTop: "1px solid var(--border)" }}>
         <span>ETS v2.0</span>
         <span>{classifiedScenarios.length} CASES AVAILABLE</span>
       </div>
