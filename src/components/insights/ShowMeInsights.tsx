@@ -5,7 +5,7 @@ import { CATEGORY_COLORS, DIFFICULTY_CONFIG } from "@/lib/scenarios";
 import type { Scenario } from "@/lib/scenarios";
 import {
   Target, FileText, Shield, Lightbulb,
-  CheckCircle, XCircle, User,
+  CheckCircle, XCircle, User, Map,
 } from "lucide-react";
 
 interface Exchange {
@@ -55,96 +55,264 @@ export function ShowMeInsights({
 
   return (
     <>
-      {/* Scenario Context */}
-      <div className="insight-card" style={{ borderTop: `2px solid ${catColor}30` }}>
-        <div className="insight-card-header" style={{ color: catColor }}>
-          <FileText size={11} /> SCENARIO
+      {/* ═══ 1. SCENARIO BRIEF ═══ */}
+      <div className="insight-card">
+        <div className="insight-card-header" style={{ color: "var(--accent-primary)" }}>
+          <FileText size={11} /> SCENARIO BRIEF
         </div>
-        <div className="space-y-2.5 text-[11px]">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {/* Objective */}
           <div>
-            <span className="text-[9px] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>OBJECTIVE</span>
-            <p className="mt-0.5" style={{ color: "var(--text-primary)" }}>{objective}</p>
+            <span style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 9,
+              fontWeight: 600,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase" as const,
+              color: "var(--text-ghost)",
+            }}>
+              OBJECTIVE
+            </span>
+            <p style={{
+              fontSize: 12,
+              lineHeight: 1.5,
+              color: "var(--text-primary)",
+              margin: "4px 0 0",
+            }}>
+              {objective}
+            </p>
           </div>
+
+          {/* Client Profile */}
           <div>
-            <span className="text-[9px] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>CLIENT</span>
-            <p className="mt-0.5" style={{ color: "var(--text-primary)" }}>{customerProfile}</p>
+            <span style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 9,
+              fontWeight: 600,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase" as const,
+              color: "var(--text-ghost)",
+            }}>
+              CLIENT PROFILE
+            </span>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
+              <div style={{
+                width: 36,
+                height: 36,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #1e3a5f, #2d5f8a)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                <span style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: "#FFFFFF",
+                }}>
+                  {sc.customer.name.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.3 }}>
+                  {sc.customer.name}
+                </div>
+                <div style={{ fontSize: 11, color: "var(--text-secondary)", lineHeight: 1.4, marginTop: 2 }}>
+                  {customerProfile}
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <span className="text-[9px] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>COMPLIANCE</span>
-            <p className="mt-0.5" style={{ color: "var(--danger)" }}>{complianceWatch}</p>
+
+          {/* Compliance Warning */}
+          <div style={{
+            padding: "10px 12px",
+            borderRadius: "var(--radius-sm)",
+            background: "var(--danger-bg)",
+            border: "1px solid var(--danger-border)",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+              <Shield size={10} style={{ color: "var(--danger)" }} />
+              <span style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 9,
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase" as const,
+                color: "var(--danger)",
+              }}>
+                COMPLIANCE WARNING
+              </span>
+            </div>
+            <p style={{
+              fontSize: 11,
+              lineHeight: 1.5,
+              color: "var(--danger)",
+              margin: 0,
+            }}>
+              {complianceWatch}
+            </p>
           </div>
-          <div className="flex items-center gap-2 pt-1">
-            <span className="tag" style={{ color: diff.color, background: `${diff.color}12`, border: `1px solid ${diff.color}25` }}>{diff.label}</span>
-            <span className="tag" style={{ color: catColor, background: `${catColor}08`, border: `1px solid ${catColor}20` }}>
+
+          {/* Difficulty + Category tags */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span className="tag" style={{
+              color: diff.color,
+              background: `${diff.color}12`,
+              border: `1px solid ${diff.color}25`,
+            }}>
+              {diff.label}
+            </span>
+            <span className="tag" style={{
+              color: catColor,
+              background: `${catColor}08`,
+              border: `1px solid ${catColor}20`,
+            }}>
               {sc.category.replace("-", " ")}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Active Technique Spotlight */}
+      {/* ═══ 2. TECHNIQUE SPOTLIGHT ═══ */}
       {latestTechnique ? (
         <motion.div
           key={latestTechnique.text.slice(0, 20)}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           className="insight-card insight-card-active"
-          style={{ borderLeft: "3px solid var(--accent-gold)" }}
+          style={{ borderLeft: "3px solid var(--accent-primary)" }}
         >
-          <div className="insight-card-header" style={{ color: "var(--accent-gold)" }}>
-            <Lightbulb size={11} /> TECHNIQUE SPOTLIGHT
+          <div style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 9,
+            fontWeight: 600,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase" as const,
+            color: "var(--text-ghost)",
+            marginBottom: 4,
+          }}>
+            CONCEPT
           </div>
-          <p className="text-sm leading-relaxed" style={{ color: "var(--warn)" }}>
+          <div style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "var(--text-primary)",
+            marginBottom: 4,
+          }}>
             {latestTechnique.technique}
+          </div>
+          <p style={{
+            fontSize: 11,
+            lineHeight: 1.5,
+            color: "var(--text-secondary)",
+            margin: 0,
+          }}>
+            Observe how the ideal RM applies this technique in the conversation to guide the client effectively.
           </p>
         </motion.div>
       ) : (
-        <div className="insight-card">
+        <div className="insight-card" style={{ borderLeft: "3px solid var(--border)" }}>
           <div className="insight-card-header" style={{ color: "var(--text-ghost)" }}>
             <Lightbulb size={11} /> TECHNIQUE SPOTLIGHT
           </div>
-          <p className="text-[11px]" style={{ color: "var(--text-ghost)" }}>
-            {visibleCount === 0 ? "Waiting for conversation to begin..." : "Observe how the client reacts to the RM's approach"}
+          <p style={{
+            fontSize: 11,
+            color: "var(--text-ghost)",
+            margin: 0,
+          }}>
+            {visibleCount === 0
+              ? "Waiting for conversation to begin..."
+              : "Observe how the client reacts to the RM's approach"}
           </p>
         </div>
       )}
 
-      {/* Conversation Map (Timeline) */}
+      {/* ═══ 3. CONVERSATION MAP ═══ */}
       <div className="insight-card">
-        <div className="insight-card-header" style={{ color: "var(--accent-gold)" }}>
-          <Target size={11} /> CONVERSATION MAP
+        <div className="insight-card-header" style={{ color: "var(--accent-primary)" }}>
+          <Map size={11} /> CONVERSATION MAP
         </div>
-        <div className="space-y-0">
+        <div style={{ display: "flex", flexDirection: "column" }}>
           {exchanges.map((ex, i) => {
             const isRevealed = i < visibleCount;
             const isCurrent = i === visibleCount - 1;
+            const isPending = i >= visibleCount;
             const isCustomer = ex.speaker === "customer";
 
             return (
-              <div key={i} className="flex items-start gap-3">
-                {/* Timeline rail */}
-                <div className="flex flex-col items-center" style={{ width: 12 }}>
-                  <div className={`timeline-node ${isCurrent ? "timeline-node-active" : isRevealed ? "timeline-node-done" : ""}`} />
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                {/* Vertical timeline */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: 16 }}>
+                  <div
+                    className={`timeline-node ${isRevealed && !isCurrent ? "timeline-node-done" : isCurrent ? "timeline-node-active" : ""}`}
+                  />
                   {i < exchanges.length - 1 && (
-                    <div className={`timeline-line ${isRevealed ? "timeline-line-done" : ""}`} style={{ height: 24, marginTop: 2, marginBottom: 2 }} />
+                    <div
+                      className={`timeline-line ${isRevealed ? "timeline-line-done" : ""}`}
+                      style={{ height: 28, marginTop: 2, marginBottom: 2 }}
+                    />
                   )}
                 </div>
-                {/* Label */}
-                <div className="pb-2 flex-1 min-w-0">
-                  <span className="text-[9px] font-semibold uppercase tracking-wider" style={{
-                    fontFamily: "var(--font-mono)",
-                    color: isRevealed
-                      ? (isCustomer ? catColor : "var(--success)")
-                      : "var(--text-ghost)",
+
+                {/* Step info */}
+                <div style={{ flex: 1, paddingBottom: 4, marginTop: -2 }}>
+                  <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 8,
                   }}>
-                    {isCustomer ? (
-                      <><User size={8} className="inline mr-1" />{sc.customer.name.split(" ")[0]}</>
-                    ) : (
-                      <>IDEAL RM</>
-                    )}
-                  </span>
+                    <span style={{
+                      fontSize: 11,
+                      lineHeight: 1.3,
+                      color: isRevealed && !isCurrent
+                        ? "var(--success)"
+                        : isCurrent
+                          ? "var(--text-primary)"
+                          : "var(--text-ghost)",
+                      fontWeight: isCurrent ? 600 : 400,
+                      fontStyle: isPending ? "italic" : "normal",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}>
+                      {isCustomer ? (
+                        <><User size={9} />{sc.customer.name.split(" ")[0]}</>
+                      ) : (
+                        <>IDEAL RM</>
+                      )}
+                    </span>
+                    <span style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 8,
+                      fontWeight: 600,
+                      textTransform: "uppercase" as const,
+                      letterSpacing: "0.06em",
+                      flexShrink: 0,
+                      padding: "2px 6px",
+                      borderRadius: 4,
+                      color: isRevealed && !isCurrent
+                        ? "var(--success)"
+                        : isCurrent
+                          ? "var(--accent-primary)"
+                          : "var(--text-ghost)",
+                      background: isRevealed && !isCurrent
+                        ? "var(--success-bg)"
+                        : isCurrent
+                          ? "var(--accent-primary-bg)"
+                          : "transparent",
+                    }}>
+                      {isRevealed && !isCurrent ? "DONE" : isCurrent ? "ACTIVE" : "PENDING"}
+                    </span>
+                  </div>
                   {isRevealed && (
-                    <p className="text-[10px] mt-0.5 leading-snug" style={{
+                    <p style={{
+                      fontSize: 10,
+                      marginTop: 2,
+                      lineHeight: 1.4,
                       color: "var(--text-secondary)",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -162,30 +330,85 @@ export function ShowMeInsights({
         </div>
       </div>
 
-      {/* Skill Debrief */}
+      {/* ═══ 4. SKILL DEBRIEF ═══ */}
       <div className="insight-card">
-        <div className="insight-card-header" style={{ color: allRevealed ? "var(--accent-gold)" : "var(--text-ghost)" }}>
-          <Shield size={11} /> SKILL DEBRIEF
+        <div className="insight-card-header" style={{
+          color: allRevealed ? "var(--accent-primary)" : "var(--text-ghost)",
+        }}>
+          <Target size={11} /> SKILL DEBRIEF
         </div>
         {allRevealed && debrief ? (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2">
-            {debrief.map((item, i) => (
-              <div key={i} className="flex items-center gap-2.5 py-1.5" style={{ borderBottom: "1px solid var(--border)" }}>
-                {item.demonstrated
-                  ? <CheckCircle size={11} style={{ color: "var(--success)" }} />
-                  : <XCircle size={11} style={{ color: "var(--danger)" }} />}
-                <span className="text-[11px] flex-1" style={{ color: "var(--text-primary)" }}>{item.skill}</span>
-                <span className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>{item.where}</span>
-              </div>
-            ))}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              {debrief.map((item, i) => (
+                <div key={i} style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "10px 0",
+                  borderBottom: i < debrief.length - 1 ? "1px solid var(--border-subtle)" : "none",
+                }}>
+                  {item.demonstrated
+                    ? <CheckCircle size={14} style={{ color: "var(--success)", flexShrink: 0 }} />
+                    : <XCircle size={14} style={{ color: "var(--danger)", flexShrink: 0 }} />}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <span style={{
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: "var(--text-primary)",
+                      display: "block",
+                    }}>
+                      {item.skill}
+                    </span>
+                    <span style={{
+                      fontSize: 10,
+                      fontFamily: "var(--font-mono)",
+                      color: "var(--text-muted)",
+                      display: "block",
+                      marginTop: 2,
+                    }}>
+                      {item.where}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </motion.div>
         ) : (
-          <div className="space-y-2">
+          <div style={{ display: "flex", flexDirection: "column" }}>
             {sc.evaluationRules.map((rule, i) => (
-              <div key={i} className="flex items-center gap-2.5 py-1.5" style={{ borderBottom: "1px solid var(--border)" }}>
-                <div className="w-3 h-3 rounded-full" style={{ background: "var(--border)" }} />
-                <span className="text-[11px]" style={{ color: "var(--text-ghost)" }}>{rule.skill}</span>
-                <span className="text-[9px] ml-auto" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>Pending</span>
+              <div key={i} style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "10px 0",
+                borderBottom: i < sc.evaluationRules.length - 1 ? "1px solid var(--border-subtle)" : "none",
+                opacity: 0.55,
+              }}>
+                <div style={{
+                  width: 14,
+                  height: 14,
+                  borderRadius: "50%",
+                  border: "2px solid var(--border)",
+                  background: "var(--bg-void)",
+                  flexShrink: 0,
+                }} />
+                <span style={{
+                  flex: 1,
+                  fontSize: 12,
+                  fontWeight: 500,
+                  color: "var(--text-ghost)",
+                }}>
+                  {rule.skill}
+                </span>
+                <span style={{
+                  fontSize: 10,
+                  fontFamily: "var(--font-mono)",
+                  fontStyle: "italic",
+                  color: "var(--text-ghost)",
+                }}>
+                  Pending
+                </span>
               </div>
             ))}
           </div>

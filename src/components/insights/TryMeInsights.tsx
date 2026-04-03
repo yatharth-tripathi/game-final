@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import type { Scenario } from "@/lib/scenarios";
 import { CATEGORY_COLORS } from "@/lib/scenarios";
 import {
-  User, Shield, MessageSquare, Target, Lightbulb,
-  TrendingUp, TrendingDown, Minus, CheckSquare,
+  User, Shield, Target, Lightbulb,
+  TrendingUp, TrendingDown, Minus, CheckSquare, ChevronRight,
 } from "lucide-react";
 
 interface TryMeInsightsProps {
@@ -17,26 +17,84 @@ interface TryMeInsightsProps {
 }
 
 export function TryMeInsights({ scenario: sc, mood, moodHistory, responseCount, coachingStep }: TryMeInsightsProps) {
-  const catColor = CATEGORY_COLORS[sc.category] || "var(--accent-gold)";
+  const catColor = CATEGORY_COLORS[sc.category] || "var(--accent-primary)";
   const moodColor = mood <= 3 ? "var(--danger)" : mood <= 6 ? "var(--warn)" : "var(--success)";
   const lastDelta = moodHistory.length >= 2
     ? moodHistory[moodHistory.length - 1] - moodHistory[moodHistory.length - 2]
     : 0;
 
-  const moodLabel = mood <= 2 ? "Client is very frustrated" :
-    mood <= 3 ? "Client is losing patience" :
-    mood <= 5 ? "Client is neutral — build rapport" :
-    mood <= 7 ? "Client is warming up to you" :
-    mood <= 9 ? "Client trusts you" : "Client is fully engaged";
+  const moodInsight = mood <= 2 ? "Client is very frustrated. Focus on empathy and de-escalation to recover the conversation." :
+    mood <= 3 ? "Client is losing patience. Show understanding and address their core concerns directly." :
+    mood <= 5 ? "Client is neutral. Build rapport by actively listening and asking thoughtful questions." :
+    mood <= 7 ? "Client is warming up. Continue your current approach and look for opportunities to deepen trust." :
+    mood <= 9 ? "Client trusts you. Maintain this positive momentum with genuine engagement." :
+    "Client is fully engaged. Excellent rapport -- keep the conversation natural.";
 
   // Get current coaching step data
   const systemSteps = sc.steps.filter(s => s.speaker === "system");
   const currentCoachingStep = systemSteps[coachingStep];
   const currentHints = currentCoachingStep?.hints || [];
 
+  const overallProgress = systemSteps.length > 0 ? Math.round(((coachingStep) / systemSteps.length) * 100) : 0;
+
+  // Block color for trust blocks
+  const blockColor = (filled: boolean, value: number) => {
+    if (!filled) return "#E2E8F0";
+    if (value >= 7) return "linear-gradient(135deg, #4361EE, #6380FF)";
+    if (value >= 4) return "linear-gradient(135deg, #F59E0B, #FBBF24)";
+    return "linear-gradient(135deg, #EF4444, #F87171)";
+  };
+
   return (
     <>
-      {/* Current Coaching Objective */}
+      {/* ═══ 1. PRACTICE PROGRESS ═══ */}
+      <div className="insight-card">
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 12,
+        }}>
+          <div className="insight-card-header" style={{
+            color: "var(--accent-primary)",
+            marginBottom: 0,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+          }}>
+            <Target size={11} /> PRACTICE PROGRESS
+          </div>
+          <span style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 11,
+            fontWeight: 600,
+            color: "var(--accent-primary)",
+          }}>
+            Round {Math.min(coachingStep + 1, systemSteps.length)}/{systemSteps.length}
+          </span>
+        </div>
+        <div className="progress-track" style={{ height: 6, borderRadius: 99 }}>
+          <div className="progress-fill" style={{
+            width: `${overallProgress}%`,
+            background: "linear-gradient(90deg, var(--accent-primary), var(--accent-primary-glow))",
+            borderRadius: 99,
+          }} />
+        </div>
+        {/* Coaching step segments */}
+        <div style={{ display: "flex", gap: 3, marginTop: 8 }}>
+          {systemSteps.map((_, i) => (
+            <div key={i} style={{
+              flex: 1,
+              height: 3,
+              borderRadius: 2,
+              background: i < coachingStep ? "var(--success)" : i === coachingStep ? "var(--accent-primary)" : "var(--border)",
+              transition: "all 0.3s ease",
+            }} />
+          ))}
+        </div>
+      </div>
+
+      {/* ═══ 2. CURRENT OBJECTIVE ═══ */}
       {currentCoachingStep && (
         <motion.div
           key={coachingStep}
@@ -44,98 +102,243 @@ export function TryMeInsights({ scenario: sc, mood, moodHistory, responseCount, 
           animate={{ opacity: 1, y: 0 }}
           className="insight-card insight-card-active"
         >
-          <div className="insight-card-header" style={{ color: "var(--accent-gold)" }}>
+          <div className="insight-card-header" style={{ color: "var(--accent-primary)" }}>
             <Target size={11} /> CURRENT OBJECTIVE
           </div>
-          <p className="text-sm leading-relaxed mb-3" style={{ color: "var(--text-primary)" }}>
+          <p style={{
+            fontSize: 13,
+            lineHeight: 1.55,
+            color: "var(--text-primary)",
+            margin: "0 0 10px 0",
+          }}>
             {currentCoachingStep.text.replace("OBJECTIVE: ", "")}
           </p>
           {currentCoachingStep.expectedAction && (
-            <p className="text-[10px] leading-relaxed px-3 py-2 rounded-lg" style={{
+            <p style={{
+              fontSize: 11,
+              lineHeight: 1.5,
+              padding: "8px 12px",
+              borderRadius: 8,
               background: "var(--accent-primary-bg)",
               border: "1px solid var(--accent-primary-border)",
               color: "var(--text-secondary)",
+              margin: "0 0 10px 0",
             }}>
               <strong style={{ color: "var(--accent-primary)" }}>Expected:</strong> {currentCoachingStep.expectedAction}
             </p>
           )}
-          {/* Step progress */}
-          <div className="flex items-center gap-2 mt-3">
-            <span className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-              ROUND {Math.min(coachingStep + 1, systemSteps.length)}/{systemSteps.length}
-            </span>
-            <div className="flex items-center gap-1.5 flex-1">
-              {Array.from({ length: systemSteps.length }).map((_, i) => (
-                <div key={i} style={{
-                  flex: 1, height: 3, borderRadius: 2,
-                  background: i < coachingStep ? "var(--success)" : i === coachingStep ? "var(--accent-gold)" : "var(--border)",
-                  boxShadow: i === coachingStep ? "0 0 6px var(--accent-gold)" : "none",
-                  transition: "all 0.3s ease",
-                }} />
-              ))}
-            </div>
-          </div>
+          <span style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 9,
+            fontWeight: 600,
+            letterSpacing: "0.06em",
+            padding: "3px 8px",
+            borderRadius: 4,
+            background: "var(--accent-primary-bg)",
+            color: "var(--accent-primary)",
+            textTransform: "uppercase",
+          }}>
+            COACHING
+          </span>
         </motion.div>
       )}
 
-      {/* Hints */}
-      {currentHints.length > 0 && (
-        <div className="insight-card">
-          <div className="insight-card-header" style={{ color: "var(--warn)" }}>
-            <Lightbulb size={11} /> HINTS
+      {/* ═══ 3. CONVERSATION TEMPERATURE ═══ */}
+      <div className="insight-card">
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 10,
+        }}>
+          <div className="insight-card-header" style={{
+            color: moodColor,
+            marginBottom: 0,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+          }}>
+            {mood <= 3 ? <TrendingDown size={11} /> : mood >= 7 ? <TrendingUp size={11} /> : <Minus size={11} />}
+            CONVERSATION TEMPERATURE
           </div>
-          <div className="space-y-1.5">
-            {currentHints.map((hint, i) => (
-              <div key={i} className="flex items-start gap-2 text-[11px] leading-relaxed"
-                style={{ color: "var(--warn)" }}>
-                <span style={{ color: "var(--warn)", opacity: 0.5 }}>›</span>
-                {hint}
-              </div>
-            ))}
-            {currentCoachingStep?.idealKeywords && (
-              <div className="flex flex-wrap gap-1.5 mt-2 pt-2" style={{ borderTop: "1px solid var(--border)" }}>
-                {currentCoachingStep.idealKeywords.map((kw, i) => (
-                  <span key={i} className="text-[9px] px-2 py-0.5 rounded-full"
-                    style={{ background: "var(--warn-bg)", color: "var(--warn)", border: "1px solid rgba(181,133,10,0.15)" }}>
-                    {kw}
-                  </span>
-                ))}
-              </div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 2 }}>
+            <span style={{
+              fontFamily: "var(--font-display)",
+              fontSize: 28,
+              fontWeight: 700,
+              lineHeight: 1,
+              color: moodColor,
+            }}>
+              {mood}
+            </span>
+            <span style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              color: "var(--text-ghost)",
+            }}>
+              /10
+            </span>
+            {lastDelta !== 0 && (
+              <span style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                fontWeight: 600,
+                marginLeft: 6,
+                padding: "2px 6px",
+                borderRadius: 99,
+                background: lastDelta > 0 ? "var(--success-bg)" : "var(--danger-bg)",
+                color: lastDelta > 0 ? "var(--success)" : "var(--danger)",
+              }}>
+                {lastDelta > 0 ? "+" : ""}{lastDelta}
+              </span>
             )}
           </div>
         </div>
-      )}
 
-      {/* Client Dossier */}
-      <div className="insight-card" style={{ borderTop: `2px solid ${catColor}30` }}>
-        <div className="insight-card-header" style={{ color: catColor }}>
-          <User size={11} /> CLIENT DOSSIER
+        {/* Trust blocks (10 colored blocks) */}
+        <div style={{ display: "flex", gap: 3, marginBottom: 10 }}>
+          {Array.from({ length: 10 }).map((_, i) => {
+            const filled = i < mood;
+            return (
+              <div key={i} style={{
+                width: 20,
+                height: 8,
+                borderRadius: 2,
+                background: blockColor(filled, mood),
+                transition: "all 0.3s ease",
+              }} />
+            );
+          })}
         </div>
-        <div className="space-y-2 text-[11px]">
-          <div className="flex justify-between" style={{ borderBottom: "1px solid var(--border)", paddingBottom: 6 }}>
-            <span style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", fontSize: 9 }}>NAME</span>
-            <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>{sc.customer.name}</span>
+
+        {/* Insight text */}
+        <div>
+          <span style={{
+            fontSize: 11,
+            fontWeight: 700,
+            color: "var(--text-primary)",
+            marginRight: 4,
+          }}>
+            Insight:
+          </span>
+          <span style={{
+            fontSize: 11,
+            color: "var(--text-secondary)",
+            lineHeight: 1.5,
+          }}>
+            {moodInsight}
+          </span>
+        </div>
+      </div>
+
+      {/* ═══ 4. CLIENT INTEL ═══ */}
+      <div className="insight-card">
+        <div className="insight-card-header" style={{ color: "var(--accent-primary)" }}>
+          <User size={11} /> CLIENT INTEL
+        </div>
+
+        {/* Avatar row */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
+          <div style={{
+            width: 48,
+            height: 48,
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #1e3a5f, #2d5f8a)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}>
+            <span style={{
+              fontFamily: "var(--font-display)",
+              fontSize: 20,
+              fontWeight: 700,
+              color: "#FFFFFF",
+            }}>
+              {sc.customer.name.charAt(0).toUpperCase()}
+            </span>
           </div>
-          <div className="flex justify-between" style={{ borderBottom: "1px solid var(--border)", paddingBottom: 6 }}>
-            <span style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", fontSize: 9 }}>AGE / CITY</span>
-            <span style={{ color: "var(--text-primary)" }}>{sc.customer.age} · {sc.customer.city}</span>
-          </div>
-          <div className="flex justify-between" style={{ borderBottom: "1px solid var(--border)", paddingBottom: 6 }}>
-            <span style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", fontSize: 9 }}>PROFESSION</span>
-            <span style={{ color: "var(--text-primary)" }}>{sc.customer.profession}</span>
-          </div>
-          <p className="text-[10px] leading-relaxed pt-1" style={{ color: "var(--text-secondary)" }}>
-            {sc.customer.personality}
-          </p>
           <div>
-            <span className="text-[9px] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>GOAL</span>
-            <p className="text-[11px] mt-0.5" style={{ color: "var(--text-primary)" }}>{sc.customer.goal}</p>
+            <div style={{
+              fontSize: 14,
+              fontWeight: 700,
+              color: "var(--text-primary)",
+              lineHeight: 1.3,
+            }}>
+              {sc.customer.name}
+            </div>
+            <div style={{
+              fontSize: 12,
+              color: "var(--text-secondary)",
+              lineHeight: 1.3,
+            }}>
+              {sc.customer.age} yrs, {sc.customer.profession}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1.5 mt-1">
-            <span className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>HOT BUTTONS</span>
+        </div>
+
+        {/* Key-value pairs */}
+        <div>
+          {[
+            { label: "RISK PROFILE", value: sc.customer.archetype },
+            { label: "GOAL", value: sc.customer.goal.length > 60 ? sc.customer.goal.substring(0, 57) + "..." : sc.customer.goal },
+          ].map((item, i, arr) => (
+            <div key={item.label} style={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              padding: "8px 0",
+              borderBottom: i < arr.length - 1 ? "1px solid var(--border-subtle)" : "none",
+              gap: 12,
+            }}>
+              <span style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                color: "var(--text-ghost)",
+                textTransform: "uppercase",
+                letterSpacing: "0.04em",
+                flexShrink: 0,
+                whiteSpace: "nowrap",
+              }}>
+                {item.label}
+              </span>
+              <span style={{
+                fontSize: 12,
+                fontWeight: 500,
+                color: "var(--text-primary)",
+                textAlign: "right",
+                lineHeight: 1.4,
+              }}>
+                {item.value}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Hot Buttons as red tags */}
+        <div style={{ marginTop: 10 }}>
+          <span style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "var(--text-ghost)",
+            textTransform: "uppercase",
+            letterSpacing: "0.04em",
+            display: "block",
+            marginBottom: 6,
+          }}>
+            HOT BUTTONS
+          </span>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             {sc.customer.hotButtons.map((btn) => (
-              <span key={btn} className="text-[9px] px-2 py-0.5 rounded-full"
-                style={{ background: "var(--danger-bg)", color: "var(--danger)", border: "1px solid rgba(196,48,48,0.15)" }}>
+              <span key={btn} style={{
+                fontSize: 9,
+                padding: "3px 8px",
+                borderRadius: 99,
+                background: "var(--danger-bg)",
+                color: "var(--danger)",
+                border: "1px solid rgba(196,48,48,0.15)",
+                fontFamily: "var(--font-mono)",
+              }}>
                 {btn}
               </span>
             ))}
@@ -143,112 +346,123 @@ export function TryMeInsights({ scenario: sc, mood, moodHistory, responseCount, 
         </div>
       </div>
 
-      {/* Conversation Temperature */}
-      <div className="insight-card">
-        <div className="insight-card-header" style={{ color: moodColor }}>
-          {mood <= 3 ? <TrendingDown size={11} /> : mood >= 7 ? <TrendingUp size={11} /> : <Minus size={11} />}
-          CONVERSATION TEMPERATURE
-        </div>
-        <div className="flex items-center gap-3 mb-3">
-          <span className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: moodColor }}>
-            {mood}
-          </span>
-          <span className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>/10</span>
-          {lastDelta !== 0 && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full" style={{
-              fontFamily: "var(--font-mono)",
-              fontWeight: 600,
-              background: lastDelta > 0 ? "var(--success-bg)" : "var(--danger-bg)",
-              color: lastDelta > 0 ? "var(--success)" : "var(--danger)",
-            }}>
-              {lastDelta > 0 ? "+" : ""}{lastDelta}
-            </span>
-          )}
-        </div>
-        {moodHistory.length > 1 && (
-          <div className="mood-spark mb-2">
-            {moodHistory.map((val, i) => (
-              <div key={i} className="mood-spark-bar" style={{
-                height: `${(val / 10) * 100}%`,
-                background: val <= 3 ? "var(--danger)" : val <= 6 ? "var(--warn)" : "var(--success)",
-                opacity: i === moodHistory.length - 1 ? 1 : 0.5,
-              }} />
+      {/* ═══ 5. HINTS ═══ */}
+      {currentHints.length > 0 && (
+        <div className="insight-card">
+          <div className="insight-card-header" style={{ color: "var(--warn)" }}>
+            <Lightbulb size={11} /> HINTS
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {currentHints.map((hint, i) => (
+              <div key={i} style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 8,
+                fontSize: 11,
+                lineHeight: 1.5,
+                color: "var(--text-secondary)",
+              }}>
+                <ChevronRight size={10} style={{ color: "var(--warn)", flexShrink: 0, marginTop: 3 }} />
+                <span>{hint}</span>
+              </div>
             ))}
           </div>
-        )}
-        <p className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-          {moodLabel}
-        </p>
-      </div>
+          {currentCoachingStep?.idealKeywords && currentCoachingStep.idealKeywords.length > 0 && (
+            <div style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 6,
+              marginTop: 10,
+              paddingTop: 10,
+              borderTop: "1px solid var(--border)",
+            }}>
+              {currentCoachingStep.idealKeywords.map((kw, i) => (
+                <span key={i} style={{
+                  fontSize: 9,
+                  padding: "3px 8px",
+                  borderRadius: 99,
+                  background: "var(--accent-primary-bg)",
+                  color: "var(--accent-primary)",
+                  border: "1px solid var(--accent-primary-border)",
+                  fontFamily: "var(--font-mono)",
+                }}>
+                  {kw}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* Conversation Flow */}
+      {/* ═══ 6. SKILLS TO PRACTICE ═══ */}
       <div className="insight-card">
-        <div className="insight-card-header" style={{ color: "var(--warn)" }}>
-          <MessageSquare size={11} /> CONVERSATION FLOW
-        </div>
-        <div className="flex items-center gap-4 mb-2">
-          <div>
-            <span className="text-xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
-              {responseCount}
-            </span>
-            <span className="text-[10px] ml-1" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>responses</span>
-          </div>
-        </div>
-        <div className="w-full skill-bar mb-2">
-          <div className="skill-bar-fill" style={{
-            width: `${Math.min((responseCount / 8) * 100, 100)}%`,
-            background: responseCount <= 3 ? "var(--info)" : responseCount <= 8 ? "var(--success)" : "var(--warn)",
-          }} />
-        </div>
-        <p className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-          {responseCount <= 2 ? "Just getting started — set the tone" :
-           responseCount <= 5 ? "Good flow — keep discovering needs" :
-           responseCount <= 8 ? "Natural conversation length — aim to close" :
-           "Consider wrapping up the conversation"}
-        </p>
-      </div>
-
-      {/* Skill Checklist */}
-      <div className="insight-card">
-        <div className="insight-card-header" style={{ color: "var(--accent-gold)" }}>
+        <div className="insight-card-header" style={{ color: "var(--accent-primary)" }}>
           <CheckSquare size={11} /> SKILLS TO PRACTICE
         </div>
-        <div className="space-y-2">
-          {sc.evaluationRules.map((rule) => (
-            <div key={rule.skill} className="flex items-center gap-2.5 py-1.5" style={{ borderBottom: "1px solid var(--border)" }}>
-              <div className="w-3 h-3 rounded border flex items-center justify-center"
-                style={{ borderColor: "var(--text-ghost)" }} />
-              <div className="flex-1 min-w-0">
-                <span className="text-[11px]" style={{ color: "var(--text-primary)" }}>{rule.skill}</span>
-                <span className="text-[9px] ml-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-                  {rule.weight}pts in Test Me
-                </span>
-              </div>
+        <div>
+          {sc.evaluationRules.map((rule, i) => (
+            <div key={rule.skill} style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "8px 0",
+              borderBottom: i < sc.evaluationRules.length - 1 ? "1px solid var(--border-subtle)" : "none",
+            }}>
+              <div style={{
+                width: 14,
+                height: 14,
+                borderRadius: 3,
+                border: "1.5px solid var(--text-ghost)",
+                flexShrink: 0,
+              }} />
+              <span style={{
+                flex: 1,
+                fontSize: 12,
+                fontWeight: 500,
+                color: "var(--text-primary)",
+              }}>
+                {rule.skill}
+              </span>
+              <span style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                color: "var(--text-ghost)",
+              }}>
+                {rule.weight}pts
+              </span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Compliance Reminder */}
+      {/* ═══ 7. PHRASES TO AVOID ═══ */}
       <div className="insight-card">
         <div className="insight-card-header" style={{ color: "var(--warn)" }}>
           <Shield size={11} /> PHRASES TO AVOID
         </div>
-        <div className="flex flex-wrap gap-1.5">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {sc.complianceRules.hardBanned.map((phrase) => (
-            <span key={phrase} className="text-[9px] px-2 py-1 rounded"
-              style={{
-                fontFamily: "var(--font-mono)",
-                background: "rgba(181,133,10,0.06)",
-                color: "var(--warn)",
-                border: "1px solid rgba(181,133,10,0.15)",
-              }}>
+            <span key={phrase} style={{
+              fontSize: 9,
+              padding: "4px 10px",
+              borderRadius: 6,
+              fontFamily: "var(--font-mono)",
+              background: "var(--warn-bg)",
+              color: "var(--warn)",
+              border: "1px solid var(--warn-border)",
+            }}>
               {phrase}
             </span>
           ))}
         </div>
-        <p className="text-[9px] mt-2" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
-          No penalties in practice — but avoid these to build good habits
+        <p style={{
+          fontSize: 10,
+          fontFamily: "var(--font-mono)",
+          color: "var(--text-ghost)",
+          marginTop: 8,
+          marginBottom: 0,
+        }}>
+          No penalties in practice -- but avoid these to build good habits
         </p>
       </div>
     </>
