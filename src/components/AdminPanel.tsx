@@ -224,11 +224,11 @@ export function AdminPanel() {
 
   /* ── Sidebar nav items ── */
   const sidebarLinks = [
-    { label: "Overview", icon: Layout, active: false },
-    { label: "Custom Scenarios", icon: ClipboardList, active: true },
-    { label: "Team Progress", icon: Users, active: false },
-    { label: "Feedback", icon: MessageSquare, active: false },
-    { label: "Archives", icon: Archive, active: false },
+    { label: "Overview", icon: Layout, active: false, disabled: true },
+    { label: "Custom Scenarios", icon: ClipboardList, active: true, disabled: false },
+    { label: "Team Progress", icon: Users, active: false, disabled: true },
+    { label: "Feedback", icon: MessageSquare, active: false, disabled: true },
+    { label: "Archives", icon: Archive, active: false, disabled: true },
   ];
 
   return (
@@ -249,14 +249,14 @@ export function AdminPanel() {
         <div className="ei-nav-links">
           <button className="ei-nav-link" onClick={resetGame}>Dashboard</button>
           <button className="ei-nav-link active">Scenarios</button>
-          <button className="ei-nav-link">Library</button>
-          <button className="ei-nav-link">Analytics</button>
+          <button className="ei-nav-link coming-soon">Library</button>
+          <button className="ei-nav-link coming-soon">Analytics</button>
         </div>
 
         {/* Right icons */}
         <div className="ei-nav-profile">
-          <button className="ei-nav-support"><Bell size={16} /></button>
-          <button className="ei-nav-support"><Settings size={16} /></button>
+          <button className="ei-nav-support coming-soon"><Bell size={16} /></button>
+          <button className="ei-nav-support coming-soon"><Settings size={16} /></button>
           <div className="ei-nav-avatar">A</div>
         </div>
       </nav>
@@ -271,7 +271,8 @@ export function AdminPanel() {
               return (
                 <button
                   key={link.label}
-                  className={`ei-sidebar-link${link.active ? " active" : ""}`}
+                  className={`ei-sidebar-link${link.active ? " active" : ""}${link.disabled ? " coming-soon" : ""}`}
+                  onClick={link.active ? () => setView("list") : undefined}
                 >
                   <Icon size={16} />
                   {link.label}
@@ -288,7 +289,7 @@ export function AdminPanel() {
             >
               <Plus size={14} /> New Scenario
             </button>
-            <button className="ei-sidebar-link" style={{ marginTop: 4 }}>
+            <button className="ei-sidebar-link coming-soon" style={{ marginTop: 4 }}>
               <HelpCircle size={16} /> Help Center
             </button>
             <button className="ei-sidebar-link" onClick={resetGame}>
@@ -1146,9 +1147,9 @@ export function AdminPanel() {
           {/* ════════════ FOOTER ════════════ */}
           <footer className="ei-footer" style={{ borderTop: "1px solid var(--border)" }}>
             <div className="ei-footer-links">
-              <button className="ei-footer-link">Privacy Policy</button>
-              <button className="ei-footer-link">Terms of Service</button>
-              <button className="ei-footer-link">Knowledge Base</button>
+              <span className="ei-footer-link" style={{ cursor: "default" }}>Privacy Policy</span>
+              <span className="ei-footer-link" style={{ cursor: "default" }}>Terms of Service</span>
+              <span className="ei-footer-link" style={{ cursor: "default" }}>Knowledge Base</span>
             </div>
             <div
               style={{

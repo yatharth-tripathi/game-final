@@ -215,12 +215,12 @@ export function Lobby() {
           </div>
 
           {/* Notification bell */}
-          <button className="ei-nav-support" title="Notifications">
+          <button className="ei-nav-support coming-soon" title="Notifications — Coming Soon">
             <Bell size={16} />
           </button>
 
-          {/* Settings gear */}
-          <button className="ei-nav-support" onClick={() => setPhase("admin")} title="Settings">
+          {/* Settings */}
+          <button className="ei-nav-support" onClick={() => setPhase("admin")} title="Manage Scenarios">
             <Settings size={16} />
           </button>
 
@@ -984,9 +984,9 @@ export function Lobby() {
 
           <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
             <div className="ei-footer-links">
-              <button className="ei-footer-link">Privacy Policy</button>
-              <button className="ei-footer-link">Terms of Service</button>
-              <button className="ei-footer-link">Knowledge Base</button>
+              <span className="ei-footer-link" style={{ cursor: "default" }}>Privacy Policy</span>
+              <span className="ei-footer-link" style={{ cursor: "default" }}>Terms of Service</span>
+              <span className="ei-footer-link" style={{ cursor: "default" }}>Knowledge Base</span>
             </div>
             <span
               style={{

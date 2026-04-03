@@ -465,7 +465,7 @@ export function GamePlay() {
         {/* Right: actions */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           <button
-            className="btn-ghost hidden sm:inline-flex text-[10px] px-2.5 py-1.5"
+            className="btn-ghost hidden sm:inline-flex text-[10px] px-2.5 py-1.5 coming-soon"
             style={{ color: "var(--text-secondary)" }}
           >
             <Save size={11} />
@@ -705,7 +705,7 @@ export function GamePlay() {
               whileHover={waitingForUser && input.trim() ? { scale: 1.03 } : {}}
               whileTap={waitingForUser && input.trim() ? { scale: 0.97 } : {}}
               aria-label="Send response"
-              className="shrink-0 h-10 px-4 rounded-xl flex items-center justify-center gap-2 transition-all mb-0.5 text-xs font-semibold"
+              className="shrink-0 h-10 px-5 rounded-xl flex items-center justify-center gap-2 transition-all mb-0.5 text-[13px] font-semibold"
               style={{
                 fontFamily: "var(--font-body)",
                 background: input.trim() && waitingForUser ? "var(--accent-primary)" : "var(--bg-tint)",
@@ -714,7 +714,7 @@ export function GamePlay() {
               }}
             >
               <Send size={14} strokeWidth={2} />
-              <span className="hidden sm:inline">Send</span>
+              <span className="hidden sm:inline">Send Message</span>
             </motion.button>
           </div>
           <div className="px-3 sm:px-4 pb-2.5 flex items-center justify-between">

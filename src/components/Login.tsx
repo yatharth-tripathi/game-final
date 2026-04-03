@@ -183,9 +183,9 @@ export function Login() {
         </div>
         <div className="ei-nav-links">
           <button className="ei-nav-link active">Simulator</button>
-          <button className="ei-nav-link">Modules</button>
-          <button className="ei-nav-link">Resources</button>
-          <button className="ei-nav-support">
+          <button className="ei-nav-link coming-soon">Modules</button>
+          <button className="ei-nav-link coming-soon">Resources</button>
+          <button className="ei-nav-support coming-soon">
             <HelpCircle size={16} />
           </button>
         </div>
@@ -465,9 +465,9 @@ export function Login() {
       <footer className="ei-footer">
         <span className="ei-footer-brand">Editorial Intelligence</span>
         <div className="ei-footer-links">
-          <button className="ei-footer-link">Privacy Policy</button>
-          <button className="ei-footer-link">Terms of Service</button>
-          <button className="ei-footer-link">Help Center</button>
+          <span className="ei-footer-link" style={{ cursor: "default" }}>Privacy Policy</span>
+          <span className="ei-footer-link" style={{ cursor: "default" }}>Terms of Service</span>
+          <span className="ei-footer-link" style={{ cursor: "default" }}>Help Center</span>
         </div>
         <span className="ei-footer-copyright">
           &copy; 2024 Editorial Intelligence. All rights reserved.

@@ -77,13 +77,13 @@ export function Briefing() {
         </div>
         <div className="ei-nav-links hidden md:flex">
           <button className="ei-nav-link" onClick={resetGame}>Dashboard</button>
-          <button className="ei-nav-link">Curriculum</button>
+          <button className="ei-nav-link coming-soon">Curriculum</button>
           <button className="ei-nav-link active">Library</button>
-          <button className="ei-nav-link">Resources</button>
+          <button className="ei-nav-link coming-soon">Resources</button>
         </div>
         <div className="ei-nav-profile">
-          <button className="ei-nav-support"><Bell size={16} /></button>
-          <button className="ei-nav-support"><Settings size={16} /></button>
+          <button className="ei-nav-support coming-soon"><Bell size={16} /></button>
+          <button className="ei-nav-support coming-soon"><Settings size={16} /></button>
           <div className="ei-nav-avatar">RM</div>
         </div>
       </nav>
@@ -134,7 +134,7 @@ export function Briefing() {
                 </span>
               </div>
 
-              <button className="btn-outline" style={{ fontSize: 11, padding: "8px 16px" }}>
+              <button className="btn-outline coming-soon" style={{ fontSize: 11, padding: "8px 16px" }}>
                 <Download size={13} />
                 Download Brief
               </button>
