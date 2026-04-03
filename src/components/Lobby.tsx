@@ -226,7 +226,7 @@ export function Lobby() {
 
           {/* User avatar + name */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div className="ei-nav-avatar">{initials}</div>
+            <div className="ei-nav-avatar" onClick={() => setPhase("profile")} style={{ cursor: "pointer" }} title="View Profile">{initials}</div>
             {career.playerName && (
               <span
                 style={{

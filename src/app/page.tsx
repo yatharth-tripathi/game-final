@@ -12,6 +12,7 @@ import { ShowMe } from "@/components/ShowMe";
 import { TryMe } from "@/components/TryMe";
 import { AdminPanel } from "@/components/AdminPanel";
 import { Analytics } from "@/components/Analytics";
+import { Profile } from "@/components/Profile";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -26,6 +27,7 @@ const PHASE_PARENT: Record<string, GamePhase> = {
   showme: "lobby",
   tryme: "lobby",
   admin: "lobby",
+  profile: "lobby",
 };
 
 export default function Home() {
@@ -147,6 +149,7 @@ export default function Home() {
           {phase === "tryme" && <TryMe key="tryme" />}
           {phase === "admin" && <AdminPanel key="admin" />}
           {phase === "analytics" && <Analytics key="analytics" />}
+          {phase === "profile" && <Profile key="profile" />}
         </AnimatePresence>
       </div>
     </ErrorBoundary>
