@@ -6,16 +6,16 @@ import { useGameStore } from "@/store/useGameStore";
 import { checkCompliance, evaluatePerformance } from "@/lib/evaluator";
 import type { EvaluationResult } from "@/lib/evaluator";
 import { CATEGORY_COLORS } from "@/lib/scenarios";
-import { Particles } from "./Particles";
 import { SplitLayout } from "./SplitLayout";
 import { TestMeInsights } from "./insights/TestMeInsights";
 import { useVoice } from "@/hooks/useVoice";
 import {
-  Clock, Briefcase, Brain, Target, ArrowUp,
+  Clock, Brain, ArrowUp, Send,
   ChevronRight, AlertTriangle, ArrowLeft, Mic, MicOff, Volume2, VolumeX,
+  Save, Square, Lightbulb,
 } from "lucide-react";
 
-// Timeout wrapper for fetch calls — 12s to stay within Vercel's limits
+// Timeout wrapper for fetch calls -- 12s to stay within Vercel's limits
 function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 12000): Promise<Response> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -51,7 +51,7 @@ export function GamePlay() {
     }
   }, [voice.transcript, voice.isListening]);
 
-  // Timer — stops when evaluating
+  // Timer -- stops when evaluating
   useEffect(() => {
     if (!startTime || isEvaluating) return;
     const interval = setInterval(() => setElapsedTime(Math.floor((Date.now() - startTime) / 1000)), 1000);
@@ -63,7 +63,7 @@ export function GamePlay() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Advance when step changes — no objective shown in test mode (it's a test!)
+  // Advance when step changes -- no objective shown in test mode (it's a test!)
   useEffect(() => {
     if (!sc) return;
     const step = sc.steps[currentStepIndex];
@@ -220,15 +220,15 @@ export function GamePlay() {
     }
   }, [sc, setEvaluation]);
 
-  // Mood warning — show warning when mood is very low but DON'T end the game
-  // The game continues all rounds regardless of mood — mood affects AI tone and final score
+  // Mood warning -- show warning when mood is very low but DON'T end the game
+  // The game continues all rounds regardless of mood -- mood affects AI tone and final score
   useEffect(() => {
     if (!sc || isEvaluating || evaluationStarted.current) return;
     const currentMood = useGameStore.getState().mood;
     if (currentMood <= 1) {
       addMessage({
         role: "system",
-        content: "⚠ CLIENT TRUST CRITICAL — The customer is extremely frustrated. Focus on empathy and de-escalation to recover the conversation.",
+        content: "CLIENT TRUST CRITICAL -- The customer is extremely frustrated. Focus on empathy and de-escalation to recover the conversation.",
       });
     }
   }, [mood, sc, isEvaluating, addMessage]);
@@ -241,7 +241,7 @@ export function GamePlay() {
     }
   }, [runEvaluation]);
 
-  // Advance conversation after user responds — wrapped in try-catch for crash safety
+  // Advance conversation after user responds -- wrapped in try-catch for crash safety
   const advanceConversation = useCallback(async () => {
     if (!sc || useGameStore.getState().isAdvancing) return;
     setAdvancing(true);
@@ -349,7 +349,11 @@ export function GamePlay() {
   if (!sc) return null;
 
   const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
-  const catColor = CATEGORY_COLORS[sc.category] || "var(--accent-gold)";
+  const catColor = CATEGORY_COLORS[sc.category] || "var(--accent-primary)";
+
+  // Get current system step hint for the technique tip
+  const currentSystemStep = sc.steps[currentStepIndex];
+  const techniqueTip = currentSystemStep?.hints?.[0] || currentSystemStep?.expectedAction || null;
 
   // ── AI EVALUATING SCREEN ──
   if (isEvaluating) {
@@ -359,7 +363,6 @@ export function GamePlay() {
         className="h-screen w-full flex flex-col items-center justify-center relative"
         style={{ background: "var(--bg-void)" }}
       >
-        <Particles count={10} />
         <div className="relative z-10 text-center max-w-sm px-6">
           <motion.div
             animate={{ opacity: [0.5, 1, 0.5] }}
@@ -397,40 +400,101 @@ export function GamePlay() {
     );
   }
 
-  // ── TOP BAR (simplified — mood/compliance/progress moved to insights) ──
+  // ── TOP BAR ──
   const topBar = (
-    <div className="shrink-0 w-full relative z-10 glass-panel" style={{ borderBottom: "1px solid var(--border)" }}>
+    <div className="shrink-0 w-full relative z-10" style={{
+      background: "#FFFFFF",
+      borderBottom: "1px solid var(--border)",
+    }}>
       <div className="px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+        {/* Left: back + title */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <button onClick={() => useGameStore.getState().resetGame()} className="btn-ghost shrink-0 px-2 py-1">
-            <ArrowLeft size={12} />
+          <button
+            onClick={() => useGameStore.getState().resetGame()}
+            className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+            style={{
+              border: "1px solid var(--border)",
+              color: "var(--text-secondary)",
+              background: "var(--bg-surface)",
+            }}
+          >
+            <ArrowLeft size={14} />
           </button>
           <div className="min-w-0">
-            <p className="text-xs truncate" style={{ fontFamily: "var(--font-display)", fontWeight: 600, color: "var(--text-primary)" }}>{sc.title}</p>
-            <p className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>vs {sc.customer.name}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm truncate" style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 600,
+                color: "var(--text-primary)",
+              }}>
+                {sc.title}
+              </p>
+              <span className="hidden sm:inline-block text-[8px] px-1.5 py-0.5 rounded uppercase tracking-widest"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontWeight: 600,
+                  background: "var(--accent-primary-bg)",
+                  color: "var(--accent-primary)",
+                  border: "1px solid var(--accent-primary-border)",
+                }}>
+                INTERACTIVE SESSION
+              </span>
+            </div>
+            <p className="text-[11px]" style={{
+              fontFamily: "var(--font-body)",
+              color: "var(--text-secondary)",
+            }}>
+              vs {sc.customer.name}
+            </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="flex items-center gap-1.5">
-            <Clock size={11} style={{ color: "var(--text-ghost)" }} />
-            <span className="text-sm font-bold" style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>{formatTime(elapsedTime)}</span>
-          </div>
+
+        {/* Center: Timer */}
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
+          style={{ background: "var(--bg-tint)", border: "1px solid var(--border)" }}>
+          <Clock size={12} style={{ color: "var(--text-muted)" }} />
+          <span className="text-sm font-bold tabular-nums" style={{
+            fontFamily: "var(--font-mono)",
+            color: "var(--text-primary)",
+            letterSpacing: "0.05em",
+          }}>
+            {formatTime(elapsedTime)}
+          </span>
+        </div>
+
+        {/* Right: actions */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <button
+            className="btn-ghost hidden sm:inline-flex text-[10px] px-2.5 py-1.5"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            <Save size={11} />
+            <span className="hidden md:inline">Save Progress</span>
+          </button>
           {voice.isSupported && (
             <button
               onClick={voice.toggleVoice}
-              className="btn-ghost text-[9px] px-2 py-1 flex items-center gap-1"
-              style={{ color: voice.voiceEnabled ? "var(--accent-primary)" : "var(--text-ghost)" }}
+              className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+              style={{
+                border: "1px solid var(--border)",
+                color: voice.voiceEnabled ? "var(--accent-primary)" : "var(--text-muted)",
+                background: voice.voiceEnabled ? "var(--accent-primary-bg)" : "var(--bg-surface)",
+              }}
             >
-              {voice.voiceEnabled ? <Volume2 size={11} /> : <VolumeX size={11} />}
-              <span className="hidden sm:inline">{voice.voiceEnabled ? "VOICE ON" : "VOICE OFF"}</span>
+              {voice.voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
             </button>
           )}
           <button
             onClick={handleEndEarly}
-            className="text-[9px] px-2 sm:px-3 py-1.5 rounded-md font-bold uppercase tracking-wider transition-colors"
-            style={{ background: "var(--danger)", color: "#FFFFFF", fontFamily: "var(--font-mono)" }}
+            className="text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5"
+            style={{
+              background: "var(--danger)",
+              color: "#FFFFFF",
+              fontFamily: "var(--font-mono)",
+            }}
           >
-            SUBMIT & END
+            <Square size={9} fill="#FFFFFF" />
+            <span className="hidden sm:inline">End Session</span>
           </button>
         </div>
       </div>
@@ -439,10 +503,9 @@ export function GamePlay() {
 
   // ── CHAT AREA ──
   const chatArea = (
-    <div className="w-full h-full relative">
-      <Particles count={4} />
-      <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-3 sm:space-y-4 relative z-10" style={{ minHeight: "100%" }}>
-        {messages.filter(m => m.role !== "system").map((msg) => (
+    <div className="w-full h-full relative" style={{ background: "#FFFFFF" }}>
+      <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-5 relative z-10" style={{ minHeight: "100%" }}>
+        {messages.map((msg) => (
           <motion.div key={msg.id}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", damping: 22 }}
@@ -451,38 +514,130 @@ export function GamePlay() {
               <motion.div initial={{ x: -10 }} animate={{ x: 0 }} className="compliance-alert p-4">
                 <div className="flex items-center gap-2 mb-1.5">
                   <AlertTriangle size={12} style={{ color: "var(--danger)" }} />
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.06em", color: "var(--danger)" }}>COMPLIANCE VIOLATION</span>
+                  <span style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    color: "var(--danger)",
+                  }}>
+                    COMPLIANCE VIOLATION
+                  </span>
                 </div>
                 <p className="text-xs leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
               </motion.div>
+            ) : msg.role === "system" ? (
+              /* System / Mentor tip */
+              <div className="chat-system p-4">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Lightbulb size={11} style={{ color: "var(--accent-primary)" }} />
+                  <span style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    color: "var(--accent-primary)",
+                  }}>
+                    MENTOR TIP
+                  </span>
+                </div>
+                <p className="text-xs leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
+              </div>
             ) : msg.role === "customer" ? (
               <div className="max-w-[95%] sm:max-w-[85%]">
-                <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5" style={{ fontFamily: "var(--font-mono)", color: catColor }}>{sc.customer.name}</p>
+                {/* Customer name + timestamp */}
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+                    style={{
+                      background: `color-mix(in srgb, ${catColor} 12%, transparent)`,
+                      color: catColor,
+                      fontFamily: "var(--font-display)",
+                    }}>
+                    {sc.customer.name.charAt(0)}
+                  </span>
+                  <span className="text-[10px] font-semibold" style={{
+                    fontFamily: "var(--font-body)",
+                    color: "var(--text-primary)",
+                  }}>
+                    {sc.customer.name}
+                  </span>
+                  <span className="text-[9px]" style={{
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--text-ghost)",
+                  }}>
+                    {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                </div>
                 <div className="chat-customer p-4">
                   <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
                 </div>
               </div>
             ) : (
               <div className="max-w-[95%] sm:max-w-[85%] ml-auto">
-                <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5 text-right" style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}>YOU (RM)</p>
+                {/* User label + timestamp */}
+                <div className="flex items-center gap-2 mb-1.5 justify-end">
+                  <span className="text-[9px]" style={{
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--text-ghost)",
+                  }}>
+                    {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                  <span className="text-[10px] font-semibold" style={{
+                    fontFamily: "var(--font-body)",
+                    color: "var(--accent-primary)",
+                  }}>
+                    You (Relationship Manager)
+                  </span>
+                  <span className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0"
+                    style={{
+                      background: "var(--accent-primary)",
+                      color: "#FFFFFF",
+                      fontFamily: "var(--font-mono)",
+                    }}>
+                    RM
+                  </span>
+                </div>
                 <div className="chat-user p-4">
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: "#FFFFFF" }}>{msg.content}</p>
                 </div>
               </div>
             )}
           </motion.div>
         ))}
 
+        {/* Typing indicator */}
         <AnimatePresence>
           {isTyping && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <p className="text-[9px] font-semibold uppercase tracking-widest mb-1.5" style={{ fontFamily: "var(--font-mono)", color: catColor }}>{sc.customer.name}</p>
-              <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+                  style={{
+                    background: `color-mix(in srgb, ${catColor} 12%, transparent)`,
+                    color: catColor,
+                    fontFamily: "var(--font-display)",
+                  }}>
+                  {sc.customer.name.charAt(0)}
+                </span>
+                <span className="text-[10px] font-semibold" style={{
+                  fontFamily: "var(--font-body)",
+                  color: "var(--text-primary)",
+                }}>
+                  {sc.customer.name}
+                </span>
+                <span className="text-[9px]" style={{
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--text-ghost)",
+                }}>
+                  typing...
+                </span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-5 py-3 rounded-2xl"
+                style={{ background: "var(--bg-tint)", border: "1px solid var(--border)" }}>
                 {[0, 1, 2].map((i) => (
                   <motion.span key={i}
-                    animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }}
+                    animate={{ y: [0, -5, 0], opacity: [0.3, 1, 0.3] }}
                     transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }}
-                    className="w-1.5 h-1.5 rounded-full" style={{ background: catColor }}
+                    className="w-2 h-2 rounded-full" style={{ background: catColor }}
                   />
                 ))}
               </div>
@@ -496,27 +651,39 @@ export function GamePlay() {
 
   // ── BOTTOM INPUT ──
   const bottomBar = (
-    <div className="w-full" style={{ background: "var(--bg-surface)" }}>
-      <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 pb-4 sm:pb-5 pt-2 sm:pt-3">
+    <div className="w-full" style={{ background: "#FFFFFF", borderTop: "1px solid var(--border)" }}>
+      <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 pb-3 sm:pb-4 pt-3">
         <div className="relative transition-all"
           style={{
             background: "var(--bg-surface)",
-            border: `1px solid ${waitingForUser ? "var(--accent-primary-border)" : "var(--border)"}`,
-            boxShadow: waitingForUser ? "var(--shadow-ring)" : "var(--shadow-sm)",
-            borderRadius: 12,
+            border: `1.5px solid ${waitingForUser ? "var(--accent-primary-border)" : "var(--border)"}`,
+            boxShadow: waitingForUser ? "var(--shadow-ring)" : "var(--shadow-xs)",
+            borderRadius: 14,
           }}>
-          <div className="flex items-end gap-2 sm:gap-3 px-3 sm:px-5 pt-3 sm:pt-4 pb-2">
+          <div className="flex items-end gap-2 sm:gap-3 px-3 sm:px-4 pt-3 pb-2">
             <textarea
               ref={inputRef}
               value={input}
-              onChange={(e) => { setInput(e.target.value); e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 150) + "px"; }}
-              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-              placeholder={waitingForUser ? "Respond as Relationship Manager..." : "Waiting for client..."}
+              onChange={(e) => {
+                setInput(e.target.value);
+                e.target.style.height = "auto";
+                e.target.style.height = Math.min(e.target.scrollHeight, 150) + "px";
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
+              }}
+              placeholder={waitingForUser ? `Type your response to ${sc.customer.name}...` : "Waiting for client..."}
               disabled={!waitingForUser || isAdvancing}
               rows={1}
               aria-label="Your response as Relationship Manager"
               className="flex-1 resize-none text-sm leading-relaxed outline-none bg-transparent"
-              style={{ color: "var(--text-primary)", opacity: waitingForUser ? 1 : 0.3, minHeight: 28, maxHeight: 150, fontFamily: "var(--font-body)" }}
+              style={{
+                color: "var(--text-primary)",
+                opacity: waitingForUser ? 1 : 0.3,
+                minHeight: 28,
+                maxHeight: 150,
+                fontFamily: "var(--font-body)",
+              }}
             />
             {voice.isSupported && voice.voiceEnabled && (
               <button
@@ -524,7 +691,7 @@ export function GamePlay() {
                 disabled={!waitingForUser}
                 className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5 ${voice.isListening ? "mic-active" : ""}`}
                 style={{
-                  background: voice.isListening ? "color-mix(in srgb, var(--danger) 10%, transparent)" : "var(--bg-elevated)",
+                  background: voice.isListening ? "color-mix(in srgb, var(--danger) 10%, transparent)" : "var(--bg-tint)",
                   border: voice.isListening ? "1.5px solid var(--danger)" : "1px solid var(--border)",
                   color: voice.isListening ? "var(--danger)" : "var(--text-secondary)",
                 }}
@@ -538,33 +705,58 @@ export function GamePlay() {
               whileHover={waitingForUser && input.trim() ? { scale: 1.03 } : {}}
               whileTap={waitingForUser && input.trim() ? { scale: 0.97 } : {}}
               aria-label="Send response"
-              className="shrink-0 h-10 px-5 rounded-full flex items-center justify-center gap-2 transition-all mb-0.5 text-xs font-bold uppercase tracking-wider"
+              className="shrink-0 h-10 px-4 rounded-xl flex items-center justify-center gap-2 transition-all mb-0.5 text-xs font-semibold"
               style={{
-                fontFamily: "var(--font-mono)",
-                background: input.trim() && waitingForUser ? "var(--accent-primary)" : "var(--bg-elevated)",
-                color: input.trim() && waitingForUser ? "#FFFFFF" : "var(--text-secondary)",
+                fontFamily: "var(--font-body)",
+                background: input.trim() && waitingForUser ? "var(--accent-primary)" : "var(--bg-tint)",
+                color: input.trim() && waitingForUser ? "#FFFFFF" : "var(--text-ghost)",
+                border: input.trim() && waitingForUser ? "none" : "1px solid var(--border)",
               }}
             >
-              SEND <ArrowUp size={14} strokeWidth={2.5} />
+              <Send size={14} strokeWidth={2} />
+              <span className="hidden sm:inline">Send</span>
             </motion.button>
           </div>
-          <div className="px-3 sm:px-5 pb-3 flex items-center justify-between">
+          <div className="px-3 sm:px-4 pb-2.5 flex items-center justify-between">
             {waitingForUser ? (
               <div className="flex items-center gap-1.5">
                 <ChevronRight size={9} style={{ color: "var(--success)" }} />
-                <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--success)" }}>Your turn</span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider" style={{
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--success)",
+                }}>
+                  Your turn
+                </span>
               </div>
             ) : (
-              <span className="text-[10px] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>
+              <span className="text-[10px] uppercase tracking-wider" style={{
+                fontFamily: "var(--font-mono)",
+                color: "var(--text-ghost)",
+              }}>
                 {isTyping ? "Client is responding..." : "Processing..."}
               </span>
             )}
-            <span className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)" }}>Shift+Enter for new line</span>
+            <span className="text-[9px]" style={{
+              fontFamily: "var(--font-mono)",
+              color: "var(--text-ghost)",
+            }}>
+              Shift+Enter for new line
+            </span>
           </div>
         </div>
-        <p className="text-center text-[8px] mt-2.5 uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "var(--text-ghost)", opacity: 0.4 }}>
-          AI-powered simulation
-        </p>
+        {/* Technique tip below input */}
+        {techniqueTip && waitingForUser && (
+          <div className="flex items-center gap-2 mt-2 px-1">
+            <Lightbulb size={10} style={{ color: "var(--accent-primary)", opacity: 0.6, flexShrink: 0 }} />
+            <p className="text-[10px] italic" style={{
+              fontFamily: "var(--font-body)",
+              color: "var(--text-muted)",
+            }}>
+              <span style={{ fontWeight: 600, fontStyle: "normal", color: "var(--text-secondary)" }}>TECHNIQUE TIP: </span>
+              {techniqueTip}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -574,7 +766,7 @@ export function GamePlay() {
       <SplitLayout
         topBar={topBar}
         insightsPanel={<TestMeInsights />}
-        insightsPanelTitle="LIVE ANALYSIS"
+        insightsPanelTitle="Live Analysis"
         bottomBar={bottomBar}
       >
         {chatArea}
