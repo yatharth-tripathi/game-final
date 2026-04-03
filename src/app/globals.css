@@ -710,16 +710,15 @@ body {
    ══════════════════════════════════════════ */
 
 .chat-customer {
-  background: var(--bg-surface);
+  background: #FFFFFF;
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent-primary);
-  border-radius: 4px 16px 16px 16px;
+  border-radius: 4px 18px 18px 18px;
   box-shadow: var(--shadow-xs);
 }
 .chat-user {
   background: var(--accent-primary);
   color: #FFFFFF;
-  border-radius: 16px 4px 16px 16px;
+  border-radius: 18px 4px 18px 18px;
   box-shadow: var(--shadow-sm);
 }
 .chat-system {

@@ -10,7 +10,7 @@ import { SplitLayout } from "./SplitLayout";
 import { TestMeInsights } from "./insights/TestMeInsights";
 import { useVoice } from "@/hooks/useVoice";
 import {
-  Clock, Brain, ArrowUp, Send,
+  Clock, Brain, Send,
   ChevronRight, AlertTriangle, ArrowLeft, Mic, MicOff, Volume2, VolumeX,
   Save, Square, Lightbulb,
 } from "lucide-react";
@@ -348,7 +348,7 @@ export function GamePlay() {
 
   if (!sc) return null;
 
-  const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
+  const formatTime = (s: number) => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
   const catColor = CATEGORY_COLORS[sc.category] || "var(--accent-primary)";
 
   // Get current system step hint for the technique tip
@@ -407,7 +407,7 @@ export function GamePlay() {
       borderBottom: "1px solid var(--border)",
     }}>
       <div className="px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
-        {/* Left: back + title */}
+        {/* Left: back + title + active badge */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             onClick={() => useGameStore.getState().resetGame()}
@@ -421,38 +421,36 @@ export function GamePlay() {
             <ArrowLeft size={14} />
           </button>
           <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <p className="text-sm truncate" style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 600,
-                color: "var(--text-primary)",
-              }}>
-                {sc.title}
-              </p>
-              <span className="hidden sm:inline-block text-[8px] px-1.5 py-0.5 rounded uppercase tracking-widest"
+            <p className="text-[15px] truncate" style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 700,
+              color: "var(--text-primary)",
+              lineHeight: 1.3,
+            }}>
+              {sc.title}
+            </p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: "var(--success)" }} />
+              <span className="text-[9px] px-1.5 py-0.5 rounded uppercase tracking-widest"
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontWeight: 600,
-                  background: "var(--accent-primary-bg)",
-                  color: "var(--accent-primary)",
-                  border: "1px solid var(--accent-primary-border)",
+                  background: "var(--success-bg)",
+                  color: "var(--success)",
                 }}>
-                INTERACTIVE SESSION
+                ACTIVE SIMULATION
               </span>
             </div>
-            <p className="text-[11px]" style={{
-              fontFamily: "var(--font-body)",
-              color: "var(--text-secondary)",
-            }}>
-              vs {sc.customer.name}
-            </p>
           </div>
         </div>
 
         {/* Center: Timer */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg"
           style={{ background: "var(--bg-tint)", border: "1px solid var(--border)" }}>
-          <Clock size={12} style={{ color: "var(--text-muted)" }} />
+          <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+            style={{ background: "linear-gradient(135deg, var(--success), var(--accent-primary))" }}>
+            <Clock size={10} style={{ color: "#FFFFFF" }} />
+          </div>
           <span className="text-sm font-bold tabular-nums" style={{
             fontFamily: "var(--font-mono)",
             color: "var(--text-primary)",
@@ -465,10 +463,17 @@ export function GamePlay() {
         {/* Right: actions */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           <button
-            className="btn-ghost hidden sm:inline-flex text-[10px] px-2.5 py-1.5 coming-soon"
-            style={{ color: "var(--text-secondary)" }}
+            className="btn-ghost hidden sm:inline-flex text-[11px] px-3 py-1.5 coming-soon items-center gap-1.5"
+            style={{
+              color: "var(--text-secondary)",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              background: "transparent",
+              fontFamily: "var(--font-body)",
+              fontWeight: 500,
+            }}
           >
-            <Save size={11} />
+            <Save size={12} />
             <span className="hidden md:inline">Save Progress</span>
           </button>
           {voice.isSupported && (
@@ -486,11 +491,11 @@ export function GamePlay() {
           )}
           <button
             onClick={handleEndEarly}
-            className="text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5"
+            className="text-[11px] px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5"
             style={{
-              background: "var(--danger)",
+              background: "var(--accent-primary)",
               color: "#FFFFFF",
-              fontFamily: "var(--font-mono)",
+              fontFamily: "var(--font-body)",
             }}
           >
             <Square size={9} fill="#FFFFFF" />
@@ -503,14 +508,15 @@ export function GamePlay() {
 
   // ── CHAT AREA ──
   const chatArea = (
-    <div className="w-full h-full relative" style={{ background: "#FFFFFF" }}>
-      <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-5 relative z-10" style={{ minHeight: "100%" }}>
+    <div className="w-full h-full relative" style={{ background: "var(--bg-void)" }}>
+      <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-5 sm:space-y-6 relative z-10" style={{ minHeight: "100%" }}>
         {messages.map((msg) => (
           <motion.div key={msg.id}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", damping: 22 }}
           >
             {msg.role === "compliance" ? (
+              /* ── Compliance Violation ── */
               <motion.div initial={{ x: -10 }} animate={{ x: 0 }} className="compliance-alert p-4">
                 <div className="flex items-center gap-2 mb-1.5">
                   <AlertTriangle size={12} style={{ color: "var(--danger)" }} />
@@ -524,10 +530,10 @@ export function GamePlay() {
                     COMPLIANCE VIOLATION
                   </span>
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
+                <p className="text-[13px] leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
               </motion.div>
             ) : msg.role === "system" ? (
-              /* System / Mentor tip */
+              /* ── System / Mentor tip ── */
               <div className="chat-system p-4">
                 <div className="flex items-center gap-2 mb-1.5">
                   <Lightbulb size={11} style={{ color: "var(--accent-primary)" }} />
@@ -541,64 +547,84 @@ export function GamePlay() {
                     MENTOR TIP
                   </span>
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
+                <p className="text-[13px] leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
               </div>
             ) : msg.role === "customer" ? (
+              /* ── Customer Message (LEFT) ── */
               <div className="max-w-[95%] sm:max-w-[85%]">
-                {/* Customer name + timestamp */}
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+                {/* Avatar + Name + Timestamp row */}
+                <div className="flex items-center gap-3 mb-1.5">
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
                     style={{
-                      background: `color-mix(in srgb, ${catColor} 12%, transparent)`,
-                      color: catColor,
+                      background: "linear-gradient(135deg, #1e3a5f, #2d5f8a)",
+                    }}>
+                    <span className="text-[13px] font-bold" style={{
+                      color: "#FFFFFF",
                       fontFamily: "var(--font-display)",
                     }}>
-                    {sc.customer.name.charAt(0)}
-                  </span>
-                  <span className="text-[10px] font-semibold" style={{
+                      {sc.customer.name.charAt(0)}
+                    </span>
+                  </div>
+                  <span className="text-[13px] font-bold" style={{
                     fontFamily: "var(--font-body)",
                     color: "var(--text-primary)",
                   }}>
                     {sc.customer.name}
                   </span>
-                  <span className="text-[9px]" style={{
+                  <span className="text-[11px]" style={{
                     fontFamily: "var(--font-mono)",
-                    color: "var(--text-ghost)",
+                    color: "var(--text-muted)",
                   }}>
                     {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </span>
                 </div>
-                <div className="chat-customer p-4">
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-primary)" }}>{msg.content}</p>
+                {/* Bubble */}
+                <div className="chat-customer" style={{ marginLeft: 48, padding: "16px 20px" }}>
+                  <p style={{
+                    fontSize: 14,
+                    lineHeight: 1.65,
+                    color: "var(--text-primary)",
+                    margin: 0,
+                  }}>{msg.content}</p>
                 </div>
               </div>
             ) : (
+              /* ── User Message (RIGHT) ── */
               <div className="max-w-[95%] sm:max-w-[85%] ml-auto">
-                {/* User label + timestamp */}
-                <div className="flex items-center gap-2 mb-1.5 justify-end">
-                  <span className="text-[9px]" style={{
+                {/* Timestamp + Name + Badge row (right-aligned) */}
+                <div className="flex items-center gap-3 mb-1.5 justify-end">
+                  <span className="text-[11px]" style={{
                     fontFamily: "var(--font-mono)",
-                    color: "var(--text-ghost)",
+                    color: "var(--text-muted)",
                   }}>
                     {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </span>
-                  <span className="text-[10px] font-semibold" style={{
+                  <span className="text-[13px] font-bold" style={{
                     fontFamily: "var(--font-body)",
                     color: "var(--accent-primary)",
                   }}>
                     You (Relationship Manager)
                   </span>
-                  <span className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0"
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
                     style={{
                       background: "var(--accent-primary)",
+                    }}>
+                    <span className="text-[11px] font-bold" style={{
                       color: "#FFFFFF",
                       fontFamily: "var(--font-mono)",
                     }}>
-                    RM
-                  </span>
+                      RM
+                    </span>
+                  </div>
                 </div>
-                <div className="chat-user p-4">
-                  <p className="text-sm leading-relaxed" style={{ color: "#FFFFFF" }}>{msg.content}</p>
+                {/* Bubble */}
+                <div className="chat-user" style={{ marginRight: 48, padding: "16px 20px" }}>
+                  <p style={{
+                    fontSize: 14,
+                    lineHeight: 1.65,
+                    color: "#FFFFFF",
+                    margin: 0,
+                  }}>{msg.content}</p>
                 </div>
               </div>
             )}
@@ -609,30 +635,33 @@ export function GamePlay() {
         <AnimatePresence>
           {isTyping && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+              <div className="flex items-center gap-3 mb-1.5">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
                   style={{
-                    background: `color-mix(in srgb, ${catColor} 12%, transparent)`,
-                    color: catColor,
+                    background: "linear-gradient(135deg, #1e3a5f, #2d5f8a)",
+                  }}>
+                  <span className="text-[13px] font-bold" style={{
+                    color: "#FFFFFF",
                     fontFamily: "var(--font-display)",
                   }}>
-                  {sc.customer.name.charAt(0)}
-                </span>
-                <span className="text-[10px] font-semibold" style={{
+                    {sc.customer.name.charAt(0)}
+                  </span>
+                </div>
+                <span className="text-[13px] font-bold" style={{
                   fontFamily: "var(--font-body)",
                   color: "var(--text-primary)",
                 }}>
                   {sc.customer.name}
                 </span>
-                <span className="text-[9px]" style={{
+                <span className="text-[11px]" style={{
                   fontFamily: "var(--font-mono)",
-                  color: "var(--text-ghost)",
+                  color: "var(--text-muted)",
                 }}>
                   typing...
                 </span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-5 py-3 rounded-2xl"
-                style={{ background: "var(--bg-tint)", border: "1px solid var(--border)" }}>
+              <div className="inline-flex items-center gap-1.5 px-5 py-3 rounded-full"
+                style={{ marginLeft: 48, background: "#FFFFFF", border: "1px solid var(--border)" }}>
                 {[0, 1, 2].map((i) => (
                   <motion.span key={i}
                     animate={{ y: [0, -5, 0], opacity: [0.3, 1, 0.3] }}
@@ -653,97 +682,76 @@ export function GamePlay() {
   const bottomBar = (
     <div className="w-full" style={{ background: "#FFFFFF", borderTop: "1px solid var(--border)" }}>
       <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 pb-3 sm:pb-4 pt-3">
-        <div className="relative transition-all"
+        {/* Rounded container */}
+        <div className="relative transition-all flex items-end gap-2 sm:gap-3"
           style={{
             background: "var(--bg-surface)",
-            border: `1.5px solid ${waitingForUser ? "var(--accent-primary-border)" : "var(--border)"}`,
-            boxShadow: waitingForUser ? "var(--shadow-ring)" : "var(--shadow-xs)",
-            borderRadius: 14,
+            border: `1px solid ${waitingForUser ? "var(--border-strong)" : "var(--border)"}`,
+            borderRadius: 28,
+            padding: "8px 8px 8px 16px",
           }}>
-          <div className="flex items-end gap-2 sm:gap-3 px-3 sm:px-4 pt-3 pb-2">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => {
-                setInput(e.target.value);
-                e.target.style.height = "auto";
-                e.target.style.height = Math.min(e.target.scrollHeight, 150) + "px";
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
-              }}
-              placeholder={waitingForUser ? `Type your response to ${sc.customer.name}...` : "Waiting for client..."}
-              disabled={!waitingForUser || isAdvancing}
-              rows={1}
-              aria-label="Your response as Relationship Manager"
-              className="flex-1 resize-none text-sm leading-relaxed outline-none bg-transparent"
+          {/* Mic button (left) */}
+          {voice.isSupported && voice.voiceEnabled && (
+            <button
+              onClick={() => voice.isListening ? voice.stopListening() : voice.startListening()}
+              disabled={!waitingForUser}
+              className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all ${voice.isListening ? "mic-active" : ""}`}
               style={{
-                color: "var(--text-primary)",
-                opacity: waitingForUser ? 1 : 0.3,
-                minHeight: 28,
-                maxHeight: 150,
-                fontFamily: "var(--font-body)",
-              }}
-            />
-            {voice.isSupported && voice.voiceEnabled && (
-              <button
-                onClick={() => voice.isListening ? voice.stopListening() : voice.startListening()}
-                disabled={!waitingForUser}
-                className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all mb-0.5 ${voice.isListening ? "mic-active" : ""}`}
-                style={{
-                  background: voice.isListening ? "color-mix(in srgb, var(--danger) 10%, transparent)" : "var(--bg-tint)",
-                  border: voice.isListening ? "1.5px solid var(--danger)" : "1px solid var(--border)",
-                  color: voice.isListening ? "var(--danger)" : "var(--text-secondary)",
-                }}
-              >
-                {voice.isListening ? <MicOff size={16} /> : <Mic size={16} />}
-              </button>
-            )}
-            <motion.button
-              onClick={() => { handleSend(); voice.stopListening(); voice.resetTranscript(); }}
-              disabled={!waitingForUser || !input.trim() || isAdvancing}
-              whileHover={waitingForUser && input.trim() ? { scale: 1.03 } : {}}
-              whileTap={waitingForUser && input.trim() ? { scale: 0.97 } : {}}
-              aria-label="Send response"
-              className="shrink-0 h-10 px-5 rounded-xl flex items-center justify-center gap-2 transition-all mb-0.5 text-[13px] font-semibold"
-              style={{
-                fontFamily: "var(--font-body)",
-                background: input.trim() && waitingForUser ? "var(--accent-primary)" : "var(--bg-tint)",
-                color: input.trim() && waitingForUser ? "#FFFFFF" : "var(--text-ghost)",
-                border: input.trim() && waitingForUser ? "none" : "1px solid var(--border)",
+                background: voice.isListening ? "color-mix(in srgb, var(--danger) 10%, transparent)" : "transparent",
+                border: voice.isListening ? "1.5px solid var(--danger)" : "1px solid var(--border)",
+                color: voice.isListening ? "var(--danger)" : "var(--text-muted)",
               }}
             >
-              <Send size={14} strokeWidth={2} />
-              <span className="hidden sm:inline">Send Message</span>
-            </motion.button>
-          </div>
-          <div className="px-3 sm:px-4 pb-2.5 flex items-center justify-between">
-            {waitingForUser ? (
-              <div className="flex items-center gap-1.5">
-                <ChevronRight size={9} style={{ color: "var(--success)" }} />
-                <span className="text-[10px] font-semibold uppercase tracking-wider" style={{
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--success)",
-                }}>
-                  Your turn
-                </span>
-              </div>
-            ) : (
-              <span className="text-[10px] uppercase tracking-wider" style={{
-                fontFamily: "var(--font-mono)",
-                color: "var(--text-ghost)",
-              }}>
-                {isTyping ? "Client is responding..." : "Processing..."}
-              </span>
-            )}
-            <span className="text-[9px]" style={{
-              fontFamily: "var(--font-mono)",
-              color: "var(--text-ghost)",
-            }}>
-              Shift+Enter for new line
-            </span>
-          </div>
+              {voice.isListening ? <MicOff size={16} /> : <Mic size={16} />}
+            </button>
+          )}
+
+          {/* Textarea (center) */}
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+              e.target.style.height = "auto";
+              e.target.style.height = Math.min(e.target.scrollHeight, 150) + "px";
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
+            }}
+            placeholder={waitingForUser ? `Type your response to ${sc.customer.name}...` : "Waiting for client..."}
+            disabled={!waitingForUser || isAdvancing}
+            rows={1}
+            aria-label="Your response as Relationship Manager"
+            className="flex-1 resize-none text-sm leading-relaxed outline-none bg-transparent py-2.5"
+            style={{
+              color: "var(--text-primary)",
+              opacity: waitingForUser ? 1 : 0.3,
+              minHeight: 28,
+              maxHeight: 150,
+              fontFamily: "var(--font-body)",
+            }}
+          />
+
+          {/* Send button (right) */}
+          <motion.button
+            onClick={() => { handleSend(); voice.stopListening(); voice.resetTranscript(); }}
+            disabled={!waitingForUser || !input.trim() || isAdvancing}
+            whileHover={waitingForUser && input.trim() ? { scale: 1.03 } : {}}
+            whileTap={waitingForUser && input.trim() ? { scale: 0.97 } : {}}
+            aria-label="Send response"
+            className="shrink-0 h-10 px-6 py-2.5 rounded-full flex items-center justify-center gap-2 transition-all text-[13px] font-semibold"
+            style={{
+              fontFamily: "var(--font-body)",
+              background: input.trim() && waitingForUser ? "var(--accent-primary)" : "var(--bg-tint)",
+              color: input.trim() && waitingForUser ? "#FFFFFF" : "var(--text-ghost)",
+              border: input.trim() && waitingForUser ? "none" : "1px solid var(--border)",
+            }}
+          >
+            <Send size={14} strokeWidth={2} />
+            <span className="hidden sm:inline">Send Message</span>
+          </motion.button>
         </div>
+
         {/* Technique tip below input */}
         {techniqueTip && waitingForUser && (
           <div className="flex items-center gap-2 mt-2 px-1">
@@ -757,6 +765,17 @@ export function GamePlay() {
             </p>
           </div>
         )}
+
+        {/* Helper text */}
+        <p className="text-center mt-1.5" style={{
+          fontSize: 9,
+          fontFamily: "var(--font-mono)",
+          color: "var(--text-ghost)",
+          letterSpacing: "0.05em",
+          textTransform: "uppercase",
+        }}>
+          Press Enter to send. Shift+Enter for new line
+        </p>
       </div>
     </div>
   );
