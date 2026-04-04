@@ -68,7 +68,7 @@ export function Profile() {
       <nav className="ei-nav" style={{ flexShrink: 0 }}>
         <div className="ei-nav-brand" onClick={() => setPhase("lobby")} style={{ cursor: "pointer" }}>
           <ArrowLeft size={16} style={{ opacity: 0.4 }} />
-          Editorial Intelligence
+          WISDORA INTELLIGENCE
         </div>
         <div className="ei-nav-links">
           <button className="ei-nav-link" onClick={() => setPhase("lobby")}>Dashboard</button>
@@ -317,12 +317,12 @@ export function Profile() {
 
         {/* ── FOOTER ── */}
         <footer className="ei-footer" style={{ borderTop: "1px solid var(--border)" }}>
-          <span className="ei-footer-brand">Editorial Intelligence</span>
+          <span className="ei-footer-brand">WISDORA INTELLIGENCE</span>
           <div className="ei-footer-links">
             <span className="ei-footer-link" style={{ cursor: "default" }}>Privacy Policy</span>
             <span className="ei-footer-link" style={{ cursor: "default" }}>Terms of Service</span>
           </div>
-          <span className="ei-footer-copyright">&copy; 2024 Editorial Intelligence. All rights reserved.</span>
+          <span className="ei-footer-copyright">&copy; 2024 WISDORA INTELLIGENCE. All rights reserved.</span>
         </footer>
       </div>
     </motion.div>

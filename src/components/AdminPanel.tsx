@@ -242,7 +242,7 @@ export function AdminPanel() {
       <nav className="ei-nav">
         {/* Brand */}
         <div className="ei-nav-brand" onClick={resetGame}>
-          Editorial Intelligence
+          WISDORA INTELLIGENCE
         </div>
 
         {/* Centre links */}

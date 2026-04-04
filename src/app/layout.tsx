@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Employee Training Simulator — Editorial Intelligence",
+  title: "Employee Training Simulator — WISDORA INTELLIGENCE",
   description: "Elite BFSI career simulation. Train like the stakes are real.",
 };
 

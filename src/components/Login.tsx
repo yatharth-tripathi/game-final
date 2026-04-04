@@ -179,7 +179,7 @@ export function Login() {
       {/* ── Top Navigation Bar ── */}
       <nav className="ei-nav">
         <div className="ei-nav-brand">
-          Editorial Intelligence
+          WISDORA INTELLIGENCE
         </div>
         <div className="ei-nav-links">
           <button className="ei-nav-link active">Simulator</button>
@@ -463,14 +463,14 @@ export function Login() {
 
       {/* ── Footer ── */}
       <footer className="ei-footer">
-        <span className="ei-footer-brand">Editorial Intelligence</span>
+        <span className="ei-footer-brand">WISDORA INTELLIGENCE</span>
         <div className="ei-footer-links">
           <span className="ei-footer-link" style={{ cursor: "default" }}>Privacy Policy</span>
           <span className="ei-footer-link" style={{ cursor: "default" }}>Terms of Service</span>
           <span className="ei-footer-link" style={{ cursor: "default" }}>Help Center</span>
         </div>
         <span className="ei-footer-copyright">
-          &copy; 2024 Editorial Intelligence. All rights reserved.
+          &copy; 2024 WISDORA INTELLIGENCE. All rights reserved.
         </span>
       </footer>
     </motion.div>

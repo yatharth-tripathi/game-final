@@ -147,7 +147,7 @@ export function Lobby() {
       <nav className="ei-nav" style={{ flexShrink: 0 }}>
         {/* Brand */}
         <div className="ei-nav-brand">
-          Editorial Intelligence
+          WISDORA INTELLIGENCE
         </div>
 
         {/* Center nav links */}
@@ -976,9 +976,9 @@ export function Lobby() {
            ══════════════════════════════════════ */}
         <footer className="ei-footer" style={{ borderTop: "1px solid var(--border)", padding: "20px 48px" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <span className="ei-footer-brand">Editorial Intelligence</span>
+            <span className="ei-footer-brand">WISDORA INTELLIGENCE</span>
             <span className="ei-footer-copyright">
-              &copy; 2024 Editorial Intelligence. Guided by the Digital Mentor.
+              &copy; 2024 WISDORA INTELLIGENCE. Guided by the Digital Mentor.
             </span>
           </div>
 
