@@ -1,0 +1,1480 @@
+import type { Scenario } from "./scenarios";
+
+export const TELECOM_SCENARIOS_2: Scenario[] = [
+  // ══════════════════════════════════════════════════════════════
+  // ── SCENARIO 4: Digital App Adoption Push ──
+  // ══════════════════════════════════════════════════════════════
+  {
+    id: "digital-app-adoption-push",
+    title: "Digital App Adoption Push",
+    description:
+      "Rajendra Patil is a 58-year-old small shop owner from Nagpur who calls the helpline 4-5 times a month for simple tasks like balance check and data pack renewal. He has a smartphone but barely uses it beyond WhatsApp and calls. He distrusts apps after a bad experience that slowed his phone. Guide him toward self-service app adoption while keeping him comfortable and respected.",
+    category: "telecom",
+    difficulty: "easy",
+    xpReward: 80,
+    tags: [
+      "telecom",
+      "digital-adoption",
+      "self-service",
+      "app",
+      "customer-education",
+      "cost-reduction",
+      "CX",
+    ],
+    customer: {
+      name: "Rajendra Patil",
+      age: 58,
+      profession: "Small shop owner",
+      city: "Nagpur",
+      avatar: "RP",
+      personality:
+        "Warm, set in his ways, and proud of managing his shop for 30 years without fancy technology. Speaks in a mix of Hindi and English. Gets defensive if anyone implies he is behind the times. Responds well to patience and practical demonstrations. Once he sees value, he is willing to try — but needs hand-holding. His son set up UPI on his phone but he is scared to use it alone.",
+      goal: "Get his balance checked and data pack renewed — and ideally learn to do it himself on the app",
+      archetype: "DIGITAL_RESISTANT",
+      moodInitial: 5,
+      hotButtons: [
+        "phone got slow",
+        "hidden charges from app",
+        "data theft",
+        "too complicated",
+        "I'm too old for this",
+        "automatic deductions",
+      ],
+      aiPersonaPrompt:
+        "You are Rajendra Patil, a 58-year-old small shop owner from Nagpur. You run a stationery and photocopy shop near a college. You have a basic smartphone — your son bought it for you 2 years ago. You use WhatsApp to talk to family and suppliers, and you make calls. That's it.\n\nYou call the telecom helpline 4-5 times a month to check balance, renew data packs, and sometimes complain about slow internet. Last year you downloaded some app your nephew recommended and your phone became very slow. You had to take it to a repair shop. Since then you distrust all apps.\n\nYour son set up Google Pay/UPI on your phone for shop payments, but you only let customers scan YOUR QR code — you never send money through the app yourself because you're scared of pressing the wrong button.\n\nBehaviour rules:\n- You are calling to check balance and renew your data pack — your usual monthly call.\n- If the agent suggests the app, you resist initially: 'Last time I downloaded something, my phone got slow.'\n- You warm up if the agent is patient and walks you through step by step.\n- You respond well to practical benefits: 'You can do this in 10 seconds instead of waiting 5 minutes on hold.'\n- If the agent is condescending or pushy, you shut down: 'Just do it for me, I don't want the app.'\n- Keep responses 2-4 sentences. Be realistic.",
+    },
+    openingStatement:
+      "Haan bhai, namaste. I want to check my balance and renew my data pack — the ₹299 one, same as every month. Can you just do it quickly? I'm at the shop and customers are waiting.",
+    steps: [
+      // ── Round 1: Customer calls with routine request ──
+      {
+        speaker: "customer",
+        text: "Haan bhai, namaste. I want to check my balance and renew my data pack — the ₹299 one, same as every month. Can you just do it quickly? I'm at the shop and customers are waiting.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Greet warmly, acknowledge the urgency, and fulfil the immediate request (balance check + data pack renewal). Build rapport before attempting any app pitch. Do NOT jump into the app suggestion yet — earn trust first by being helpful.",
+        expectedAction:
+          "Greet him respectfully, check his balance, confirm the ₹299 data pack details, and process the renewal. Acknowledge he is busy at the shop. Be efficient and warm.",
+        hints: [
+          "First priority: solve his immediate need — check balance and renew the pack",
+          "Acknowledge he is busy at the shop — show you respect his time",
+          "Use simple, conversational language — no corporate jargon",
+          "This is rapport-building — do the task first, pitch later",
+        ],
+        idealKeywords: [
+          "namaste",
+          "balance",
+          "₹299",
+          "renewed",
+          "data pack",
+          "done",
+          "right away",
+          "shop",
+        ],
+        bannedPhrases: [
+          "have you tried our app",
+          "why don't you use the app",
+          "you should download",
+          "it's very easy",
+        ],
+        scoring: { "Customer Empathy": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 2: Understand resistance — why doesn't he use the app? ──
+      {
+        speaker: "customer",
+        text: "Thank you, that was quick. You know, I call every month for the same thing. My son keeps telling me to use the app but I don't trust these apps. Last time I downloaded something, my phone became so slow I had to take it to the repair shop. Cost me ₹500.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Acknowledge his bad experience without dismissing it. Show genuine curiosity about what happened. This is discovery — understand the root of his resistance before offering solutions. Do NOT immediately defend the app or push it.",
+        expectedAction:
+          "Validate his concern about the bad experience. Ask what happened — was it a random app or the official telecom app? Show empathy for the ₹500 repair cost. Position yourself as someone who wants to understand, not sell.",
+        hints: [
+          "His bad experience is real — don't dismiss it with 'our app is different'",
+          "Ask specifically what app caused the problem — it was likely a third-party app, not yours",
+          "Empathise with the ₹500 repair cost — that's real money for a small shop owner",
+          "This is needs discovery — understand before you prescribe",
+        ],
+        idealKeywords: [
+          "understand",
+          "that's frustrating",
+          "₹500",
+          "which app",
+          "what happened",
+          "valid concern",
+          "your experience",
+          "repair",
+        ],
+        bannedPhrases: [
+          "our app is completely different",
+          "that won't happen",
+          "you must have done something wrong",
+          "all apps are safe",
+        ],
+        scoring: { "Customer Empathy": 10, "Problem Diagnosis": 5 },
+      },
+
+      // ── Round 3: Fear identification — what specifically worries him ──
+      {
+        speaker: "customer",
+        text: "I don't remember the name — my nephew told me to download some cleaner app. After that, ads started coming and the phone became very slow. I had to factory reset. I lost all my WhatsApp photos too. So now I don't download anything. Even UPI — my son set it up, I only let customers scan my QR code. I never press any buttons myself.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Now you know the root cause — a malicious cleaner app, NOT the telecom app. Gently distinguish between random third-party apps and your official app from the Play Store. Acknowledge the UPI fear too — this reveals a deeper pattern of digital anxiety. Do NOT push the app yet — just plant the seed of distinction.",
+        expectedAction:
+          "Explain that the cleaner app was a third-party app with ads/malware — very different from official company apps. Mention that your app is verified on Play Store, has no ads, and doesn't slow the phone. Acknowledge his UPI caution shows he is careful, which is actually smart.",
+        hints: [
+          "The culprit was a third-party cleaner app with adware — help him understand that distinction",
+          "Official apps from Play Store verified publishers are safe — no ads, no background processes",
+          "Compliment his caution with UPI — being careful with money is wise, not backward",
+          "Don't push the download yet — just help him understand the difference",
+          "Mention the app size is small — won't slow his phone",
+        ],
+        idealKeywords: [
+          "cleaner app",
+          "third-party",
+          "official app",
+          "Play Store",
+          "verified",
+          "no ads",
+          "safe",
+          "careful",
+          "smart",
+          "small size",
+        ],
+        bannedPhrases: [
+          "you shouldn't download random apps",
+          "that was your mistake",
+          "everyone uses apps nowadays",
+          "you're being paranoid",
+        ],
+        scoring: { "Problem Diagnosis": 10, "Customer Empathy": 5, "Digital Literacy": 5 },
+      },
+
+      // ── Round 4: Trust building — acknowledge his concerns are valid ──
+      {
+        speaker: "customer",
+        text: "Hmm OK, so that cleaner thing was bad. But still — how do I know YOUR app won't do the same? And what if I press some wrong button and money gets deducted? I don't want any automatic payments. I want to control everything myself.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Address his two core fears: (1) app will harm his phone, (2) accidental money deduction. Provide concrete reassurances — no auto-debit without his permission, he controls every payment, app has no background ads. Offer a no-risk proposition: 'Download it, try one thing, and if you don't like it, delete it.'",
+        expectedAction:
+          "Reassure that there is no auto-debit or auto-renewal — every payment requires his confirmation with PIN/OTP. Explain the app doesn't run ads or background processes. Offer a zero-risk trial: download, check balance once, and delete if he doesn't like it.",
+        hints: [
+          "Address the auto-payment fear directly — no charges without his OTP/PIN confirmation",
+          "Explain the app is light (under 30MB) and doesn't run background processes",
+          "Zero-risk proposition: try it once, delete if you don't like it — nothing to lose",
+          "Mention he already trusts WhatsApp — this app is even simpler than WhatsApp",
+          "Emphasise control: 'You are always in charge — nothing happens without your permission'",
+        ],
+        idealKeywords: [
+          "no auto-debit",
+          "your permission",
+          "OTP",
+          "PIN",
+          "confirm",
+          "control",
+          "lightweight",
+          "delete anytime",
+          "no ads",
+          "try once",
+        ],
+        bannedPhrases: [
+          "nothing can go wrong",
+          "just trust us",
+          "don't be scared",
+          "it's foolproof",
+          "everyone does it",
+        ],
+        scoring: { "Customer Empathy": 8, "Product Knowledge": 7, "Communication Clarity": 5 },
+      },
+
+      // ── Round 5: Simple demonstration — walk through balance check ──
+      {
+        speaker: "customer",
+        text: "OK fine, no automatic deduction — that is good. But I'm not good with phones. WhatsApp I learned because my daughter showed me 100 times. If I download this app, I won't know what to press. The screen will have too many options and I'll get confused.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Offer to walk him through the balance check step-by-step right now on the call. Make it feel like a guided, personal experience — not a tutorial. Start with just ONE action: checking balance. Keep the instruction to 3-4 taps maximum. Relate it to something he knows.",
+        expectedAction:
+          "Offer to guide him through downloading the app and checking balance right now while on the call. Break it into 3 simple steps: Open Play Store, search app name, install. Then open app, enter mobile number, and balance shows on home screen. Compare to how he learned WhatsApp — same process.",
+        hints: [
+          "Offer to do it together on the phone right now — real-time guidance builds confidence",
+          "Break it into tiny steps: Step 1 open Play Store, Step 2 search, Step 3 install",
+          "Compare to WhatsApp learning: 'Your daughter showed you 100 times — I'll show you once and you'll get it'",
+          "Emphasise that balance check is on the HOME screen — no digging through menus",
+          "Use the phrase 'just 3 taps' — make it feel achievable",
+        ],
+        idealKeywords: [
+          "together",
+          "right now",
+          "step by step",
+          "3 taps",
+          "home screen",
+          "Play Store",
+          "search",
+          "install",
+          "like WhatsApp",
+          "I'll guide you",
+        ],
+        bannedPhrases: [
+          "it's very simple",
+          "anyone can do it",
+          "just figure it out",
+          "read the instructions",
+          "you'll manage",
+        ],
+        scoring: { "Communication Clarity": 10, "Digital Literacy": 8, "Customer Empathy": 5 },
+      },
+
+      // ── Round 6: Data pack renewal demo — show how easy it is in-app ──
+      {
+        speaker: "customer",
+        text: "OK OK, I downloaded it. It's asking for my mobile number... I typed it... OK I see a screen now. It shows my balance — ₹47 remaining and my ₹299 pack is active till April 18. Wah, this is fast! But this is only checking balance — what about renewing my pack? That must be complicated.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: He is engaged! Capitalize on this momentum. Walk him through the recharge/renewal process step by step. Show him how to find the ₹299 pack and renew it. Emphasise that it's the SAME pack he gets every month, already shown as a recommendation because the app knows his history.",
+        expectedAction:
+          "Celebrate his success with the balance check. Now guide him to the recharge section: tap 'Recharge', his ₹299 pack will appear under 'Recommended' or 'Previous Recharges' since the app remembers his history. One tap to select, confirm with UPI/payment method. 3 steps total.",
+        hints: [
+          "Celebrate the win: 'See, you already did the hardest part!'",
+          "Guide to Recharge button — it's on the home screen or bottom navigation",
+          "The ₹299 pack will appear in 'Recommended' because the app tracks his usage pattern",
+          "Payment: he can use UPI (already set up on his phone) — connect it to what he knows",
+          "Emphasise: 'Next month, this whole thing takes 30 seconds instead of a 5-minute call'",
+        ],
+        idealKeywords: [
+          "well done",
+          "recharge",
+          "recommended",
+          "₹299",
+          "previous recharges",
+          "one tap",
+          "UPI",
+          "30 seconds",
+          "next month",
+          "history",
+        ],
+        bannedPhrases: [
+          "see how easy it was",
+          "I told you so",
+          "why were you scared",
+          "anyone can do this",
+        ],
+        scoring: { "Digital Literacy": 10, "Communication Clarity": 8 },
+      },
+
+      // ── Round 7: Bill payment walkthrough — connect to his UPI comfort ──
+      {
+        speaker: "customer",
+        text: "Arre waah, it's showing ₹299 right there in 'My Plans'! And I can pay with UPI? My son set up Google Pay already. But wait — if I pay through this app, will it connect to my Google Pay? I don't want to enter my bank details again anywhere new.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Address the payment concern. Explain that the app uses the UPI system already on his phone — when he taps 'Pay', it will open his existing Google Pay or show UPI options. No new bank details needed. Connect this to his existing comfort with receiving UPI payments at his shop.",
+        expectedAction:
+          "Explain that the app doesn't need separate bank details — it triggers UPI intent which opens his existing Google Pay. Same PIN, same process as when customers pay him at the shop, just in reverse. No new setup needed.",
+        hints: [
+          "The app uses UPI intent — it opens Google Pay automatically, no new bank details needed",
+          "Same UPI PIN he uses at his shop — nothing new to remember",
+          "Compare: 'When customers pay you via QR, that's UPI. This is the same thing — you're paying via UPI'",
+          "Reassure: his bank details stay in Google Pay only, the telecom app never sees them",
+          "This is a breakthrough moment — he's about to make his first self-service recharge",
+        ],
+        idealKeywords: [
+          "Google Pay",
+          "UPI",
+          "same PIN",
+          "no new bank details",
+          "already set up",
+          "opens automatically",
+          "your shop",
+          "QR code",
+          "same process",
+        ],
+        bannedPhrases: [
+          "just enter your details",
+          "link your bank account",
+          "it's totally safe don't worry",
+          "nothing bad will happen",
+        ],
+        scoring: { "Product Knowledge": 8, "Communication Clarity": 7, "Digital Literacy": 5 },
+      },
+
+      // ── Round 8: Feature discovery — other useful features ──
+      {
+        speaker: "customer",
+        text: "OK I tapped pay, Google Pay opened, I put my PIN... and it says 'Recharge Successful'! ₹299 done! Bahut accha! That was actually easy. But tell me — I sometimes feel my internet is slow. Is there something in the app to check that? Because I always call you people to complain about slow speed.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: He is now genuinely curious! Show him the data usage tracker and speed test features. Also mention the exclusive app-only offers and data booster packs. This is feature discovery — show him 2-3 useful features, not the entire app. Keep it relevant to his life as a shop owner.",
+        expectedAction:
+          "Show him the data usage tracker to see how much data he's used vs his plan limit. Mention the network/speed check feature. Highlight app-exclusive offers and data booster packs that aren't available via helpline. Keep it to 2-3 features — don't overwhelm.",
+        hints: [
+          "Data usage tracker: shows daily/weekly consumption — helps him know if he's running out",
+          "Speed test or network check: he can verify if the speed is actually slow before calling",
+          "App-exclusive offers: sometimes cheaper packs are only available on the app",
+          "Don't show everything — pick 2-3 features relevant to his complaints (slow speed, data running out)",
+          "Relate to his shop: 'If your data runs out, you can top up in 30 seconds without closing the shop'",
+        ],
+        idealKeywords: [
+          "data usage",
+          "tracker",
+          "speed test",
+          "app-exclusive",
+          "offers",
+          "booster",
+          "daily usage",
+          "running out",
+          "30 seconds",
+          "without calling",
+        ],
+        bannedPhrases: [
+          "the app has 50 features",
+          "explore it yourself",
+          "you should learn all of it",
+          "there's so much you're missing",
+        ],
+        scoring: { "Product Knowledge": 10, "Upselling": 5, "Communication Clarity": 5 },
+      },
+
+      // ── Round 9: Addressing complexity concern — show how few taps ──
+      {
+        speaker: "customer",
+        text: "Data tracker — that's useful! I always feel like my 1.5GB per day finishes by evening. But Rajendra bhai is 58 years old, not like these youngsters. What if the app updates and everything changes? Then I'll be lost again. I don't want to learn something new every month.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Address his concern about app updates changing the interface. Reassure that the core functions (balance, recharge, data check) stay in the same place — updates improve things but don't rearrange the basics. Relate to WhatsApp: it updates too, but he still knows how to send messages. Validate his age concern without being patronizing.",
+        expectedAction:
+          "Reassure that core functions don't move — balance and recharge stay on the home screen regardless of updates. Compare to WhatsApp: it has updated many times but the basic chat screen is the same. Address his age comment respectfully — age has nothing to do with it, the app is designed for everyone.",
+        hints: [
+          "Core features stay in the same place — updates add features, not rearrange existing ones",
+          "WhatsApp comparison: 'WhatsApp updates every month but you still open it and chat — same here'",
+          "Don't patronize about age — many 60+ users use the app successfully",
+          "Focus on the 3 things he needs: balance, recharge, data check — those 3 buttons won't move",
+          "Mention that the app has a 'simple mode' or large text option if available",
+        ],
+        idealKeywords: [
+          "same place",
+          "home screen",
+          "won't change",
+          "WhatsApp",
+          "updates",
+          "balance",
+          "recharge",
+          "data check",
+          "everyone",
+          "3 things",
+        ],
+        bannedPhrases: [
+          "you'll get used to it",
+          "at your age",
+          "even old people can do it",
+          "it's designed for beginners",
+          "don't worry about updates",
+        ],
+        scoring: { "Customer Empathy": 8, "Communication Clarity": 7, "Digital Literacy": 5 },
+      },
+
+      // ── Round 10: Security reassurance — no hidden charges ──
+      {
+        speaker: "customer",
+        text: "OK that makes sense — like WhatsApp. But one more thing — I've heard stories about apps charging money secretly. Like some subscription starts automatically and ₹99 gets deducted every month. I don't want any surprise deductions. I am a small shop owner, every rupee matters.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Address the auto-subscription fear head-on. Explain that the app has NO auto-renewal or hidden subscriptions unless he explicitly enables it. Every transaction requires his UPI PIN. Mention TRAI regulations that protect consumers from unauthorized charges. Respect his concern about every rupee.",
+        expectedAction:
+          "Clearly state: no hidden subscriptions, no auto-deductions. Every payment requires his UPI PIN or explicit confirmation. TRAI regulations mandate explicit consent for any charges. He can check his transaction history in the app anytime. Validate that being careful with money is smart business sense.",
+        hints: [
+          "No auto-subscriptions: every charge requires UPI PIN or OTP confirmation from him",
+          "TRAI regulations: telecom companies cannot charge without explicit customer consent",
+          "Transaction history: he can see every rupee spent in the app's payment section",
+          "Respect his frugality: 'Every rupee matters — that's why you've run a successful shop for 30 years'",
+          "Offer: 'If any unexpected charge ever appears, call us and we'll reverse it immediately'",
+        ],
+        idealKeywords: [
+          "no auto-deduction",
+          "your PIN",
+          "explicit consent",
+          "TRAI",
+          "transaction history",
+          "every rupee",
+          "confirmation",
+          "no hidden charges",
+          "reverse",
+          "your permission",
+        ],
+        bannedPhrases: [
+          "that never happens",
+          "don't believe rumours",
+          "it's impossible",
+          "you're overthinking",
+          "just trust the system",
+        ],
+        scoring: { "Product Knowledge": 8, "Compliance": 7, "Customer Empathy": 5 },
+      },
+
+      // ── Round 11: Family benefit — son/daughter can help ──
+      {
+        speaker: "customer",
+        text: "TRAI rule — OK that's good to know. Actually my son also uses your network, and my daughter too. She's in Pune for college. Sometimes she calls me saying her data is finished and asks me to recharge for her. I have to call you people and do it for her number. Can I do that from the app?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: This is a golden opportunity! Show him the recharge-for-others feature. He can recharge his daughter's number and son's number from the same app. This is a practical, emotional use case — a father keeping his daughter connected in another city. Also mention the family plan or group management feature if available.",
+        expectedAction:
+          "Explain the recharge-for-others feature: he can add his son's and daughter's numbers in the app and recharge them anytime. No need to call the helpline. Highlight the emotional angle: 'Your daughter calls and within 30 seconds her data is back.' Mention any family plan or group recharge discounts.",
+        hints: [
+          "Recharge for others: tap Recharge, enter daughter's number, select pack, pay — done",
+          "He can save family numbers in the app for quick recharge anytime",
+          "Emotional hook: 'When your daughter calls from Pune saying data is over, you can fix it in 30 seconds'",
+          "Mention family plans or group offers if multiple connections are on the same network",
+          "This makes him the family hero — he can solve their telecom problems from his shop",
+          "Don't oversell — keep it to the 1-2 features that matter to him right now",
+        ],
+        idealKeywords: [
+          "daughter",
+          "son",
+          "recharge for others",
+          "Pune",
+          "add number",
+          "family",
+          "30 seconds",
+          "save number",
+          "quick",
+          "anytime",
+        ],
+        bannedPhrases: [
+          "upgrade to family plan now",
+          "you must add all numbers",
+          "this is mandatory",
+          "everyone does this",
+        ],
+        scoring: { "Customer Empathy": 8, "Upselling": 7, "Communication Clarity": 5 },
+      },
+
+      // ── Round 12: Incentive offer — ₹50 cashback on first app recharge ──
+      {
+        speaker: "customer",
+        text: "Arre, that is very useful! My Priya will be so happy if I can recharge her number instantly. She always says 'Papa you take so long, just use the app!' Now I can show her I did it myself. But tell me honestly — is there any benefit for me to use the app instead of calling? Why should I change my habit?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Give him concrete benefits of app usage over calling: time saved, app-exclusive offers/discounts, cashback on first recharge, and 24/7 access without hold times. Present the ₹50 cashback offer as a bonus, not a bribe. Frame benefits in terms of his life — shop time saved, no waiting on hold.",
+        expectedAction:
+          "List practical benefits: no 5-minute hold time, available 24/7 even at midnight, app-exclusive cheaper plans, and offer the ₹50 cashback on his next app recharge. Frame in terms of his shop: '5 minutes on hold = 2-3 customers you could serve.' Make the cashback feel like a reward for being smart, not a gimmick.",
+        hints: [
+          "Time: 30 seconds on app vs 5 minutes on hold — that's shop time saved",
+          "App-exclusive offers: some plans are ₹20-30 cheaper only through the app",
+          "₹50 cashback on first app recharge — frame it as reward, not bribe",
+          "24/7 access: recharge at midnight if needed, no helpline hours",
+          "Frame in shop terms: '5 minutes on hold means 2-3 customers walking out of your shop'",
+          "His daughter will be proud — emotional benefit too",
+        ],
+        idealKeywords: [
+          "save time",
+          "5 minutes",
+          "30 seconds",
+          "app-exclusive",
+          "₹50 cashback",
+          "first recharge",
+          "24/7",
+          "no waiting",
+          "shop time",
+          "cheaper plans",
+          "reward",
+        ],
+        bannedPhrases: [
+          "calling is a waste of time",
+          "stop calling us",
+          "the helpline costs us money",
+          "you're wasting resources",
+          "we prefer app users",
+        ],
+        scoring: { "Upselling": 8, "Communication Clarity": 7, "Customer Empathy": 5 },
+      },
+
+      // ── Round 13: Hands-on guidance — guide through actual first action ──
+      {
+        speaker: "customer",
+        text: "₹50 cashback? Real money back? OK I like that! And you're right — I waste 10-15 minutes every time I call. That's bad for business. OK so I already recharged my number today. Can I try recharging my daughter Priya's number right now? Her number is on your network — she needs data badly, she has exams coming.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: This is the critical moment — guide him through his first independent action (recharging his daughter's number). Walk him through each tap: go to Recharge, enter Priya's number, select a pack, and pay. Be patient, specific, and encouraging. This is where the habit changes — his first real self-service success.",
+        expectedAction:
+          "Guide him step by step: 1) Tap 'Recharge' on home screen, 2) Tap 'Recharge for other number', 3) Type Priya's number, 4) Select her data pack, 5) Tap 'Pay' and confirm with UPI PIN. Be encouraging at each step. If he hesitates, reassure him. This is his transformation moment.",
+        hints: [
+          "Step-by-step: Recharge > Other number > Enter Priya's number > Select pack > Pay with UPI",
+          "Be patient — he may take a moment at each step, that's OK",
+          "If he asks about the pack, suggest a data-heavy student pack for Priya's exam prep",
+          "Encourage him: 'You're doing great — Priya is going to be impressed!'",
+          "Mention the ₹50 cashback will apply to this recharge if it's the first app recharge",
+        ],
+        idealKeywords: [
+          "step 1",
+          "tap recharge",
+          "other number",
+          "Priya",
+          "select pack",
+          "pay",
+          "UPI PIN",
+          "you're doing great",
+          "well done",
+          "first recharge",
+        ],
+        bannedPhrases: [
+          "hurry up",
+          "it's obvious",
+          "just press the button",
+          "I already told you",
+          "you should know this",
+        ],
+        scoring: { "Digital Literacy": 10, "Customer Empathy": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 14: Confirmation of learning — verify independence ──
+      {
+        speaker: "customer",
+        text: "It says 'Recharge Successful' for Priya's number! ₹349 data pack done! And I can see it in the transaction history — both my recharge and Priya's. Bahut accha! Now let me see if I remember — to check my balance I just open the app and it's on the main screen, and to recharge I tap that big button at the bottom, correct?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Confirm his understanding and reinforce the learning. He is recapping what he learned — validate his summary. Add one small tip he might have missed (like saving Priya's number as a favourite). Express genuine appreciation for his willingness to learn. This is the confidence-building step.",
+        expectedAction:
+          "Confirm his summary is correct: balance on home screen, recharge via the big button. Add the tip about saving Priya's number as favourite for next time. Express genuine appreciation: he learned the app in one phone call. Mention he just saved himself 4-5 helpline calls per month.",
+        hints: [
+          "Confirm his understanding: 'Absolutely right — you've got it perfectly'",
+          "Small bonus tip: save Priya's number as favourite for even faster recharges next time",
+          "Appreciation: 'You learned this in one call — your daughter will be proud'",
+          "Reinforce the saving: 'That's 4-5 fewer calls per month — 30-40 minutes saved for your shop'",
+          "Don't overload him — he has learned enough for today",
+        ],
+        idealKeywords: [
+          "correct",
+          "exactly right",
+          "favourite",
+          "save number",
+          "well done",
+          "proud",
+          "one call",
+          "4-5 calls saved",
+          "minutes saved",
+          "shop",
+        ],
+        bannedPhrases: [
+          "now learn these 5 more features",
+          "you should also try",
+          "there's much more to learn",
+          "you still need to know",
+        ],
+        scoring: { "Communication Clarity": 8, "Customer Empathy": 7, "Digital Literacy": 5 },
+      },
+
+      // ── Round 15: Follow-up plan — callback in 3 days ──
+      {
+        speaker: "customer",
+        text: "Thank you bhai! You are very patient. Most people just say 'download the app' and hang up. You actually showed me step by step. I feel confident now. But if I get stuck somewhere, can I still call? I don't want to feel like the helpline is closed for me just because I have the app.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Reassure him the helpline is always available — the app is an ADDITIONAL convenience, not a replacement for human support. Offer a proactive follow-up call in 3 days to check if he needs help. Close with warmth and respect. This is the NPS moment — he should hang up feeling valued, not processed.",
+        expectedAction:
+          "Reassure that the helpline is always available for him — the app doesn't replace it. Offer a proactive follow-up: 'We'll call you in 3 days to check if you're comfortable or need help with anything.' Thank him for his time and patience. Wish him well at the shop. Leave him feeling respected and empowered.",
+        hints: [
+          "Helpline is ALWAYS available — app is a convenience, not a replacement",
+          "Offer proactive follow-up: 'We'll call you in 3 days to see if everything is smooth'",
+          "Thank him genuinely — he gave his time during a busy shop day to learn something new",
+          "Personal touch: wish his daughter well in her exams",
+          "Close warmly: 'You are now an app expert, Patil sahab!'",
+          "This is an NPS moment — his experience decides if he recommends the app to other shop owners",
+        ],
+        idealKeywords: [
+          "always available",
+          "helpline open",
+          "3 days",
+          "follow-up call",
+          "thank you",
+          "your time",
+          "daughter exams",
+          "Patil sahab",
+          "comfortable",
+          "empowered",
+        ],
+        bannedPhrases: [
+          "try not to call anymore",
+          "use the app instead of calling",
+          "the helpline is for emergencies only",
+          "you shouldn't need to call now",
+        ],
+        scoring: { "Customer Empathy": 10, "Communication Clarity": 7, "Retention Skills": 5 },
+      },
+    ],
+    evaluationRules: [
+      {
+        skill: "Customer Empathy",
+        keywords: [
+          "understand",
+          "valid concern",
+          "your experience",
+          "patience",
+          "respect",
+          "shop",
+          "busy",
+          "every rupee",
+          "daughter",
+          "Priya",
+        ],
+        weight: 25,
+      },
+      {
+        skill: "Digital Literacy",
+        keywords: [
+          "step by step",
+          "Play Store",
+          "home screen",
+          "tap",
+          "recharge",
+          "UPI",
+          "3 taps",
+          "data tracker",
+          "download",
+          "install",
+        ],
+        weight: 25,
+      },
+      {
+        skill: "Communication Clarity",
+        keywords: [
+          "let me show you",
+          "first",
+          "next",
+          "simple",
+          "like WhatsApp",
+          "30 seconds",
+          "3 steps",
+          "home screen",
+          "big button",
+        ],
+        weight: 20,
+      },
+      {
+        skill: "Product Knowledge",
+        keywords: [
+          "app-exclusive",
+          "data tracker",
+          "speed test",
+          "cashback",
+          "no auto-debit",
+          "TRAI",
+          "family recharge",
+          "transaction history",
+          "offers",
+        ],
+        weight: 15,
+      },
+      {
+        skill: "Retention Skills",
+        keywords: [
+          "follow-up",
+          "3 days",
+          "helpline always available",
+          "callback",
+          "comfortable",
+          "NPS",
+          "habit change",
+          "self-service",
+        ],
+        weight: 15,
+      },
+    ],
+    complianceRules: {
+      hardBanned: [
+        "stop calling the helpline",
+        "at your age you should know",
+        "everyone uses apps now",
+        "you're wasting our time by calling",
+        "the helpline will be discontinued",
+        "old people can't learn",
+      ],
+      violationPenalty: 40,
+      violationMessage:
+        "COMPLIANCE BREACH: Discriminatory language based on age or digital literacy, or misleading statements about helpline availability. Violates TRAI customer service regulations and company digital inclusion policy.",
+    },
+  },
+
+  // ══════════════════════════════════════════════════════════════
+  // ── SCENARIO 5: Enterprise Client Deal Negotiation ──
+  // ══════════════════════════════════════════════════════════════
+  {
+    id: "enterprise-client-deal-negotiation",
+    title: "Enterprise Client Deal Negotiation",
+    description:
+      "Sunita Kapoor is VP - IT & Operations at FleetTrack Logistics, a company with 2,200 employees and 500+ SIM connections (employee SIMs + IoT SIMs for fleet tracking). Their current contract is ₹18 lakh/month. A competitor has offered ₹14 lakh/month with free IoT SIMs for 6 months. This is a high-stakes B2B retention negotiation where you must demonstrate value beyond price to save a ₹2.16 crore annual account.",
+    category: "telecom",
+    difficulty: "expert",
+    xpReward: 220,
+    tags: [
+      "telecom",
+      "enterprise",
+      "B2B",
+      "negotiation",
+      "IoT",
+      "fleet-management",
+      "SLA",
+      "contract",
+      "retention",
+      "ARPU",
+    ],
+    customer: {
+      name: "Sunita Kapoor",
+      age: 42,
+      profession: "VP - IT & Operations, FleetTrack Logistics",
+      city: "Mumbai",
+      avatar: "SK",
+      personality:
+        "Data-driven, assertive, and time-efficient. Has 15 years of enterprise IT experience. Respects competence and despises fluff or generic sales pitches. Will call out vague claims immediately. Negotiates hard but fairly — she wants the best deal, not necessarily the cheapest. Values uptime and reliability over everything else because fleet tracking downtime directly impacts delivery SLAs with THEIR clients. Will respect you if you come prepared with data.",
+      goal: "Get the best possible deal — price, SLA, IoT coverage, and dedicated support — either from the current provider or the competitor",
+      archetype: "ENTERPRISE_DECISION_MAKER",
+      moodInitial: 4,
+      hotButtons: [
+        "vague promises",
+        "we'll look into it",
+        "generic pricing",
+        "no data to back claims",
+        "ignoring competitor offer",
+        "patronizing tone",
+        "wasting time",
+      ],
+      aiPersonaPrompt:
+        "You are Sunita Kapoor, 42, VP - IT & Operations at FleetTrack Logistics, a mid-large logistics company with 2,200 employees operating across 14 states. You manage 500+ employee SIM connections and 300+ IoT SIMs for GPS fleet tracking across your truck fleet.\n\nYour current telecom contract is ₹18 lakh/month. A competitor (you won't name them initially) has offered ₹14 lakh/month + free IoT SIMs for 6 months. You have a meeting with your CEO next week to decide.\n\nYou are NOT bluffing — the competitor offer is real. But you also know that switching 800+ connections is a massive migration risk. You WANT to stay if the current provider matches value — but you won't say that. You'll negotiate hard.\n\nBehaviour rules:\n- You lead with the competitor offer to create urgency.\n- You push back on vague promises: 'Give me numbers, not feelings.'\n- You respect someone who knows your business — fleet routes, coverage gaps, uptime data.\n- You care about: price, uptime SLA (99.9%+), IoT SIM coverage on highways, dedicated account manager, and fleet analytics dashboard.\n- You will reveal pain points (coverage gaps on NH44, slow ticket resolution) only if asked the right questions.\n- If the agent offers a structured, data-backed counter-proposal, you'll negotiate seriously.\n- If the agent just says 'we'll match the price,' you'll say 'Price matching isn't a strategy.'\n- Keep responses 2-4 sentences. Be direct and professional.",
+    },
+    openingStatement:
+      "Let me be direct with you. I have 500+ employee connections and 300+ IoT SIMs with your network. We're paying ₹18 lakh a month. Your competitor has offered us ₹14 lakh a month with free IoT SIMs for 6 months. That's a ₹4 lakh monthly saving. I have a CEO meeting next week. Give me a reason to stay.",
+    steps: [
+      // ── Round 1: Client states position ──
+      {
+        speaker: "customer",
+        text: "Let me be direct with you. I have 500+ employee connections and 300+ IoT SIMs with your network. We're paying ₹18 lakh a month. Your competitor has offered us ₹14 lakh a month with free IoT SIMs for 6 months. That's a ₹4 lakh monthly saving. I have a CEO meeting next week. Give me a reason to stay.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Do NOT panic-match the price immediately. Acknowledge her position professionally, validate the competitor offer as serious, and pivot to understanding her FULL requirements. Ask structured discovery questions — this negotiation will be won on value, not price alone. Show you take this seriously.",
+        expectedAction:
+          "Acknowledge the ₹4 lakh gap seriously. Thank her for the transparency. Do NOT offer a discount yet. Instead, ask to understand the complete picture: what specific services are included in the competitor offer, what SLA guarantees they've committed to, and what her top 3 priorities are beyond price.",
+        hints: [
+          "Do NOT say 'we'll match the price' — that's reactive, not strategic",
+          "Acknowledge the competitor offer: 'That's a significant difference and I take it seriously'",
+          "Pivot to discovery: 'Before I respond with numbers, I want to make sure I'm solving the right problem'",
+          "Ask about the competitor's SLA commitments — cheap price with poor uptime costs more",
+          "Show strategic thinking: price is one dimension, total cost of ownership is what matters",
+          "Mention you want to review their account data before proposing anything",
+        ],
+        idealKeywords: [
+          "appreciate your transparency",
+          "take this seriously",
+          "full picture",
+          "SLA",
+          "competitor offer details",
+          "total cost",
+          "priorities",
+          "before I propose",
+          "your requirements",
+          "data",
+        ],
+        bannedPhrases: [
+          "we'll match the price",
+          "competitors always promise more",
+          "they can't deliver",
+          "you should stay with us because",
+          "don't worry about it",
+        ],
+        scoring: { "Negotiation Skills": 10, "B2B Selling": 8, "Customer Empathy": 5 },
+      },
+
+      // ── Round 2: Acknowledge & discover — full requirements ──
+      {
+        speaker: "customer",
+        text: "Fair enough — I appreciate you not just throwing a discount at me. My priorities, in order: first, network uptime — we lose ₹2 lakh per hour when fleet tracking goes down. Second, IoT SIM coverage on national highways, especially NH44 and NH48. Third, price. And yes, the competitor has offered 99.95% uptime SLA. What's yours currently?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She has given you her priority order — uptime > coverage > price. This is critical intelligence. Address the uptime question with real data from her account. Pull up her actual uptime statistics, not generic company figures. If you don't have exact data, commit to sharing it within 24 hours. Show you know her business — fleet tracking downtime = delivery SLA breaches.",
+        expectedAction:
+          "Acknowledge her priority order. Quote her account-specific uptime data (or commit to pulling it within 24 hours). Frame the conversation around business impact: ₹2 lakh/hour downtime means even 99.9% vs 99.95% matters. Ask about their current downtime incidents to understand pain points. Show you understand fleet tracking = their revenue engine.",
+        hints: [
+          "Her priority is uptime first — this is where you can win, not on price",
+          "₹2 lakh/hour downtime: even 0.05% uptime difference = significant money over a year",
+          "Ask about specific downtime incidents — she will have data, and this reveals competitor gaps",
+          "99.95% SLA from competitor: ask if that includes penalties for non-compliance",
+          "Show industry knowledge: fleet tracking IoT SIMs need consistent coverage, not just speed",
+          "Commit to sharing account-specific uptime data if you don't have it immediately",
+        ],
+        idealKeywords: [
+          "uptime",
+          "99.9%",
+          "₹2 lakh per hour",
+          "account-specific data",
+          "downtime incidents",
+          "fleet tracking",
+          "SLA penalties",
+          "coverage",
+          "NH44",
+          "NH48",
+          "business impact",
+        ],
+        bannedPhrases: [
+          "our network is the best",
+          "competitors lie about uptime",
+          "trust me on this",
+          "I don't have that data",
+          "uptime doesn't vary much between providers",
+        ],
+        scoring: { "Problem Diagnosis": 10, "B2B Selling": 8, "Product Knowledge": 5 },
+      },
+
+      // ── Round 3: Current service audit ──
+      {
+        speaker: "customer",
+        text: "I'll tell you exactly where the pain is. In the last 6 months, we had 3 major outages affecting fleet tracking — two on the NH44 corridor between Hyderabad and Bangalore, and one in the Nagpur-Mumbai stretch. Total downtime: roughly 14 hours. That's ₹28 lakh in SLA penalties WE paid to our clients. Your ticket resolution time averaged 6 hours. That's unacceptable for enterprise IoT.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: This is a make-or-break moment. She has given you specific, damaging data. Do NOT deflect or make excuses. Own the problem, show you understand the financial impact (₹28 lakh in penalties), and propose a concrete resolution plan. This is where enterprise trust is built or destroyed.",
+        expectedAction:
+          "Own the 3 outages and 14-hour downtime without excuses. Acknowledge the ₹28 lakh SLA penalty impact. Commit to: (1) reviewing root cause of each outage, (2) sharing the RCA report with her, (3) proposing an enhanced SLA with financial penalties on YOUR side. Ask if the 6-hour ticket resolution had a dedicated escalation path or went through standard queue.",
+        hints: [
+          "Do NOT deflect: 'I understand the impact — ₹28 lakh in penalties you bore is unacceptable'",
+          "Own it: 'Those 3 outages should not have happened, and 6-hour resolution is too slow for enterprise IoT'",
+          "Propose RCA sharing: root cause analysis for each outage shows accountability",
+          "Ask about escalation path — if tickets went to standard queue, that's a fixable process problem",
+          "This is where you differentiate: competitors promise SLA but haven't been tested on her routes",
+          "Mention that you can offer financial SLA penalties — 'skin in the game' builds trust",
+        ],
+        idealKeywords: [
+          "unacceptable",
+          "₹28 lakh",
+          "root cause analysis",
+          "RCA",
+          "own the issue",
+          "escalation path",
+          "6 hours too slow",
+          "enhanced SLA",
+          "financial penalties",
+          "dedicated support",
+          "enterprise IoT",
+        ],
+        bannedPhrases: [
+          "outages happen to everyone",
+          "that's normal for the industry",
+          "the competitor will have the same issues",
+          "we can't control network failures",
+          "those were force majeure events",
+        ],
+        scoring: { "Customer Empathy": 8, "Problem Diagnosis": 8, "Negotiation Skills": 7 },
+      },
+
+      // ── Round 4: Hidden cost analysis — competitor fine print ──
+      {
+        speaker: "customer",
+        text: "At least you're honest about it. Most account managers make excuses. Now here's the thing — I KNOW switching 800+ connections is risky. I'm not naive. But ₹4 lakh per month is ₹48 lakh per year. My CEO will ask why we're paying a premium for a provider that gave us 14 hours of downtime. Help me build a case to stay.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She just told you she WANTS to stay — 'help me build a case.' This is your opening. Shift to hidden cost analysis of switching. Calculate migration costs, porting downtime, re-provisioning IoT SIMs, and the risk of the competitor's unproven SLA on her specific routes. Give her CEO-ready ammunition.",
+        expectedAction:
+          "Build the business case for staying: (1) Migration cost: porting 800+ numbers = 2-3 weeks of disruption, (2) IoT SIM re-provisioning: new APNs, device reconfiguration for 300+ trackers = 4-6 weeks + technician costs, (3) Competitor SLA is untested on NH44/NH48 corridors, (4) Historical data and route optimization is lost. Quantify the switching cost in rupees.",
+        hints: [
+          "She said 'help me build a case' — she's asking you to arm her for the CEO meeting",
+          "Migration cost: porting 800 numbers is 2-3 weeks, each day without fleet tracking = ₹48 lakh risk",
+          "IoT re-provisioning: 300+ GPS trackers need new APN settings, firmware updates — 4-6 weeks",
+          "Competitor's SLA is theoretical — they haven't proven coverage on her specific highway corridors",
+          "Data loss: years of network performance data, optimized routes, tower handoff patterns",
+          "Quantify total switching cost: easily ₹30-50 lakh in migration + downtime + retraining",
+        ],
+        idealKeywords: [
+          "migration cost",
+          "porting",
+          "downtime risk",
+          "re-provisioning",
+          "IoT SIM",
+          "APN",
+          "300+ trackers",
+          "untested",
+          "CEO meeting",
+          "switching cost",
+          "₹30-50 lakh",
+          "business case",
+        ],
+        bannedPhrases: [
+          "competitors are unreliable",
+          "you'll regret switching",
+          "they'll increase prices later",
+          "you can't leave",
+          "we won't let you go",
+        ],
+        scoring: { "Negotiation Skills": 10, "B2B Selling": 8, "Product Knowledge": 7 },
+      },
+
+      // ── Round 5: IoT infrastructure deep dive ──
+      {
+        speaker: "customer",
+        text: "Good — those numbers are real. The IoT re-provisioning alone will cost us 4-6 weeks. Our fleet management vendor estimated ₹35 lakh for migration support. But here's my counter: that's a one-time cost. ₹48 lakh saved per year means ROI in under 9 months. So you need to give me more than just 'switching is expensive.' What can you do specifically for our IoT fleet tracking?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She's right — switching cost alone won't retain her. Pivot to IoT-specific value. Deep-dive into your fleet tracking capabilities: dedicated IoT SIM plans, coverage on her specific routes (NH44, NH48), low-latency data for real-time GPS, and any fleet management analytics or dashboards you can offer. Show differentiated IoT value.",
+        expectedAction:
+          "Present IoT-specific advantages: (1) dedicated IoT APN with prioritized data routing, (2) coverage map analysis for NH44 and NH48 showing tower density vs competitor, (3) low-latency SIM with <200ms ping for real-time fleet tracking, (4) fleet analytics dashboard integration, (5) bulk IoT SIM management portal. Offer to do a side-by-side coverage comparison on her key routes.",
+        hints: [
+          "She shut down the 'switching is expensive' argument — now you must sell IoT value",
+          "Dedicated IoT APN: fleet tracking data gets priority over consumer traffic — no congestion impact",
+          "Coverage map: offer to compare tower density on NH44 and NH48 — this is verifiable data",
+          "Low-latency: real-time GPS needs <200ms ping — standard consumer SIMs don't guarantee this",
+          "Fleet analytics: if you have a dashboard or API integration, this is a differentiator",
+          "Bulk management portal: she manages 300+ IoT SIMs — device-level visibility matters",
+        ],
+        idealKeywords: [
+          "dedicated IoT APN",
+          "priority routing",
+          "coverage map",
+          "NH44",
+          "NH48",
+          "tower density",
+          "low latency",
+          "200ms",
+          "fleet analytics",
+          "dashboard",
+          "bulk management",
+          "real-time GPS",
+        ],
+        bannedPhrases: [
+          "our IoT is the best in the market",
+          "competitors don't have IoT",
+          "just trust our coverage",
+          "IoT is the same everywhere",
+          "I'm not sure about the technical details",
+        ],
+        scoring: { "Product Knowledge": 10, "B2B Selling": 8, "Negotiation Skills": 5 },
+      },
+
+      // ── Round 6: Network reliability data ──
+      {
+        speaker: "customer",
+        text: "Now you're talking my language. The dedicated IoT APN and low-latency SIM are interesting — we've had issues with consumer-grade SIMs getting congested in urban areas. But I need to see actual coverage data, not marketing slides. Can you show me tower coverage along our top 5 routes? And what's your actual measured latency on IoT SIMs — not theoretical, actual?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She wants data, not promises. Commit to providing: (1) tower coverage map along her top 5 routes, (2) actual measured latency data from IoT SIMs in similar deployments, (3) a coverage comparison tool she can verify herself. Set a timeline for delivery. If you don't have it right now, be honest and commit to 48 hours.",
+        expectedAction:
+          "Commit to delivering: (1) custom coverage report for her top 5 routes within 48 hours, (2) actual latency data from your IoT network — measured P95 latency, not theoretical, (3) offer a 30-day pilot on 10-20 IoT SIMs with real-time monitoring so she can verify claims independently. Ask her to share the top 5 routes for the analysis.",
+        hints: [
+          "She wants measured data, not specs: provide P95 latency, not 'up to' numbers",
+          "Custom coverage report: map her actual routes against your tower locations — 48 hours is realistic",
+          "Pilot program: offer 10-20 IoT SIMs on her critical routes for 30 days with monitoring dashboard",
+          "Ask for her top 5 routes — this shows you're building a custom solution, not giving a brochure",
+          "Mention similar deployments: if you have logistics/fleet customers, reference anonymized benchmarks",
+          "Be honest if you need time: 'I want to give you real data, not estimates — 48 hours for the report'",
+        ],
+        idealKeywords: [
+          "coverage report",
+          "48 hours",
+          "top 5 routes",
+          "measured latency",
+          "P95",
+          "pilot program",
+          "30-day trial",
+          "10-20 SIMs",
+          "monitoring dashboard",
+          "verify independently",
+          "custom analysis",
+        ],
+        bannedPhrases: [
+          "our coverage is nationwide",
+          "we cover 99% of highways",
+          "just trust the network",
+          "marketing has those numbers",
+          "I can't share that data",
+        ],
+        scoring: { "Product Knowledge": 8, "Negotiation Skills": 7, "Communication Clarity": 5 },
+      },
+
+      // ── Round 7: SLA commitment ──
+      {
+        speaker: "customer",
+        text: "A 30-day pilot is smart — I can validate your claims before committing. I'll share our routes. But let's talk SLA. You gave us standard 99.5% uptime last contract. The competitor is offering 99.95% with financial penalties. I need at least 99.9% with teeth — meaning real penalties if you breach. Not 'service credits' that nobody can redeem. Can you do that?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: This is the SLA negotiation — she wants 99.9% with real financial penalties. Do NOT overpromise. If 99.9% is achievable, commit with a clear penalty structure. If 99.95% is a stretch, be honest about it. Define what counts as downtime, how it's measured, and what the penalty tiers look like. Show you're negotiating in good faith.",
+        expectedAction:
+          "Offer 99.9% uptime SLA with a clear penalty structure: Tier 1 (99.9-99.7%) = 5% monthly credit, Tier 2 (99.7-99.5%) = 10% monthly credit, Tier 3 (<99.5%) = 15% credit + right to exit without penalty. Define measurement methodology: per-connection uptime, measured monthly, excluding planned maintenance with 7-day advance notice. Explain why 99.9% is realistic while 99.95% may be overpromised by the competitor.",
+        hints: [
+          "Commit to 99.9% — it's aggressive but achievable with dedicated IoT infrastructure",
+          "Penalty tiers show seriousness: escalating credits based on severity, not flat rates",
+          "Include exit clause: if SLA is breached 3 months in a row, she can exit without penalty",
+          "Define measurement: per-connection basis, monthly measurement, excluding planned maintenance",
+          "Address her 'teeth' comment: 'Real credits applied automatically to next invoice, not a claim form'",
+          "Be honest about 99.95%: if the competitor promises it without penalties, it's a marketing number",
+        ],
+        idealKeywords: [
+          "99.9%",
+          "penalty tiers",
+          "monthly credit",
+          "5%",
+          "10%",
+          "15%",
+          "exit clause",
+          "automatic credit",
+          "per-connection",
+          "measurement methodology",
+          "planned maintenance",
+          "real penalties",
+        ],
+        bannedPhrases: [
+          "we guarantee 100% uptime",
+          "SLAs are just formalities",
+          "no one actually enforces SLAs",
+          "we can match 99.95%",
+          "service credits are standard",
+        ],
+        scoring: { "Negotiation Skills": 10, "Compliance": 7, "Product Knowledge": 5 },
+      },
+
+      // ── Round 8: Bundled value proposition ──
+      {
+        speaker: "customer",
+        text: "99.9% with automatic credits and an exit clause after 3 consecutive breaches — that's a real SLA, not a brochure. Now, the competitor bundled everything — employee SIMs, IoT SIMs, and dedicated support — into one package at ₹14 lakh. Currently I'm managing 3 separate contracts with you for employee voice, employee data, and IoT. Can you consolidate into one contract with one invoice and one account manager?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She wants consolidation — one contract, one invoice, one account manager. This is an operational simplification request, not just a price request. Design a bundled proposition that combines all three services. Show how bundling creates savings, simplifies operations, and gives her a single point of accountability. This is where you start building the counter-offer.",
+        expectedAction:
+          "Propose a consolidated enterprise bundle: (1) single contract covering employee voice + data + IoT SIMs, (2) unified invoice with line-item breakdowns, (3) dedicated named account manager with SLA on response time, (4) single escalation matrix. Show how consolidation reduces her admin overhead and creates volume-based pricing. Begin structuring the counter-offer.",
+        hints: [
+          "Consolidation is a huge operational win — managing 3 vendors/contracts is expensive in time",
+          "Single account manager with <4 hour response SLA for enterprise tickets",
+          "Unified invoice: one bill with clear line items for each service category",
+          "Volume bundling: 800+ connections in one contract unlocks enterprise tier pricing",
+          "Single escalation matrix: Sunita's team has one phone number, one email for everything",
+          "Position this as 'enterprise-grade managed telecom' — not just SIM cards",
+        ],
+        idealKeywords: [
+          "consolidated bundle",
+          "single contract",
+          "one invoice",
+          "dedicated account manager",
+          "4-hour response",
+          "escalation matrix",
+          "volume pricing",
+          "enterprise tier",
+          "admin overhead",
+          "managed telecom",
+          "line-item breakdown",
+        ],
+        bannedPhrases: [
+          "we've always done separate contracts",
+          "that's how our billing works",
+          "I'll need to check with billing",
+          "consolidation isn't possible",
+          "account managers are for larger accounts",
+        ],
+        scoring: { "B2B Selling": 10, "Product Knowledge": 7, "Communication Clarity": 5 },
+      },
+
+      // ── Round 9: Pricing negotiation ──
+      {
+        speaker: "customer",
+        text: "Good — single contract, single account manager, unified billing. Now let's talk numbers. The competitor is at ₹14 lakh. You're at ₹18 lakh. Even with all the value-adds, I can't go to my CEO with ₹18 lakh when there's a ₹14 lakh offer on the table. What's your best consolidated price?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: Time to talk price — but do it strategically. Do NOT drop to ₹14 lakh (that destroys ARPU and signals desperation). Propose a structured pricing model tied to commitment period. Show her the math: your price includes the SLA penalties, dedicated support, IoT APN, and fleet dashboard — the competitor price likely doesn't. Target ₹15.5-16 lakh with clear justification.",
+        expectedAction:
+          "Propose a tiered pricing structure: ₹16.5 lakh for 1-year term, ₹15.5 lakh for 2-year term, ₹14.8 lakh for 3-year term. Show the value gap: your ₹15.5 lakh includes dedicated account manager (worth ₹1.5 lakh/month separately), IoT APN priority (worth ₹80K/month), fleet dashboard, and SLA with real penalties. The competitor's ₹14 lakh is base price — ask what their add-on costs are.",
+        hints: [
+          "Do NOT match ₹14 lakh — it signals panic and destroys your margin",
+          "Tiered pricing by commitment period shows strategic thinking",
+          "Value quantification: put a rupee value on each add-on to justify the gap",
+          "₹15.5 lakh for 2-year with all add-ons vs ₹14 lakh base + hidden costs = close to parity",
+          "Ask her to compare total cost of ownership, not just the monthly number",
+          "The ₹1.5 lakh gap between your 2-year price and competitor covers the value-adds",
+        ],
+        idealKeywords: [
+          "tiered pricing",
+          "commitment period",
+          "₹16.5 lakh",
+          "₹15.5 lakh",
+          "₹14.8 lakh",
+          "1-year",
+          "2-year",
+          "3-year",
+          "value-adds included",
+          "total cost of ownership",
+          "ARPU",
+          "dedicated manager",
+        ],
+        bannedPhrases: [
+          "we'll match ₹14 lakh",
+          "price is negotiable to any amount",
+          "we'll do whatever it takes",
+          "the competitor is lying about price",
+          "you can't get that price anywhere",
+        ],
+        scoring: { "Negotiation Skills": 10, "B2B Selling": 8, "Product Knowledge": 5 },
+      },
+
+      // ── Round 10: Migration risk discussion ──
+      {
+        speaker: "customer",
+        text: "₹15.5 lakh for 2 years with everything included — that's getting closer. But I'll be honest, my CEO will still push on the ₹1.5 lakh gap. Let me think about this differently. What happens if we actually try to migrate? Walk me through the realistic timeline and risks. I want to know what I'm signing up for if I DO switch.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She's asking you to help her evaluate the migration risk honestly. This is not a scare tactic — give her a genuine, realistic migration timeline with risks. If you're honest here, you build massive trust. Cover porting timelines, IoT re-provisioning, testing period, and the business risk during transition.",
+        expectedAction:
+          "Lay out the realistic migration timeline: Week 1-2: Number porting (MNP) for 500+ employee SIMs — 7-10 business days, potential 4-8 hour gaps per batch. Week 3-6: IoT SIM replacement and re-provisioning — 300+ devices need new SIMs, APN reconfiguration, firmware updates. Week 7-8: Testing and stabilization. Total: 6-8 weeks of active migration with fleet tracking disruption risk. Quantify: even 2 days of partial fleet tracking outage = ₹9.6 lakh in potential SLA penalties to their clients.",
+        hints: [
+          "Be honest and thorough — a genuine migration assessment builds more trust than FUD",
+          "MNP porting: 500+ numbers in batches, 7-10 business days, 4-8 hour gap per batch",
+          "IoT migration: physical SIM swap or eSIM provisioning for 300+ GPS trackers — 4-6 weeks",
+          "Each GPS tracker needs: new SIM, APN configuration, firmware update, testing — ~30 min per device",
+          "Fleet tracking downtime during migration: quantify in terms of HER client SLA penalties",
+          "Parallel run option: keep old SIMs active for 30 days during migration — that means double cost for a month",
+        ],
+        idealKeywords: [
+          "MNP porting",
+          "7-10 business days",
+          "batches",
+          "IoT re-provisioning",
+          "4-6 weeks",
+          "APN reconfiguration",
+          "firmware update",
+          "testing period",
+          "fleet tracking disruption",
+          "parallel run",
+          "SLA penalties",
+          "₹9.6 lakh",
+        ],
+        bannedPhrases: [
+          "migration will be a disaster",
+          "you'll lose all your data",
+          "it's impossible to switch",
+          "no one successfully migrates",
+          "you're making a huge mistake",
+        ],
+        scoring: { "Product Knowledge": 8, "Negotiation Skills": 8, "Communication Clarity": 7 },
+      },
+
+      // ── Round 11: Dedicated account management ──
+      {
+        speaker: "customer",
+        text: "6-8 weeks of migration risk with potential fleet tracking downtime — that's sobering. And honestly, a big reason I'm looking elsewhere is because your current support is generic. When we raise a ticket, it goes into a black hole. I need a named account manager who picks up MY call, knows MY fleet routes, and escalates MY issues as priority. Not a call center.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: This is a critical retention lever — dedicated account management. She's telling you that poor support is pushing her away more than price. Propose a named account manager with specific commitments: response time, escalation authority, quarterly business reviews, and direct mobile access. Make her feel like an enterprise client, not a ticket number.",
+        expectedAction:
+          "Propose a named enterprise account manager with: (1) direct mobile number — no call center, (2) <2 hour response for P1 issues, <4 hours for P2, (3) authority to escalate to network operations center directly, (4) quarterly business reviews with uptime data and optimization recommendations, (5) proactive alerting: the AM monitors her fleet SIMs and alerts before SHE discovers issues.",
+        hints: [
+          "Named account manager: give her a real person, not a team or a rotation",
+          "<2 hour P1 response, <4 hour P2 — with escalation authority to NOC (network operations center)",
+          "Quarterly business reviews: present uptime data, route coverage analytics, optimization suggestions",
+          "Proactive monitoring: alert her team before they discover issues — this is the differentiator",
+          "Direct mobile access: not a helpline, not a call center — her AM's personal number",
+          "This addresses her 'black hole' comment — show you listened and are solving the root cause",
+        ],
+        idealKeywords: [
+          "named account manager",
+          "direct mobile",
+          "2-hour response",
+          "P1",
+          "P2",
+          "escalation authority",
+          "NOC",
+          "quarterly review",
+          "proactive monitoring",
+          "alerting",
+          "no call center",
+          "your dedicated contact",
+        ],
+        bannedPhrases: [
+          "our support is already good",
+          "all customers get the same priority",
+          "we can't give direct numbers",
+          "account managers are extra cost",
+          "you're overreacting about support",
+        ],
+        scoring: { "Customer Empathy": 8, "B2B Selling": 8, "Retention Skills": 7 },
+      },
+
+      // ── Round 12: Custom solution design ──
+      {
+        speaker: "customer",
+        text: "Proactive monitoring and alerting — now THAT is enterprise-grade. If your AM can tell me about a coverage issue on NH44 before my fleet manager discovers it, that's genuine value. Speaking of which — do you have any fleet management tools? Our current GPS vendor gives us basic tracking, but I'd love a unified dashboard that shows connectivity status, SIM health, and data usage per vehicle alongside location.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She's asking about fleet management analytics — this is a differentiation and upselling opportunity. Present your IoT fleet management dashboard capabilities: SIM health monitoring, data usage per device, connectivity status, geofence alerts, and API integration with her existing GPS vendor. This is where you move from telecom vendor to strategic technology partner.",
+        expectedAction:
+          "Present the fleet management dashboard: (1) real-time SIM connectivity status per vehicle, (2) data usage analytics per device/route with anomaly detection, (3) geofence-based alerts when vehicles enter low-coverage zones, (4) API integration with her existing GPS vendor for unified view, (5) monthly fleet analytics report showing coverage patterns and optimization opportunities. Position this as the bridge from 'telecom vendor' to 'fleet technology partner.'",
+        hints: [
+          "Fleet dashboard: real-time connectivity status of all 300+ IoT SIMs on a single screen",
+          "Data usage per vehicle: identify SIMs consuming too much or too little data (anomaly = device issue)",
+          "Geofence alerts: when trucks enter known low-coverage zones, alert dispatch proactively",
+          "API integration: connect with her existing GPS vendor — don't force a platform replacement",
+          "Monthly analytics: route-level coverage heat maps to optimize fleet routing for connectivity",
+          "This transforms you from 'SIM vendor' to 'fleet connectivity partner' — massive differentiation",
+        ],
+        idealKeywords: [
+          "fleet dashboard",
+          "real-time connectivity",
+          "SIM health",
+          "data usage per vehicle",
+          "anomaly detection",
+          "geofence alerts",
+          "API integration",
+          "GPS vendor",
+          "coverage heat map",
+          "fleet analytics",
+          "technology partner",
+          "unified view",
+        ],
+        bannedPhrases: [
+          "we don't have fleet tools",
+          "that's not our responsibility",
+          "use your GPS vendor for that",
+          "we only provide SIMs",
+          "dashboards are extra cost",
+        ],
+        scoring: { "Product Knowledge": 10, "B2B Selling": 8, "Upselling": 7 },
+      },
+
+      // ── Round 13: Contract term negotiation ──
+      {
+        speaker: "customer",
+        text: "Fleet dashboard with API integration into our GPS vendor — that would save us from juggling 3 systems. OK, let me be practical. I need a number for my CEO meeting. You said ₹15.5 lakh for 2 years. But I need protection — what if your service degrades? I don't want to be locked into 2 years if the SLA keeps getting breached. Can we structure an exit clause tied to performance?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She's negotiating the contract terms — this is the final structuring phase. She wants pricing with performance-linked exit protection. Propose a fair contract structure: 2-year term at ₹15.5 lakh with SLA-linked exit clause, but balance it with a reasonable commitment from her side. This is the deal-making moment — be creative but protect your interests too.",
+        expectedAction:
+          "Propose: 2-year contract at ₹15.5 lakh/month with performance-linked exit: if SLA (<99.9%) is breached for 3 consecutive months, she can exit with 30-day notice and no penalty. In return, ask for: (1) 90-day notice for normal termination, (2) annual volume commitment (min 750 connections), (3) first right of refusal on any new connections. This is a balanced deal — protection for both sides.",
+        hints: [
+          "Performance-linked exit: 3 consecutive SLA breaches = free exit with 30 days notice",
+          "Normal termination: 90-day notice period — standard for enterprise contracts",
+          "Volume commitment: minimum 750 connections to lock in enterprise pricing",
+          "First right of refusal: if FleetTrack adds 200 new connections, you get to match any competitor bid",
+          "Price lock: ₹15.5 lakh is fixed for 2 years — no annual escalation",
+          "Both sides are protected: she gets exit on poor performance, you get volume commitment and term",
+        ],
+        idealKeywords: [
+          "2-year term",
+          "₹15.5 lakh",
+          "performance-linked exit",
+          "3 consecutive months",
+          "30-day notice",
+          "90-day notice",
+          "volume commitment",
+          "750 connections",
+          "first right of refusal",
+          "price lock",
+          "balanced",
+          "no escalation",
+        ],
+        bannedPhrases: [
+          "we can't offer an exit clause",
+          "2-year lock-in is non-negotiable",
+          "take it or leave it",
+          "no company offers exit clauses",
+          "you're asking for too much",
+        ],
+        scoring: { "Negotiation Skills": 10, "B2B Selling": 7, "Compliance": 5 },
+      },
+
+      // ── Round 14: Decision commitment — verbal agreement ──
+      {
+        speaker: "customer",
+        text: "Performance-linked exit, volume commitment, first right of refusal — that's a mature negotiation. I respect that you're not just giving away everything. Let me see if I have this right: ₹15.5 lakh/month, 2-year term, 99.9% SLA with automatic credits, dedicated account manager, fleet dashboard, IoT APN priority, 30-day pilot first, and exit clause on 3 consecutive SLA breaches. Is that the complete package?",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She's summarizing the deal — this is the verbal agreement stage. Confirm every element she listed, add anything she missed (like the consolidated single invoice, quarterly business reviews, and the RCA commitment for outages). Ask for a clear next step: verbal agreement now, formal proposal by when, and timeline for the CEO meeting. Get commitment.",
+        expectedAction:
+          "Confirm each element she listed. Add what she missed: (1) single consolidated invoice, (2) quarterly business reviews, (3) RCA within 48 hours for any P1 outage, (4) coverage report for top 5 routes within 48 hours. Ask: 'If the pilot validates our coverage and I deliver this proposal by Monday, can I count on your recommendation to the CEO?' Get a verbal yes.",
+        hints: [
+          "Confirm every item: ₹15.5L, 2-year, 99.9% SLA, automatic credits, AM, dashboard, IoT APN, pilot, exit clause",
+          "Add missing items: consolidated invoice, QBRs, RCA commitment, coverage report",
+          "Ask for the commitment: 'Can I count on your recommendation to the CEO?'",
+          "Timeline: propose delivering the formal proposal by Monday (gives her time before CEO meeting)",
+          "Don't oversell at this stage — she's ready, just confirm and close",
+          "Mention that the pilot starts immediately so she has data for the CEO meeting",
+        ],
+        idealKeywords: [
+          "confirmed",
+          "complete package",
+          "consolidated invoice",
+          "quarterly review",
+          "RCA within 48 hours",
+          "coverage report",
+          "formal proposal",
+          "Monday",
+          "CEO recommendation",
+          "pilot starts immediately",
+          "verbal agreement",
+          "your recommendation",
+        ],
+        bannedPhrases: [
+          "sign now before the price changes",
+          "this offer expires today",
+          "I need your answer now",
+          "your CEO should agree",
+          "there's no reason to say no",
+        ],
+        scoring: { "Negotiation Skills": 10, "Communication Clarity": 8, "B2B Selling": 7 },
+      },
+
+      // ── Round 15: Formal proposal & handoff ──
+      {
+        speaker: "customer",
+        text: "If the pilot shows your coverage matches your claims on our top 5 routes, and the formal proposal matches what we discussed today — yes, I'll recommend we stay. But I need that proposal by Thursday, not Monday. My CEO meeting is Friday. And I want your account manager introduced to my team within a week of signing. Don't make me chase people after the deal is done.",
+      },
+      {
+        speaker: "system",
+        text: "OBJECTIVE: She said yes — conditionally. Close the deal by confirming the accelerated timeline (proposal by Thursday), the account manager introduction within a week, and the pilot start date. Summarize next steps crisply. This is the handoff — make her feel confident she made the right decision. End with professionalism and warmth, not relief.",
+        expectedAction:
+          "Confirm: (1) formal proposal on her desk by Thursday EOD, (2) pilot of 10-20 IoT SIMs starts within 48 hours, (3) account manager introduced to her team within 1 week of signing, (4) coverage report for top 5 routes included in the proposal, (5) your personal contact details for anything before the CEO meeting. Thank her for the transparent and fair negotiation. Express confidence in the partnership.",
+        hints: [
+          "Thursday, not Monday — she set the deadline, respect it and commit",
+          "Pilot starts within 48 hours — gives her real data before the CEO meeting on Friday",
+          "Account manager introduction within 1 week of signing — she wants post-sale execution, not promises",
+          "Include coverage report in the Thursday proposal — CEO will want to see it",
+          "Give your personal mobile/email for anything before Friday — show you're invested",
+          "Close with confidence: 'This is the beginning of a partnership, not just a contract renewal'",
+        ],
+        idealKeywords: [
+          "Thursday EOD",
+          "proposal",
+          "pilot within 48 hours",
+          "account manager introduction",
+          "one week",
+          "coverage report included",
+          "personal contact",
+          "CEO meeting",
+          "partnership",
+          "transparent negotiation",
+          "next steps",
+          "confident",
+        ],
+        bannedPhrases: [
+          "glad you didn't leave",
+          "you're making the right choice",
+          "the competitor would have failed you",
+          "we saved the account",
+          "I knew you'd stay",
+          "phew that was close",
+        ],
+        scoring: { "Communication Clarity": 10, "B2B Selling": 8, "Retention Skills": 7 },
+      },
+    ],
+    evaluationRules: [
+      {
+        skill: "Negotiation Skills",
+        keywords: [
+          "tiered pricing",
+          "commitment period",
+          "exit clause",
+          "SLA penalties",
+          "performance-linked",
+          "volume commitment",
+          "total cost of ownership",
+          "counter-proposal",
+          "balanced",
+        ],
+        weight: 25,
+      },
+      {
+        skill: "Product Knowledge",
+        keywords: [
+          "IoT APN",
+          "fleet dashboard",
+          "low latency",
+          "coverage map",
+          "tower density",
+          "MNP porting",
+          "SIM re-provisioning",
+          "99.9% SLA",
+          "P95 latency",
+          "geofence",
+        ],
+        weight: 25,
+      },
+      {
+        skill: "B2B Selling",
+        keywords: [
+          "enterprise bundle",
+          "dedicated account manager",
+          "quarterly review",
+          "managed telecom",
+          "technology partner",
+          "API integration",
+          "proactive monitoring",
+          "fleet analytics",
+        ],
+        weight: 20,
+      },
+      {
+        skill: "Customer Empathy",
+        keywords: [
+          "understand your priorities",
+          "₹28 lakh impact",
+          "honest",
+          "transparent",
+          "your business",
+          "fleet tracking",
+          "CEO meeting",
+          "build a case",
+        ],
+        weight: 15,
+      },
+      {
+        skill: "Retention Skills",
+        keywords: [
+          "migration risk",
+          "switching cost",
+          "partnership",
+          "pilot program",
+          "coverage report",
+          "RCA",
+          "proactive",
+          "next steps",
+          "timeline",
+        ],
+        weight: 15,
+      },
+    ],
+    complianceRules: {
+      hardBanned: [
+        "competitors are unreliable",
+        "they will definitely fail you",
+        "no one offers better than us",
+        "you can't switch that many connections",
+        "your CEO doesn't understand telecom",
+        "we are the market leader so you should stay",
+        "I guarantee zero downtime",
+      ],
+      violationPenalty: 50,
+      violationMessage:
+        "COMPLIANCE BREACH: Misleading claims about competitor capabilities, false guarantees about network performance, or unprofessional language in an enterprise B2B context. Violates TRAI fair business practices and enterprise sales compliance standards.",
+    },
+  },
+];

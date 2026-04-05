@@ -57,6 +57,7 @@ export const CATEGORIES = [
   { id: "fraud", label: "Fraud" },
   { id: "operations", label: "Operations" },
   { id: "pharma", label: "Pharma QA" },
+  { id: "telecom", label: "Telecom" },
 ];
 
 export const CATEGORY_COLORS: Record<string, string> = {
@@ -66,6 +67,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   fraud: "#B5850A",
   operations: "#2F7D5B",
   pharma: "#7C5AC7",
+  telecom: "#0EA5E9",
 };
 
 export const DIFFICULTY_CONFIG = {
@@ -950,3 +952,15 @@ export const SCENARIOS: Scenario[] = [
 // Import and merge new scenarios
 import { NEW_SCENARIOS } from "./new-scenarios";
 SCENARIOS.push(...NEW_SCENARIOS);
+
+// Import expanded CAPA scenarios (15 exchanges each)
+import { CAPA_EXPANDED_A } from "./capa-expanded-a";
+import { CAPA_EXPANDED_B } from "./capa-expanded-b";
+import { CAPA_EXPANDED_C } from "./capa-expanded-c";
+import { CAPA_EXPANDED_D } from "./capa-expanded-d";
+SCENARIOS.push(...CAPA_EXPANDED_A, ...CAPA_EXPANDED_B, ...CAPA_EXPANDED_C, ...CAPA_EXPANDED_D);
+
+// Import telecom scenarios (15 exchanges each)
+import { TELECOM_SCENARIOS_1 } from "./telecom-scenarios-1";
+import { TELECOM_SCENARIOS_2 } from "./telecom-scenarios-2";
+SCENARIOS.push(...TELECOM_SCENARIOS_1, ...TELECOM_SCENARIOS_2);
