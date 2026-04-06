@@ -8,7 +8,7 @@ import { classifyScenario, sortScenariosForPlayer, type ScenarioTag } from "@/li
 import {
   Briefcase, Shield, Headphones, AlertTriangle, Settings, LayoutGrid,
   TrendingUp, ChevronRight, Flame, Star, Clock, Trophy, LogOut, Wrench,
-  Compass, X, Zap, BarChart3, FlaskConical, Search, Bell, ArrowRight,
+  Compass, X, Zap, BarChart3, FlaskConical, Search, Bell, ArrowRight, Signal,
 } from "lucide-react";
 
 /* ── Icon map for categories ── */
@@ -16,6 +16,7 @@ const categoryIcons: Record<string, typeof Briefcase> = {
   all: LayoutGrid, sales: TrendingUp, compliance: Shield,
   "customer-service": Headphones, fraud: AlertTriangle, operations: Settings,
   pharma: FlaskConical,
+  telecom: Signal,
 };
 
 /* ── Tag visual styles ── */
@@ -36,6 +37,7 @@ const CATEGORY_TAB_LABELS: Record<string, string> = {
   fraud: "Onboarding",
   operations: "Operations",
   pharma: "Pharma QA",
+  telecom: "Telecom",
 };
 
 export function Lobby() {
