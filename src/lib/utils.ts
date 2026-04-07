@@ -36,3 +36,24 @@ export function getInitials(name: string): string {
 export function generateAccountNumber(): string {
   return Array.from({ length: 12 }, () => Math.floor(Math.random() * 10)).join("");
 }
+
+/**
+ * Safe UUID generator. Falls back to Math.random when crypto.randomUUID
+ * is unavailable (e.g. non-secure contexts like accessing the dev server
+ * via a LAN IP rather than localhost or HTTPS).
+ */
+export function uuid(): string {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+  } catch {
+    // fall through to fallback
+  }
+  // RFC4122 v4 fallback using Math.random — sufficient for client-side keys
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}

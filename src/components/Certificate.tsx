@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
 import { X, Download, Award, ShieldCheck } from "lucide-react";
+import { uuid } from "@/lib/utils";
 
 interface SkillBreakdown {
   skill: string;
@@ -26,7 +27,7 @@ export function Certificate({
   skillBreakdown,
   onClose,
 }: CertificateProps) {
-  const verificationId = useRef(crypto.randomUUID()).current;
+  const verificationId = useRef(uuid()).current;
 
   const today = new Date().toLocaleDateString("en-US", {
     year: "numeric",

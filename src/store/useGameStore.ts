@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Scenario } from "@/lib/scenarios";
 import type { EvaluationResult } from "@/lib/evaluator";
+import { uuid } from "@/lib/utils";
 
 export type GamePhase = "login" | "lobby" | "briefing" | "playing" | "evaluation" | "leaderboard" | "showme" | "tryme" | "admin" | "analytics" | "profile";
 export type GameMode = "showme" | "tryme" | "testme";
@@ -169,7 +170,7 @@ export const useGameStore = create<GameState>()(
         const initialMessages: Message[] = [];
         if (firstStep && firstStep.speaker === "customer") {
           initialMessages.push({
-            id: crypto.randomUUID(),
+            id: uuid(),
             role: "customer",
             content: firstStep.text,
             timestamp: Date.now(),
@@ -195,7 +196,7 @@ export const useGameStore = create<GameState>()(
       addMessage: (msg) => set((state) => ({
         messages: [...state.messages, {
           ...msg,
-          id: crypto.randomUUID(),
+          id: uuid(),
           timestamp: Date.now(),
         }],
       })),

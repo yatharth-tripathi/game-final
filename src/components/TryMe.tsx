@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/store/useGameStore";
 import { CATEGORY_COLORS } from "@/lib/scenarios";
+import { uuid } from "@/lib/utils";
 import { SplitLayout } from "./SplitLayout";
 import { TryMeInsights } from "./insights/TryMeInsights";
 import { useVoice } from "@/hooks/useVoice";
@@ -73,7 +74,7 @@ export function TryMe() {
     initialized.current = true;
 
     const initMessages: ChatMessage[] = [
-      { id: crypto.randomUUID(), role: "customer", content: sc.openingStatement, timestamp: Date.now() },
+      { id: uuid(), role: "customer", content: sc.openingStatement, timestamp: Date.now() },
     ];
 
     // Show first system objective as coaching
@@ -81,7 +82,7 @@ export function TryMe() {
     if (firstSystemStep && !shownCoaching.current.has(0)) {
       shownCoaching.current.add(0);
       initMessages.push({
-        id: crypto.randomUUID(),
+        id: uuid(),
         role: "system",
         content: firstSystemStep.text,
         timestamp: Date.now(),
@@ -126,7 +127,7 @@ export function TryMe() {
       voice.speak(response);
 
       const newMessages: ChatMessage[] = [{
-        id: crypto.randomUUID(),
+        id: uuid(),
         role: "customer",
         content: response,
         timestamp: Date.now(),
@@ -138,7 +139,7 @@ export function TryMe() {
       if (nextCoachingIdx < systemSteps.length && !shownCoaching.current.has(nextCoachingIdx)) {
         shownCoaching.current.add(nextCoachingIdx);
         newMessages.push({
-          id: crypto.randomUUID(),
+          id: uuid(),
           role: "system",
           content: systemSteps[nextCoachingIdx].text,
           timestamp: Date.now(),
@@ -153,7 +154,7 @@ export function TryMe() {
       }
     } catch {
       setMessages((prev) => [...prev, {
-        id: crypto.randomUUID(),
+        id: uuid(),
         role: "customer",
         content: "I see... go on.",
         timestamp: Date.now(),
@@ -170,7 +171,7 @@ export function TryMe() {
     if (inputRef.current) inputRef.current.style.height = "auto";
 
     setMessages((prev) => [...prev, {
-      id: crypto.randomUUID(),
+      id: uuid(),
       role: "user",
       content: text,
       timestamp: Date.now(),
