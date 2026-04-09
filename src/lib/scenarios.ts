@@ -58,6 +58,7 @@ export const CATEGORIES = [
   { id: "operations", label: "Operations" },
   { id: "pharma", label: "Pharma QA" },
   { id: "telecom", label: "Telecom" },
+  { id: "hospitality", label: "Hospitality" },
 ];
 
 export const CATEGORY_COLORS: Record<string, string> = {
@@ -68,6 +69,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   operations: "#2F7D5B",
   pharma: "#7C5AC7",
   telecom: "#0EA5E9",
+  hospitality: "#D4AF37",
 };
 
 export const DIFFICULTY_CONFIG = {
@@ -963,4 +965,5 @@ SCENARIOS.push(...CAPA_EXPANDED_A, ...CAPA_EXPANDED_B, ...CAPA_EXPANDED_C, ...CA
 // Import telecom scenarios (15 exchanges each)
 import { TELECOM_SCENARIOS_1 } from "./telecom-scenarios-1";
 import { TELECOM_SCENARIOS_2 } from "./telecom-scenarios-2";
-SCENARIOS.push(...TELECOM_SCENARIOS_1, ...TELECOM_SCENARIOS_2);
+import { HOSPITALITY_SCENARIOS } from "./hospitality-scenarios";
+SCENARIOS.push(...TELECOM_SCENARIOS_1, ...TELECOM_SCENARIOS_2, ...HOSPITALITY_SCENARIOS);
